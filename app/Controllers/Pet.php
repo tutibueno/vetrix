@@ -123,8 +123,20 @@ class Pet extends BaseController
         $historicoModel = new \App\Models\HistoricoMedicoModel();
         $vacinaModel = new \App\Models\VacinaModel();
 
-        $historico = $historicoModel->where('pet_id', $id)->orderBy('data_consulta', 'desc')->findAll();
-        $vacinas = $vacinaModel->where('pet_id', $id)->orderBy('data_aplicacao', 'desc')->findAll();
+        $historico = $historicoModel
+            ->select('historico_medico.*, veterinarios.nome as veterinario_nome')
+            ->join('veterinarios', 'veterinarios.id = historico_medico.veterinario_id', 'left')
+            ->where('historico_medico.pet_id', $id)
+            ->orderBy('historico_medico.data_consulta', 'desc')
+            ->findAll();
+
+        $vacinas = $vacinaModel
+            ->select('vacinas.*, veterinarios.nome as veterinario_nome')
+            ->join('veterinarios', 'veterinarios.id = vacinas.veterinario_id', 'left')
+            ->where('vacinas.pet_id', $id)
+            ->orderBy('vacinas.data_aplicacao', 'desc')
+            ->findAll();
+
         return view('pets/ficha', compact('pet', 'historico', 'vacinas'));
     }
 

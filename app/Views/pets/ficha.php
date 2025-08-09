@@ -34,9 +34,21 @@
         <?php if ($historico): ?>
             <ul class="list-group mb-4">
                 <?php foreach ($historico as $h): ?>
-                    <li class="list-group-item">
-                        <strong><?= date('d/m/Y', strtotime($h['data_consulta'])) ?>:</strong>
-                        <?= esc($h['diagnostico']) ?> (<?= esc($h['veterinario_nome'] ?? 'Não informado') ?>)
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong><?= date('d/m/Y', strtotime($h['data_consulta'])) ?>:</strong>
+                            <?= esc($h['diagnostico']) ?> (<?= esc($h['veterinario_nome'] ?? 'Não informado') ?>)
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-warning" onclick="editarAtendimento(<?= $h['id'] ?>)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <a href="<?= base_url('historico_medico/delete/' . $h['id']) ?>"
+                                class="btn btn-sm btn-danger"
+                                onclick="return confirm('Tem certeza que deseja excluir este atendimento?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -48,11 +60,22 @@
         <?php if ($vacinas): ?>
             <ul class="list-group">
                 <?php foreach ($vacinas as $v): ?>
-                    <li class="list-group-item">
-                        <?= esc($v['nome_vacina']) ?> - <?= date('d/m/Y', strtotime($v['data_aplicacao'])) ?>
-                        <?php if ($v['data_reforco']): ?>
-                            <br><small>Próxima: <?= date('d/m/Y', strtotime($v['data_reforco'])) ?></small>
-                        <?php endif; ?>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong><?= esc($v['nome_vacina']) ?></strong> - <?= date('d/m/Y', strtotime($v['data_aplicacao'])) ?>
+                            <?php if ($v['data_reforco']): ?>
+                                <br><small>Próxima: <?= date('d/m/Y', strtotime($v['data_reforco'])) ?></small>
+                            <?php endif; ?>
+                            <br><small><?= esc($v['veterinario_nome'] ?? 'Veterinário não informado') ?></small>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-warning" onclick="editarVacina(<?= $v['id'] ?>)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <a href="<?= base_url('vacinas/delete/' . $v['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Remover vacina?')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -76,7 +99,7 @@
             const petId = $(this).data('pet');
             $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
             $('#modalFormulario').modal('show');
-            $.get("<?= base_url('historico/novo') ?>/" + petId, function(data) {
+            $.get("<?= base_url('historico_medico/create') ?>/" + petId, function(data) {
                 $('#modalContent').html(data);
             });
         });
@@ -90,6 +113,26 @@
             });
         });
     });
+</script>
+
+<script>
+    function editarVacina(id) {
+        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalFormulario').modal('show');
+        $.get("<?= base_url('vacinas/editar') ?>/" + id, function(data) {
+            $('#modalContent').html(data);
+        });
+    }
+</script>
+
+<script>
+    function editarAtendimento(id) {
+        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalFormulario').modal('show');
+        $.get("<?= base_url('historico_medico/edit') ?>/" + id, function(data) {
+            $('#modalContent').html(data);
+        });
+    }
 </script>
 
 <?= $this->endSection() ?>

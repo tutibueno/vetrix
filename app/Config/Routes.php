@@ -50,10 +50,12 @@ $routes->group('historico_medico', function ($routes) {
     $routes->get('delete/(:num)', 'HistoricoMedico::delete/$1');     // Excluir histórico
 });
 
-
 // Vacinação
 $routes->get('vacinas/nova/(:num)', 'Vacinas::nova/$1');
-$routes->post('vacinas/salvar', 'Vacinas::salvar');
+$routes->post('vacinas/store', 'Vacinas::store');
+$routes->get('vacinas/editar/(:num)', 'Vacinas::editar/$1');
+$routes->post('vacinas/update/(:num)', 'Vacinas::update/$1');
+$routes->get('vacinas/delete/(:num)', 'Vacinas::delete/$1');
 
 //Veterinario
 $routes->group('veterinarios', function ($routes) {

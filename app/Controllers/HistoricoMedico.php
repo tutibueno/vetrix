@@ -41,9 +41,10 @@ class HistoricoMedico extends BaseController
     {
         $veterinarios = $this->veterinarioModel->findAll();
 
-        return view('historico_medico/create', [
-            'veterinarios' => $veterinarios,
-            'pet_id' => $pet_id
+        return view('historico_medico/_form', [
+            'action' => site_url('historico_medico/store'),
+            'pet_id' => $pet_id,
+            'veterinarios' => $veterinarios
         ]);
     }
 
@@ -61,7 +62,7 @@ class HistoricoMedico extends BaseController
         ];
 
         if ($this->historicoModel->insert($data)) {
-            return redirect()->to(site_url('historico_medico/index/' . $data['pet_id']))
+            return redirect()->to(site_url('pets/ficha/' . $data['pet_id']))
                 ->with('success', 'Histórico médico criado com sucesso.');
         } else {
             return redirect()->back()->withInput()->with('errors', $this->historicoModel->errors());
@@ -78,7 +79,8 @@ class HistoricoMedico extends BaseController
 
         $veterinarios = $this->veterinarioModel->findAll();
 
-        return view('historico_medico/edit', [
+        return view('historico_medico/_form', [
+            'action' => site_url('historico_medico/update/' . $id),
             'historico' => $historico,
             'veterinarios' => $veterinarios,
             'pet_id' => $historico['pet_id']
@@ -104,7 +106,7 @@ class HistoricoMedico extends BaseController
         ];
 
         if ($this->historicoModel->update($id, $data)) {
-            return redirect()->to(site_url('historico_medico/index/' . $data['pet_id']))
+            return redirect()->to(site_url('pets/ficha/' . $data['pet_id']))
                 ->with('success', 'Histórico médico atualizado com sucesso.');
         } else {
             return redirect()->back()->withInput()->with('errors', $this->historicoModel->errors());

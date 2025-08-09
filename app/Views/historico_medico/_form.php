@@ -1,53 +1,57 @@
-<div class="card card-primary">
-    <div class="card-body">
+<form action="<?= esc($action) ?>" method="post">
+    <?= csrf_field() ?>
 
-        <input type="form-group" name="pet_id" value="<?= esc($pet_id ?? ($historico['pet_id'] ?? '')) ?>">
+    <div class="card card-primary">
+        <div class="card-body">
 
-        <div class="form-group">
-            <label for="data_consulta">Data</label>
-            <input type="date" name="data_consulta" id="data" class="form-control"
-                value="<?= old('data_consulta', isset($historico) ? $historico['data_consulta'] : '') ?>" required>
+            <input type="hidden" name="pet_id" value="<?= esc($pet_id ?? ($historico['pet_id'] ?? '')) ?>">
+
+            <div class="form-group">
+                <label for="data_consulta">Data</label>
+                <input type="date" name="data_consulta" id="data" class="form-control"
+                    value="<?= old('data_consulta', isset($historico) ? $historico['data_consulta'] : '') ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="veterinario_id">Veterinário Responsável</label>
+                <select name="veterinario_id" id="veterinario_id" class="form-control">
+                    <option value="">Selecione...</option>
+                    <?php if (!empty($veterinarios)): ?>
+                        <?php foreach ($veterinarios as $vet): ?>
+                            <option value="<?= esc($vet['id']) ?>"
+                                <?= (isset($historico) && $historico['veterinario_id'] == $vet['id']) ? 'selected' : '' ?>>
+                                <?= esc($vet['nome']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="sintomas">Sintomas</label>
+                <textarea name="sintomas" id="sintomas" class="form-control" rows="3"><?= old('sintomas', isset($historico) ? $historico['sintomas'] : '') ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="diagnostico">Diagnóstico</label>
+                <textarea name="diagnostico" id="diagnostico" class="form-control" rows="3"><?= old('diagnostico', isset($historico) ? $historico['diagnostico'] : '') ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="tratamento">Tratamento</label>
+                <textarea name="tratamento" id="tratamento" class="form-control" rows="3"><?= old('tratamento', isset($historico) ? $historico['tratamento'] : '') ?></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="observacoes">Observações</label>
+                <textarea name="observacoes" id="observacoes" class="form-control" rows="3"><?= old('observacoes', isset($historico) ? $historico['observacoes'] : '') ?></textarea>
+            </div>
+
         </div>
 
-        <div class="form-group">
-            <label for="veterinario_id">Veterinário Responsável</label>
-            <select name="veterinario_id" id="veterinario_id" class="form-control">
-                <option value="">Selecione...</option>
-                <?php if (!empty($veterinarios)): ?>
-                    <?php foreach ($veterinarios as $vet): ?>
-                        <option value="<?= esc($vet['id']) ?>"
-                            <?= (isset($historico) && $historico['veterinario_id'] == $vet['id']) ? 'selected' : '' ?>>
-                            <?= esc($vet['nome']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </select>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         </div>
-
-        <div class="form-group">
-            <label for="sintomas">Sintomas</label>
-            <textarea name="sintomas" id="sintomas" class="form-control" rows="3"><?= old('sintomas', isset($historico) ? $historico['sintomas'] : '') ?></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="diagnostico">Diagnóstico</label>
-            <textarea name="diagnostico" id="diagnostico" class="form-control" rows="3"><?= old('diagnostico', isset($historico) ? $historico['diagnostico'] : '') ?></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="tratamento">Tratamento</label>
-            <textarea name="tratamento" id="tratamento" class="form-control" rows="3"><?= old('tratamento', isset($historico) ? $historico['tratamento'] : '') ?></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="observacoes">Observações</label>
-            <textarea name="observacoes" id="observacoes" class="form-control" rows="3"><?= old('observacoes', isset($historico) ? $historico['observacoes'] : '') ?></textarea>
-        </div>
-
     </div>
-
-    <div class="card-footer">
-        <button type="submit" class="btn btn-primary">Salvar</button>
-        <a href="<?= site_url('historico_medico/index/' . ($pet_id ?? ($historico['pet_id'] ?? ''))) ?>" class="btn btn-secondary">Cancelar</a>
-    </div>
-</div>
+</form>

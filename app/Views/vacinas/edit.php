@@ -1,5 +1,5 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
-<h1>Novo Atendimento</h1>
-<?= view('historico_medico/_form') ?>
+<h1>Editar Vacina</h1>
+<?= view('vacinas/_form') ?>
 <?= $this->endSection() ?>
