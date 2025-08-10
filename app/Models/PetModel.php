@@ -18,19 +18,31 @@ class PetModel extends Model
         'cor',
         'data_nascimento',
         'observacoes',
-        'foto'
+        'foto', 
+        'esta_vivo',
+        'alergias',
+        'numero_identificacao',
+        'castrado',
+        'peso',
+        'pelagem'
     ];
     protected $useTimestamps    = true;
 
     protected $validationRules = [
-        'cliente_id'      => 'required|is_natural_no_zero',
-        'nome'            => 'required|min_length[2]',
-        'especie'         => 'required',
-        'raca'            => 'permit_empty',
-        'sexo'            => 'required|in_list[M,F]',
-        'cor'             => 'permit_empty',
-        'data_nascimento' => 'permit_empty|valid_date',
-        'observacoes'     => 'permit_empty',
-        'foto'            => 'permit_empty',
+        'cliente_id'             => 'required|is_natural_no_zero',
+        'nome'                   => 'required|min_length[2]',
+        'especie'                => 'required',
+        'raca'                   => 'permit_empty',
+        'sexo'                   => 'required|in_list[M,F]',
+        'cor'                    => 'permit_empty',
+        'data_nascimento'        => 'permit_empty|valid_date',
+        'observacoes'            => 'permit_empty',
+        'foto'                   => 'permit_empty',
+        'esta_vivo'              => 'permit_empty',
+        'alergias'               => 'permit_empty',
+        'numero_identificacao'   => 'permit_empty',
+        'castrado'               => 'permit_empty',
+        'peso'                   => 'permit_empty',
+        'pelagem'                => 'permit_empty',
     ];
 }

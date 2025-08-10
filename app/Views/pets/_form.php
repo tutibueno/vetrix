@@ -23,9 +23,16 @@ $pet = $pet ?? []; ?>
         </div>
 
         <div class="form-group">
-            <label>Espécie</label>
-            <input type="text" name="especie" class="form-control <?= isset($errors['especie']) ? 'is-invalid' : '' ?>" value="<?= old('especie', $pet['especie'] ?? '') ?>">
-            <div class="invalid-feedback"><?= $errors['especie'] ?? '' ?></div>
+            <label for="especie">Espécie</label>
+            <input type="text" name="especie" id="especie" class="form-control"
+                value="<?= old('especie', $pet['especie'] ?? '') ?>"
+                list="especiesPadrao" required>
+            <datalist id="especiesPadrao">
+                <option value="Canino">
+                <option value="Felino">
+                <option value="Ave">
+                <option value="Equino">
+            </datalist>
         </div>
 
         <div class="form-group">
@@ -42,18 +49,52 @@ $pet = $pet ?? []; ?>
             </select>
             <div class="invalid-feedback"><?= $errors['sexo'] ?? '' ?></div>
         </div>
+
+        <div class="form-group">
+            <label>Peso (Kg)</label>
+            <input type="text" name="peso" value="<?= isset($pet['peso']) ? esc($pet['peso']) : '' ?>" class="form-control" placeholder="Ex: 5.20">
+        </div>
+
+        <div class="form-group">
+            <label>Castrado?</label>
+            <select name="castrado" class="form-control">
+                <option value="nao" <?= isset($pet['castrado']) && $pet['castrado'] == 'sim' ? '' : 'selected' ?>>Não</option>
+                <option value="sim" <?= isset($pet['castrado']) && $pet['castrado'] == 'sim' ? 'selected' : '' ?>>Sim</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Alergias</label>
+            <textarea name="alergias" class="form-control"><?= isset($pet['alergias']) ? esc($pet['alergias']) : '' ?></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Número de Identificação (Microchip)</label>
+            <input type="text" name="numero_identificacao" value="<?= isset($pet['numero_identificacao']) ? esc($pet['numero_identificacao']) : '' ?>" class="form-control">
+        </div>
     </div>
+
 
     <div class="col-md-6">
         <div class="form-group">
-            <label>Cor</label>
-            <input type="text" name="cor" class="form-control" value="<?= old('cor', $pet['cor'] ?? '') ?>">
+            <label>Pelagem</label>
+            <input type="text" name="pelagem" class="form-control" value="<?= old('pelagem', $pet['pelagem'] ?? '') ?>">
         </div>
 
         <div class="form-group">
             <label>Data de Nascimento</label>
             <input type="date" name="data_nascimento" class="form-control <?= isset($errors['data_nascimento']) ? 'is-invalid' : '' ?>" value="<?= old('data_nascimento', $pet['data_nascimento'] ?? '') ?>">
             <div class="invalid-feedback"><?= $errors['data_nascimento'] ?? '' ?></div>
+        </div>
+
+
+
+        <div class="form-group">
+            <label>Está Vivo?</label>
+            <select name="esta_vivo" class="form-control">
+                <option value="sim" <?= isset($pet['esta_vivo']) && $pet['esta_vivo'] == 'sim' ? 'selected' : '' ?>>Sim</option>
+                <option value="nao" <?= isset($pet['esta_vivo']) && $pet['esta_vivo'] == 'nao' ? 'selected' : '' ?>>Não</option>
+            </select>
         </div>
 
         <div class="form-group">
@@ -72,6 +113,34 @@ $pet = $pet ?? []; ?>
                 <img src="<?= base_url('uploads/pets/' . $pet['foto']) ?>" alt="Foto do pet" class="img-thumbnail" width="200">
             </div>
         <?php endif ?>
-        
+
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // Máscara de peso
+        $('input[name="peso"]').mask('000.00', {
+            reverse: true
+        });
+
+        // Validação simples antes de enviar
+        $('form').on('submit', function(e) {
+            let peso = $('input[name="peso"]').val();
+            let vivo = $('select[name="esta_vivo"]').val();
+            let castrado = $('select[name="castrado"]').val();
+
+            // Peso não pode ser negativo ou zero (se informado)
+            if (peso && parseFloat(peso) <= 0) {
+                alert('O peso deve ser maior que zero.');
+                e.preventDefault();
+            }
+
+            // Se o pet não está vivo, não faz sentido marcar como castrado = sim
+            if (vivo === 'nao' && castrado === 'sim') {
+                alert('Um pet falecido não pode estar castrado.');
+                e.preventDefault();
+            }
+        });
+    });
+</script>

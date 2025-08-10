@@ -128,6 +128,7 @@ class Pet extends BaseController
             ->join('veterinarios', 'veterinarios.id = historico_medico.veterinario_id', 'left')
             ->where('historico_medico.pet_id', $id)
             ->orderBy('historico_medico.data_consulta', 'desc')
+            ->orderBy('historico_medico.id', 'desc')
             ->findAll();
 
         $vacinas = $vacinaModel
@@ -135,6 +136,7 @@ class Pet extends BaseController
             ->join('veterinarios', 'veterinarios.id = vacinas.veterinario_id', 'left')
             ->where('vacinas.pet_id', $id)
             ->orderBy('vacinas.data_aplicacao', 'desc')
+            ->orderBy('vacinas.id', 'desc')
             ->findAll();
 
         return view('pets/ficha', compact('pet', 'historico', 'vacinas'));

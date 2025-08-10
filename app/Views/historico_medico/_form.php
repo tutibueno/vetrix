@@ -7,7 +7,7 @@
             <input type="hidden" name="pet_id" value="<?= esc($pet_id ?? ($historico['pet_id'] ?? '')) ?>">
 
             <div class="form-group">
-                <label for="data_consulta">Data</label>
+                <label for="data_consulta">Data da Consulta</label>
                 <input type="date" name="data_consulta" id="data" class="form-control"
                     value="<?= old('data_consulta', isset($historico) ? $historico['data_consulta'] : '') ?>" required>
             </div>
@@ -27,19 +27,34 @@
                 </select>
             </div>
 
+            <!-- anamnese (antes sintomas) -->
             <div class="form-group">
-                <label for="sintomas">Sintomas</label>
-                <textarea name="sintomas" id="sintomas" class="form-control" rows="3"><?= old('sintomas', isset($historico) ? $historico['sintomas'] : '') ?></textarea>
+                <label>Anamnese</label>
+                <textarea name="anamnese" class="form-control"><?= esc($historico['anamnese'] ?? '') ?></textarea>
             </div>
+
+            <!-- sinais clínicos -->
+            <div class="form-group">
+                <label for="sinais_clinicos">Sinais Clínicos</label>
+                <textarea name="sinais_clinicos" class="form-control"><?= esc($historico['sinais_clinicos'] ?? '') ?></textarea>
+            </div>
+
 
             <div class="form-group">
                 <label for="diagnostico">Diagnóstico</label>
                 <textarea name="diagnostico" id="diagnostico" class="form-control" rows="3"><?= old('diagnostico', isset($historico) ? $historico['diagnostico'] : '') ?></textarea>
             </div>
 
+            <!-- prescrição médica (antes tratamento) -->
             <div class="form-group">
-                <label for="tratamento">Tratamento</label>
-                <textarea name="tratamento" id="tratamento" class="form-control" rows="3"><?= old('tratamento', isset($historico) ? $historico['tratamento'] : '') ?></textarea>
+                <label>Prescrição Médica</label>
+                <textarea name="prescricao_medica" class="form-control"><?= esc($historico['prescricao_medica'] ?? '') ?></textarea>
+            </div>
+
+            <!-- solicitação de exame -->
+            <div class="form-group">
+                <label>Solicitação de Exame</label>
+                <textarea name="solicitacao_exame" class="form-control"><?= esc($historico['solicitacao_exame'] ?? '') ?></textarea>
             </div>
 
             <div class="form-group">

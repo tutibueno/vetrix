@@ -12,13 +12,21 @@
             </div>
         <?php endif; ?>
 
+        <p>
+            <strong>Está Vivo:</strong>
+            <?= $pet['esta_vivo'] === 'sim' ? '<span class="badge badge-success">Sim</span>' : '<span class="badge badge-danger">Não</span>' ?>
+        </p>
         <p><strong>Espécie:</strong> <?= esc($pet['especie']) ?></p>
         <p><strong>Raça:</strong> <?= esc($pet['raca']) ?></p>
         <p><strong>Sexo:</strong> <?= esc($pet['sexo']) ?></p>
         <p><strong>Data de Nascimento:</strong> <?= esc(date('d/m/Y', strtotime($pet['data_nascimento']))) ?></p>
         <p><strong>Tutor:</strong> <?= esc($pet['nome_tutor']) ?> - <?= esc($pet['telefone']) ?></p>
         <p><strong>Observações:</strong> <?= esc($pet['observacoes']) ?></p>
-
+        <p><strong>Castrado:</strong> <?= ucfirst($pet['castrado']) ?></p>
+        <p><strong>Peso:</strong> <?= $pet['peso'] ? number_format($pet['peso'], 2, ',', '.') . ' kg' : 'Não informado' ?></p>
+        <p><strong>Pelagem:</strong> <?= $pet['pelagem'] ?: 'Não informada' ?></p>
+        <p><strong>Número de Identificação:</strong> <?= $pet['numero_identificacao'] ?: 'Não informado' ?></p>
+        <p><strong>Alergias:</strong> <?= $pet['alergias'] ?: 'Nenhuma' ?></p>
         <div class="mb-3">
             <button class="btn btn-primary" id="btnAdicionarAtendimento" data-pet="<?= $pet['id'] ?>">
                 <i class="fas fa-notes-medical"></i> Adicionar Atendimento
@@ -34,19 +42,23 @@
         <?php if ($historico): ?>
             <ul class="list-group mb-4">
                 <?php foreach ($historico as $h): ?>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong><?= date('d/m/Y', strtotime($h['data_consulta'])) ?>:</strong>
-                            <?= esc($h['diagnostico']) ?> (<?= esc($h['veterinario_nome'] ?? 'Não informado') ?>)
-                        </div>
-                        <div>
+                    <li class="list-group-item">
+                        <strong><?= date('d/m/Y', strtotime($h['data_consulta'])) ?>:</strong>
+                        <br><strong>Veterinário:</strong> <?= esc($h['veterinario_nome'] ?? 'Não informado') ?>
+                        <br><strong>Anamnese:</strong> <?= esc($h['anamnese']) ?>
+                        <br><strong>Sinais Clínicos:</strong> <?= esc($h['sinais_clinicos']) ?>
+                        <br><strong>Diagnóstico:</strong> <?= esc($h['diagnostico']) ?>
+                        <br><strong>Prescrição Médica:</strong> <?= esc($h['prescricao_medica']) ?>
+                        <br><strong>Solicitação de Exame:</strong> <?= esc($h['solicitacao_exame']) ?>
+                        <br><strong>Observações:</strong> <?= esc($h['observacoes']) ?>
+
+                        <div class="mt-2">
                             <button class="btn btn-sm btn-warning" onclick="editarAtendimento(<?= $h['id'] ?>)">
-                                <i class="fas fa-edit"></i>
+                                <i class="fas fa-edit"></i> Editar
                             </button>
-                            <a href="<?= base_url('historico_medico/delete/' . $h['id']) ?>"
-                                class="btn btn-sm btn-danger"
-                                onclick="return confirm('Tem certeza que deseja excluir este atendimento?')">
-                                <i class="fas fa-trash"></i>
+                            <a href="<?= site_url('historico_medico/delete/' . $h['id']) ?>" class="btn btn-sm btn-danger"
+                                onclick="return confirm('Tem certeza que deseja excluir este atendimento?');">
+                                <i class="fas fa-trash"></i> Excluir
                             </a>
                         </div>
                     </li>
@@ -55,6 +67,7 @@
         <?php else: ?>
             <p>Nenhum atendimento registrado.</p>
         <?php endif; ?>
+
 
         <h5>💉 Vacinas</h5>
         <?php if ($vacinas): ?>
