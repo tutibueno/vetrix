@@ -32,7 +32,7 @@ class Vacinas extends BaseController
         ];
 
         if ($vacinaModel->insert($data)) {
-            return redirect()->to(site_url('pets/ficha/' . $data['pet_id']))->with('success', 'Vacina adicionada com sucesso.');
+            return redirect()->to(site_url('pet/ficha/' . $data['pet_id']))->with('success', 'Vacina adicionada com sucesso.');
         } else {
             return redirect()->back()->with('error', 'Erro ao salvar vacina.');
         }
@@ -70,7 +70,7 @@ class Vacinas extends BaseController
 
         $vacina = $vacinaModel->find($id);
         if ($vacinaModel->update($id, $data)) {
-            return redirect()->to(site_url('pets/ficha/' . $vacina['pet_id']))->with('success', 'Vacina atualizada com sucesso.');
+            return redirect()->to(site_url('pet/ficha/' . $vacina['pet_id']))->with('success', 'Vacina atualizada com sucesso.');
         } else {
             return redirect()->back()->with('error', 'Erro ao atualizar vacina.');
         }
@@ -82,7 +82,7 @@ class Vacinas extends BaseController
         $vacina = $vacinaModel->find($id);
 
         if ($vacina && $vacinaModel->delete($id)) {
-            return redirect()->to(site_url('pets/ficha/' . $vacina['pet_id']))->with('success', 'Vacina removida.');
+            return redirect()->to(site_url('pet/ficha/' . $vacina['pet_id']))->with('success', 'Vacina removida.');
         } else {
             return redirect()->back()->with('error', 'Erro ao remover vacina.');
         }

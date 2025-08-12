@@ -24,6 +24,7 @@ class ClientModel extends Model
     ];
 
     protected $useTimestamps = true;
+    protected $useSoftDeletes   = true;
 
     protected $validationRules = [
         'id'             => 'permit_empty|is_natural_no_zero',

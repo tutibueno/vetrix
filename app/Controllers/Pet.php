@@ -105,8 +105,8 @@ class Pet extends BaseController
 
     public function delete($id)
     {
-        //$this->petModel->delete($id);
-        return redirect()->to('/pet')->with('error', 'Pet não pode ser removido');
+        $this->petModel->delete($id);
+        return redirect()->to('/pet')->with('error', 'Pet removido com sucesso');
     }
 
     public function ficha($id)
@@ -122,6 +122,8 @@ class Pet extends BaseController
 
         $historicoModel = new \App\Models\HistoricoMedicoModel();
         $vacinaModel = new \App\Models\VacinaModel();
+        $prescricaoModel = new \App\Models\PrescricaoModel();
+        $medicamentoModel = new \App\Models\PrescricaoMedicamentoModel();
 
         $historico = $historicoModel
             ->select('historico_medico.*, veterinarios.nome as veterinario_nome')
@@ -139,7 +141,23 @@ class Pet extends BaseController
             ->orderBy('vacinas.id', 'desc')
             ->findAll();
 
-        return view('pets/ficha', compact('pet', 'historico', 'vacinas'));
+
+        // Prescrições do pet
+        $prescricoes = $prescricaoModel
+            ->select('prescricoes.*, veterinarios.nome AS veterinario_nome')
+            ->join('veterinarios', 'veterinarios.id = prescricoes.veterinario_id', 'left')
+            ->where('prescricoes.pet_id', $id)
+            ->orderBy('prescricoes.data_prescricao', 'DESC')
+            ->findAll();
+
+        // Adiciona medicamentos de cada prescrição
+        foreach ($prescricoes as &$prescricao) {
+            $prescricao['medicamentos'] = $medicamentoModel
+                ->where('prescricao_id', $prescricao['id'])
+                ->findAll();
+        }
+
+        return view('pets/ficha', compact('pet', 'historico', 'vacinas', 'prescricoes'));
     }
 
 }

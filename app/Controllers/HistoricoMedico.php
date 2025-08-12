@@ -72,7 +72,7 @@ class HistoricoMedico extends BaseController
         ];
 
         if ($this->historicoModel->insert($data)) {
-            return redirect()->to(site_url('pets/ficha/' . $data['pet_id']))
+            return redirect()->to(site_url('pet/ficha/' . $data['pet_id']))
                 ->with('success', 'Histórico médico criado com sucesso.');
         } else {
             return redirect()->back()->withInput()->with('errors', $this->historicoModel->errors());
@@ -118,7 +118,7 @@ class HistoricoMedico extends BaseController
         ];
 
         if ($this->historicoModel->update($id, $data)) {
-            return redirect()->to(site_url('pets/ficha/' . $data['pet_id']))
+            return redirect()->to(site_url('pet/ficha/' . $data['pet_id']))
                 ->with('success', 'Histórico médico atualizado com sucesso.');
         } else {
             return redirect()->back()->withInput()->with('errors', $this->historicoModel->errors());
@@ -135,7 +135,7 @@ class HistoricoMedico extends BaseController
 
         $this->historicoModel->delete($id);
 
-        return redirect()->to(site_url('pets/ficha/' . $historico['pet_id']))
+        return redirect()->to(site_url('pet/ficha/' . $historico['pet_id']))
             ->with('success', 'Histórico médico excluído com sucesso.');
     }
 }

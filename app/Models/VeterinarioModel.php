@@ -17,4 +17,5 @@ class VeterinarioModel extends Model
         'observacoes'
     ];
     protected $useTimestamps = true;
+    protected $useSoftDeletes   = false;
 }

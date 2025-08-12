@@ -87,8 +87,6 @@ $pet = $pet ?? []; ?>
             <div class="invalid-feedback"><?= $errors['data_nascimento'] ?? '' ?></div>
         </div>
 
-
-
         <div class="form-group">
             <label>Está Vivo?</label>
             <select name="esta_vivo" class="form-control">
@@ -144,3 +142,25 @@ $pet = $pet ?? []; ?>
         });
     });
 </script>
+
+<style>
+    .suggestions {
+        position: absolute;
+        border: 1px solid #ccc;
+        background: white;
+        width: 100%;
+        max-height: 150px;
+        overflow-y: auto;
+        z-index: 1000;
+    }
+
+    .suggestions div {
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .suggestions div:hover {
+        background: #f0f0f0;
+    }
+</style>
+

@@ -25,4 +25,6 @@ class VacinaModel extends Model
             ->orderBy('data_aplicacao', 'DESC')
             ->findAll();
     }
+
+    protected $useTimestamps = true;
 }

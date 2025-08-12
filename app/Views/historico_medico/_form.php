@@ -45,18 +45,6 @@
                 <textarea name="diagnostico" id="diagnostico" class="form-control" rows="3"><?= old('diagnostico', isset($historico) ? $historico['diagnostico'] : '') ?></textarea>
             </div>
 
-            <!-- prescrição médica (antes tratamento) -->
-            <div class="form-group">
-                <label>Prescrição Médica</label>
-                <textarea name="prescricao_medica" class="form-control"><?= esc($historico['prescricao_medica'] ?? '') ?></textarea>
-            </div>
-
-            <!-- solicitação de exame -->
-            <div class="form-group">
-                <label>Solicitação de Exame</label>
-                <textarea name="solicitacao_exame" class="form-control"><?= esc($historico['solicitacao_exame'] ?? '') ?></textarea>
-            </div>
-
             <div class="form-group">
                 <label for="observacoes">Observações</label>
                 <textarea name="observacoes" id="observacoes" class="form-control" rows="3"><?= old('observacoes', isset($historico) ? $historico['observacoes'] : '') ?></textarea>

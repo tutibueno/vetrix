@@ -66,7 +66,7 @@
           <td>
             <a href="<?= site_url('pet/edit/' . $pet['id']) ?>" class="btn btn-warning btn-sm">Editar</a>
             <!-- <a href="<?= site_url('pet/delete/' . $pet['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Deseja realmente excluir este pet?')">Excluir</a> -->
-            <a href="<?= site_url('pets/ficha/' . $pet['id']) ?>" class="btn btn-sm btn-primary">
+            <a href="<?= site_url('pet/ficha/' . $pet['id']) ?>" class="btn btn-sm btn-primary">
               <i class="fas fa-notes-medical"></i> Ficha
             </a>
           </td>

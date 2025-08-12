@@ -29,10 +29,16 @@
         <p><strong>Alergias:</strong> <?= $pet['alergias'] ?: 'Nenhuma' ?></p>
         <div class="mb-3">
             <button class="btn btn-primary" id="btnAdicionarAtendimento" data-pet="<?= $pet['id'] ?>">
-                <i class="fas fa-notes-medical"></i> Adicionar Atendimento
+                <i class="fas fa-notes-medical"></i> &plus; Atendimento
             </button>
-            <button class="btn btn-success" id="btnAdicionarVacina" data-pet="<?= $pet['id'] ?>">
-                <i class="fas fa-syringe"></i> Adicionar Vacinação
+            <button class="btn btn-primary" id="btnAdicionarVacina" data-pet="<?= $pet['id'] ?>">
+                <i class="fas fa-syringe"></i> &plus; Vacinação
+            </button>
+            <button class="btn btn-primary" id="btnAdicionarPrescricao" data-pet="<?= $pet['id'] ?>">
+                <i class="fas fa-file-medical"></i> &plus; Prescrição
+            </button>
+            <button class="btn btn-primary" id="btnAdicionarExame" data-pet="<?= $pet['id'] ?>">
+                <i class="fas fa-book-medical"></i> &plus; Exame
             </button>
         </div>
 
@@ -95,6 +101,47 @@
         <?php else: ?>
             <p>Nenhuma vacina registrada.</p>
         <?php endif; ?>
+
+        <h5>Prescrições</h5>
+        <?php if (!empty($prescricoes)): ?>
+            <div class="accordion" id="accordionPrescricoes">
+                <?php foreach ($prescricoes as $index => $prescricao): ?>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading<?= $index ?>">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse<?= $index ?>" aria-expanded="false" aria-controls="collapse<?= $index ?>">
+                                <?= date('d/m/Y', strtotime($prescricao['data_prescricao'])) ?> -
+                                <?= esc($prescricao['veterinario_nome']) ?> (<?= esc($prescricao['tipo_prescricao']) ?>)
+                            </button>
+                        </h2>
+                        <div id="collapse<?= $index ?>" class="accordion-collapse collapse" aria-labelledby="heading<?= $index ?>"
+                            data-bs-parent="#accordionPrescricoes">
+                            <div class="accordion-body">
+                                <strong>Instruções Gerais:</strong>
+                                <p><?= nl2br(esc($prescricao['instrucoes_gerais'])) ?></p>
+
+                                <h5>Medicamentos</h5>
+                                <ul>
+                                    <?php foreach ($prescricao['medicamentos'] as $med): ?>
+                                        <li>
+                                            <strong><?= esc($med['nome_medicamento']) ?></strong> -
+                                            <?= esc($med['posologia']) ?> (<?= esc($med['quantidade']) ?>)
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+
+                                <div class="mt-2">
+                                    <button class="btn btn-sm btn-warning" onclick="editarPrescricao(<?= $prescricao['id'] ?>)">Editar</button>
+                                    <button class="btn btn-sm btn-danger" onclick="excluirPrescricao(<?= $prescricao['id'] ?>)">Excluir</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p>Nenhuma prescrição cadastrada.</p>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -125,6 +172,15 @@
                 $('#modalContent').html(data);
             });
         });
+
+        $('#btnAdicionarPrescricao').on('click', function() {
+            const petId = $(this).data('pet');
+            $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+            $('#modalFormulario').modal('show');
+            $.get("<?= base_url('prescricoes/create') ?>/" + petId, function(data) {
+                $('#modalContent').html(data);
+            });
+        });
     });
 </script>
 
@@ -145,6 +201,26 @@
         $.get("<?= base_url('historico_medico/edit') ?>/" + id, function(data) {
             $('#modalContent').html(data);
         });
+    }
+</script>
+
+<script>
+    function editarPrescricao(id) {
+        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalFormulario').modal('show');
+        $.get("<?= base_url('prescricoes/edit') ?>/" + id, function(data) {
+            $('#modalContent').html(data);
+        });
+    }
+
+    function excluirPrescricao(id) {
+        if (confirm('Tem certeza que deseja excluir esta prescrição?')) {
+            $.post(`/prescricoes/delete/${id}`, {
+                _method: 'DELETE'
+            }, function() {
+                location.reload();
+            });
+        }
     }
 </script>
 
