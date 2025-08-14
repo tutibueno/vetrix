@@ -133,6 +133,9 @@
                                 <div class="mt-2">
                                     <button class="btn btn-sm btn-warning" onclick="editarPrescricao(<?= $prescricao['id'] ?>)">Editar</button>
                                     <button class="btn btn-sm btn-danger" onclick="excluirPrescricao(<?= $prescricao['id'] ?>)">Excluir</button>
+                                    <a href="<?= site_url('prescricoes/imprimir/' . $prescricao['id']) ?>" target="_blank" class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-print"></i> Imprimir
+                                    </a>
                                 </div>
                             </div>
                         </div>

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\PrescricaoModel;
 use App\Models\PrescricaoMedicamentoModel;
 use App\Models\VeterinarioModel;
+use App\Models\ClientModel;
 use App\Models\PetModel;
 use CodeIgniter\Controller;
 
@@ -219,5 +220,130 @@ class Prescricoes extends Controller
     private function getVeterinarios()
     {
         return model('VeterinarioModel')->findAll();
+    }
+
+    public function imprimir_old($id)
+    {
+        $prescricaoModel = new PrescricaoModel();
+        $medicamentoPrescricaoModel = new PrescricaoMedicamentoModel();
+
+        // Consulta com JOIN para trazer dados do tutor
+        $prescricao = $prescricaoModel
+            ->select('
+                prescricoes.*, 
+                pets.nome AS pet_nome, 
+                pets.especie AS pet_especie,
+                pets.data_nascimento AS pet_data_nascimento,
+                TIMESTAMPDIFF(YEAR, pets.data_nascimento, CURDATE()) AS anos,
+                TIMESTAMPDIFF(MONTH, DATE_ADD(pets.data_nascimento, INTERVAL TIMESTAMPDIFF(YEAR, pets.data_nascimento, CURDATE()) YEAR), CURDATE()) AS meses,
+                pets.sexo AS pet_sexo,
+                clients.nome AS tutor_nome, 
+                clients.cpf_cnpj AS tutor_cpf,
+                clients.rua AS tutor_endereco,
+                clients.numero AS tutor_numero,
+                clients.bairro AS tutor_bairro,
+                clients.cidade AS tutor_cidade,
+                clients.estado AS tutor_uf,
+                clients.cep AS tutor_cep,
+                veterinarios.nome AS veterinario_nome,
+                veterinarios.crmv AS veterinario_crmv
+            ')
+            ->join('pets', 'pets.id = prescricoes.pet_id')
+            ->join('clients', 'clients.id = pets.cliente_id')
+            ->join('veterinarios', 'veterinarios.id = prescricoes.veterinario_id', 'left')
+            ->where('prescricoes.id', $id)
+            ->first();
+
+        if (!$prescricao) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Prescrição não encontrada");
+        }
+
+        // Medicamentos dessa prescrição
+        $medicamentos = $medicamentoPrescricaoModel
+            ->where('prescricao_id', $id)
+            ->findAll();
+
+        return view('prescricoes/imprimir', [
+            'prescricao' => $prescricao,
+            'medicamentos' => $medicamentos
+        ]);
+    }
+
+    public function imprimir($id)
+    {
+        $prescricaoModel = new PrescricaoModel();
+        $medicamentoModel = new PrescricaoMedicamentoModel();
+        $petModel = new PetModel();
+        $clienteModel = new ClientModel();
+        $veterinarioModel = new VeterinarioModel();
+
+        // Buscar prescrição
+        $prescricao = $prescricaoModel->find($id);
+
+        if (!$prescricao) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Prescrição não encontrada");
+        }
+
+        // Buscar dados do pet
+        $pet = $petModel->find($prescricao['pet_id']);
+
+        // Calcular idade do pet
+        $idadePet = '';
+        if (!empty($pet['data_nascimento'])) {
+            $dataNascimento = new \DateTime($pet['data_nascimento']);
+            $hoje = new \DateTime();
+            $idade = $hoje->diff($dataNascimento);
+
+            $idadePet = $idade->y . ' ano';
+            $idade->y == 0 || $idade->y > 1 ? $idadePet .= 's' : '';
+            $idadePet .= ' e ' . $idade->m;
+            $idade->m > 1 || $idade->m == 0 ? $idadePet .= ' meses' : $idadePet .= ' mês';
+            
+        }
+
+        // Buscar cliente (tutor)
+        $cliente = $clienteModel->find($pet['cliente_id']);
+
+        // Buscar veterinário
+        $veterinario = $veterinarioModel->find($prescricao['veterinario_id']);
+
+        // Buscar medicamentos e agrupar por via
+        $medicamentos = $medicamentoModel
+            ->where('prescricao_id', $id)
+            ->findAll();
+
+        $medicamentosPorVia = [];
+        foreach ($medicamentos as $med) {
+            $via = $med['via'];
+            if (!isset($medicamentosPorVia[$via])) {
+                $medicamentosPorVia[$via] = [];
+            }
+            $medicamentosPorVia[$via][] = $med;
+        }
+
+        $info_clinica = [];
+        $info_clinica['rua'] = 'Rua Teodureto Souto';
+        $info_clinica['numero'] = '577';
+        $info_clinica['complemento'] = '(paralelo à av. Lins de Vasconcelos)';
+        $info_clinica['cep'] = '01536-000';
+        $info_clinica['cidade'] = 'São Paulo';
+        $info_clinica['uf'] = 'SP';
+        $info_clinica['bairro'] = 'Cambuci';
+        $info_clinica['telefone'] = '11-3206-7266';
+        $info_clinica['celular'] = '(11)99987-9989';
+        $info_clinica['whatsapp'] = '(11)99988-9989';
+        $info_clinica['email'] = 'clinica_vet@gmail.com';
+
+        $dados = [
+            'prescricao' => $prescricao,
+            'pet' => $pet,
+            'idade_pet' => $idadePet,
+            'cliente' => $cliente,
+            'veterinario' => $veterinario,
+            'medicamentosPorVia' => $medicamentosPorVia,
+            'info_clinica' => $info_clinica
+        ];
+
+        return view('prescricoes/imprimir', $dados);
     }
 }

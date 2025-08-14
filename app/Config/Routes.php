@@ -90,5 +90,7 @@ $routes->group('prescricoes', function ($routes) {
 
     // Medicamentos dentro de uma prescrição
     $routes->get('medicamento/excluir/(:num)', 'Prescricoes::excluirMedicamento/$1');
+
+    $routes->get('imprimir/(:num)', 'Prescricoes::imprimir/$1');
 });
 

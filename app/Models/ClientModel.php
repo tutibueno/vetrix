@@ -15,6 +15,7 @@ class ClientModel extends Model
         'email',
         'rua',
         'numero',
+        'complemento',
         'bairro',
         'cidade',
         'estado',
@@ -29,10 +30,10 @@ class ClientModel extends Model
     protected $validationRules = [
         'id'             => 'permit_empty|is_natural_no_zero',
         'nome'         => 'required|min_length[3]',
-        'cpf_cnpj'     => 'required|is_unique[clients.cpf_cnpj,id,{id}]',
-        'telefone'     => 'required',
+        'cpf_cnpj'     => 'permit_empty|is_unique[clients.cpf_cnpj,id,{id}]',
+        'telefone'     => 'permit_empty',
         'email'        => 'permit_empty|valid_email',
         'cep'          => 'required',
-        'data_nascimento' => 'required|valid_date',
+        'data_nascimento' => 'permit_empty|valid_date',
     ];
 }
