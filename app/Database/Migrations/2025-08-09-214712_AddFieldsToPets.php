@@ -28,7 +28,7 @@ class AddFieldsToPets extends Migration
                 'type' => 'ENUM',
                 'constraint' => ['sim', 'nao'],
                 'default' => 'nao',
-                'null' => false,
+                'null' => true,
             ],
             'peso' => [
                 'type' => 'DECIMAL',

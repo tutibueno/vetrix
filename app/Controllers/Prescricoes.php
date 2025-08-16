@@ -298,7 +298,8 @@ class Prescricoes extends Controller
             $idade->y == 0 || $idade->y > 1 ? $idadePet .= 's' : '';
             $idadePet .= ' e ' . $idade->m;
             $idade->m > 1 || $idade->m == 0 ? $idadePet .= ' meses' : $idadePet .= ' mês';
-            
+
+            $pet['data_nascimento'] == '0000-00-00' ? $idadePet = '' : $idadePet;
         }
 
         // Buscar cliente (tutor)

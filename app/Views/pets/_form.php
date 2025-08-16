@@ -129,7 +129,7 @@ $pet = $pet ?? []; ?>
             let castrado = $('select[name="castrado"]').val();
 
             // Peso não pode ser negativo ou zero (se informado)
-            if (peso && parseFloat(peso) <= 0) {
+            if (peso && parseFloat(peso) < 0) {
                 alert('O peso deve ser maior que zero.');
                 e.preventDefault();
             }

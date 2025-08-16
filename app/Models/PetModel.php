@@ -33,7 +33,7 @@ class PetModel extends Model
         'nome'                   => 'required|min_length[2]',
         'especie'                => 'required',
         'raca'                   => 'permit_empty',
-        'sexo'                   => 'required|in_list[M,F]',
+        'sexo'                   => 'permit_empty|in_list[M,F]',
         'cor'                    => 'permit_empty',
         'data_nascimento'        => 'permit_empty|valid_date',
         'observacoes'            => 'permit_empty',

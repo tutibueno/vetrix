@@ -51,11 +51,11 @@
                     <li class="list-group-item">
                         <strong><?= date('d/m/Y', strtotime($h['data_consulta'])) ?>:</strong>
                         <br><strong>Veterinário:</strong> <?= esc($h['veterinario_nome'] ?? 'Não informado') ?>
-                        <br><strong>Anamnese:</strong> <?= esc($h['anamnese']) ?>
-                        <br><strong>Sinais Clínicos:</strong> <?= esc($h['sinais_clinicos']) ?>
-                        <br><strong>Diagnóstico:</strong> <?= esc($h['diagnostico']) ?>
-                        <br><strong>Prescrição Médica:</strong> <?= esc($h['prescricao_medica']) ?>
-                        <br><strong>Solicitação de Exame:</strong> <?= esc($h['solicitacao_exame']) ?>
+                        <br><strong>Anamnese:</strong>
+                        <div style="white-space: pre;"><?= esc($h['anamnese']) ?></div>
+                        <p><strong>Sinais Clínicos:</strong> <?= esc($h['sinais_clinicos']) ?>
+                        <br><strong>Diagnóstico:</strong>
+                        <div style="white-space: pre;"><?= esc($h['diagnostico']) ?></div>
                         <br><strong>Observações:</strong> <?= esc($h['observacoes']) ?>
 
                         <div class="mt-2">

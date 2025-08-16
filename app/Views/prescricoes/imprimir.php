@@ -122,7 +122,7 @@
         <div><?= esc($veterinario['nome']) ?></div>
         <div>CRMV: <?= esc($veterinario['crmv']) ?></div>
         <div style="font-size: 10px;">
-        <br>
+            <br>
             <?= esc($info_clinica['rua']) ?>, <?= esc($info_clinica['numero']) ?><?= $info_clinica['complemento'] ? ' ' . esc($info_clinica['complemento']) : '' ?>
             <?= esc($info_clinica['cep']) ?> - <?= esc($info_clinica['bairro']) ?> - <?= esc($info_clinica['cidade']) ?> - <?= esc($info_clinica['uf']) ?>
             <br>
@@ -144,14 +144,18 @@
                 <div class="info-title">Animal</div>
                 Nome: <?= esc($pet['nome']) ?><br>
                 Espécie: <?= esc($pet['especie']) ?><br>
-                Sexo: <?= esc($pet['sexo']) ?><br>
-                Idade: <?= $idade_pet ?><br>
+                <?php if (!empty($pet['sexo'])): ?>
+                    Sexo: <?= esc($pet['sexo']) ?><br>
+                <?php endif; ?>
+                <?php if (!empty($idade_pet)): ?>
+                    Idade: <?= $idade_pet ?><br>
+                <?php endif; ?>
             </td>
             <td style="text-align: center;">
                 <div class="info-title">Tutor</div>
                 <?= esc($cliente['nome']) ?><br>
                 <?= esc($cliente['cpf_cnpj']) ?><br>
-                <?= esc($cliente['rua']) ?> <?= esc($cliente['numero']) ?> <?= esc($cliente['complemento']) ?><br>
+                <?= esc($cliente['rua']) ?>, <?= esc($cliente['numero']) ?> <?= esc($cliente['complemento']) ?><br>
                 <?= esc($cliente['cidade']) ?> <?= esc($cliente['cep']) ?><br>
             </td>
         </tr>
@@ -201,7 +205,7 @@
         <strong><?= esc($veterinario['nome']) ?></strong><br>
         CRMV: <?= esc($veterinario['crmv']) ?><br><br>
     </div>
-   
+
 </body>
 
 </html>
