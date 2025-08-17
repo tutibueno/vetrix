@@ -50,13 +50,16 @@
                 <?php foreach ($historico as $h): ?>
                     <li class="list-group-item">
                         <strong><?= date('d/m/Y', strtotime($h['data_consulta'])) ?>:</strong>
-                        <br><strong>Veterinário:</strong> <?= esc($h['veterinario_nome'] ?? 'Não informado') ?>
+                        <br><strong>Veterinário:</strong>
+                        <div style="white-space: pre;"><?= esc($h['veterinario_nome'] ?? 'Não informado') ?></div>
                         <br><strong>Anamnese:</strong>
                         <div style="white-space: pre;"><?= esc($h['anamnese']) ?></div>
-                        <p><strong>Sinais Clínicos:</strong> <?= esc($h['sinais_clinicos']) ?>
+                        <p><strong>Sinais Clínicos:</strong>
+                        <div style="white-space: pre;"><?= esc($h['sinais_clinicos']) ?></div>
                         <br><strong>Diagnóstico:</strong>
                         <div style="white-space: pre;"><?= esc($h['diagnostico']) ?></div>
-                        <br><strong>Observações:</strong> <?= esc($h['observacoes']) ?>
+                        <br><strong>Observações:</strong>
+                        <div style="white-space: pre;"><?= esc($h['observacoes']) ?></div>
 
                         <div class="mt-2">
                             <button class="btn btn-sm btn-warning" onclick="editarAtendimento(<?= $h['id'] ?>)">
@@ -156,6 +159,27 @@
     </div>
 </div>
 
+<!-- Modal Impressão-->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pré-visualização da Prescrição</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="previewContent" style="min-height:70vh; overflow:auto;">
+                <!-- Conteúdo será injetado via JS -->
+            </div>
+            <div class="modal-footer">
+                <a href="<?= site_url('prescricoes/imprimir/pdf/' . 6) ?>" target="_blank" class="btn btn-success">
+                    Baixar PDF
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function() {
         $('#btnAdicionarAtendimento').on('click', function() {
@@ -225,6 +249,24 @@
             });
         }
     }
+
+    function VisualizarImpressao(id) {
+
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (!isMobile) {
+            document.getElementById("previewContent").innerHTML =
+                `<iframe src="<?= site_url('prescricoes/imprimir/') ?>${id}" style="width:100%; height:70vh; border:none;"></iframe>`;
+        } else {
+            document.getElementById("previewContent").innerHTML =
+                `<iframe src="<?= site_url('prescricoes/imprimir/') ?>${id}" style="width:100%; height:70vh; border:none;"></iframe>`;
+        }
+        var modal = new bootstrap.Modal(document.getElementById('previewModal'));
+        modal.show();
+
+    }
 </script>
+
+
 
 <?= $this->endSection() ?>

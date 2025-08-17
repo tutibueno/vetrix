@@ -92,5 +92,9 @@ $routes->group('prescricoes', function ($routes) {
     $routes->get('medicamento/excluir/(:num)', 'Prescricoes::excluirMedicamento/$1');
 
     $routes->get('imprimir/(:num)', 'Prescricoes::imprimir/$1');
+
+    $routes->get('imprimir/pdf/(:num)', 'Prescricoes::imprimirPdf/$1');
+
+
 });
 

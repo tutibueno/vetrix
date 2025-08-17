@@ -2,18 +2,13 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Prescrição_<?= esc($pet['nome']) ?>_<?= esc($prescricao['tipo_prescricao']) ?>_<?= date('d_m_Y', strtotime($prescricao['data_prescricao'])) ?></title>
+    <meta charset="utf-8">
+    <title>Prescrição</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
-            width: 148mm;
-            /* A5 horizontal */
-            height: 210mm;
-            /* A5 vertical */
-            margin: 0;
-            padding: 2mm;
+
         }
 
         h1,
@@ -55,7 +50,7 @@
         }
 
         .med-table {
-            width: 97%;
+            width: 100%;
             border-collapse: collapse;
             margin-bottom: 10px;
         }
@@ -111,20 +106,16 @@
         .uso {
             white-space: nowrap;
         }
-
-        #btn-imprimir {
-            font-size: 1.2rem;
-            padding: 15px;
-            border-radius: 10px;
+    </style>
+    <style type="text/css">
+        thead:before,
+        thead:after {
+            display: none;
         }
 
-        /* Estilo específico para impressão */
-        @media print {
-            #btn-imprimir {
-                display: none;
-            }
-
-            /* esconde o botão na hora da impressão */
+        tbody:before,
+        tbody:after {
+            display: none;
         }
     </style>
 </head>
@@ -180,31 +171,27 @@
 
     <!-- Medicamentos -->
     <?php foreach ($medicamentosPorVia as $via => $meds): ?>
-        <table class="med-table2">
+        <table style="width:100%; border-collapse:collapse; margin-bottom:5px;">
             <tr>
-                <td colspan="3" class="linha-pontilhada">
-                    <span class="uso"><strong>USO <?= mb_strtoupper($via, "UTF-8") ?>: </strong></span>
-                    <span class="pontilhado2"></span>
-                </td>
+                <td style="width:25%; text-align:left;"><strong>USO <?= mb_strtoupper($via, "UTF-8") ?>: </strong></td>
+                <td style="border-bottom:1px solid #000;">&nbsp;</td>
             </tr>
         </table>
-        <table class="med-table">
-            <?php foreach ($meds as $med): ?>
+        <?php foreach ($meds as $med): ?>
+            <table style="width:100%; border-collapse:collapse; margin-bottom:5px;">
                 <tr>
-                    <td colspan="3">
-                        <span class="tipo-farmacia">Farmácia <?= esc($med['tipo_farmacia']) ?></span>
-                        <span class="pontilhado"></span>
-                        <span class="quantidade"><?= esc($med['quantidade']) ?> <?= ($med['quantidade'] > 1 ? 'UNIDADES' : 'UNIDADE') ?></span>
-                    </td>
+                    <td style="width:20%; text-align:left;">Farmácia <?= esc($med['tipo_farmacia']) ?></td>
+                    <td style="border-bottom:1px dotted #000;">&nbsp;</td>
+                    <td style="width:30%; text-align:left;"><?= esc($med['quantidade']) ?> <?= ($med['quantidade'] > 1 ? 'UNIDADES' : 'UNIDADE') ?></td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="font-weight: bold;"><?= esc($med['nome_medicamento']) ?></td>
+                    <td style="width:100%; font-weight: bold;"><?= esc($med['nome_medicamento']) ?></td>
                 </tr>
                 <tr>
-                    <td colspan="3"><?= esc($med['posologia']) ?></td>
+                    <td style="width:100%;"><?= esc($med['posologia']) ?></td>
                 </tr>
-            <?php endforeach; ?>
-        </table>
+            </table>
+        <?php endforeach; ?>
     <?php endforeach; ?>
 
     <!-- Instruções gerais -->
@@ -221,10 +208,18 @@
         CRMV: <?= esc($veterinario['crmv']) ?><br><br>
     </div>
 
-    <button id="btn-imprimir" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
-
-    
-
 </body>
+
+<style>
+    @page {
+        margin: 20px;
+        /* ou margin: 10px 20px 10px 20px */
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+</style>
 
 </html>
