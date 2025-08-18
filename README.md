@@ -20,15 +20,6 @@ Roadmap:
 - Controle de serviços como banho e tosa.
 - Controle financeiro
 
----
-
-## 🖼️ Capturas de Tela
-
-> 
-
-```markdown
-![Tela de login](caminho/para/imagem-login.png)
-![Dashboard](caminho/para/imagem-dashboard.png)
 
 
 🛠️ Tecnologias Utilizadas
@@ -65,5 +56,17 @@ Desenvolvido por Reginaldo Bueno
 📧 Email: tuti.bueno@gmail.com
 🐾 Instagram: @clinica.veterinaria.dev
 
+
 ---
+
+
+
+## 🖼️ Capturas de Tela
+
+> 
+
+```markdown
+![Tela de login](caminho/para/imagem-login.png)
+![Dashboard](caminho/para/imagem-dashboard.png)
+
 
