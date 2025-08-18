@@ -1,68 +1,69 @@
-# CodeIgniter 4 Application Starter
+# 🐾 Clínica Veterinária - Sistema de Gestão
 
-## What is CodeIgniter?
+Sistema de código aberto desenvolvido em PHP com CodeIgniter 4 para gestão de clínicas veterinárias. Ideal para profissionais da saúde animal que buscam organização, eficiência e controle da rotina clínica.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+---
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## 🚀 Funcionalidades
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+- Cadastro de clientes e pacientes (pets)
+- Histórico clínico dos animais com ficha completa
+- Controle de aplicação de vacinas
+- Controle de Atendimentos
+- Controle de prescrições com impressão das prescrições
+- Controle de solicitação de exames com impressão das solicitaçoes
+- Sistema multi-usuários
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+Roadmap:
 
-## Installation & updates
+- Agendamento de consultas
+- Controle de serviços como banho e tosa.
+- Controle financeiro
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+---
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+## 🖼️ Capturas de Tela
 
-## Setup
+> 
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+```markdown
+![Tela de login](caminho/para/imagem-login.png)
+![Dashboard](caminho/para/imagem-dashboard.png)
 
-## Important Change with index.php
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+🛠️ Tecnologias Utilizadas
+- PHP 8+
+- CodeIgniter 4
+- MySQL
+- Bootstrap
+- jQuery
+- AdminLTE 
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+📦 Instalação
+- Clone o repositório:
+git clone https://github.com/tutibueno/clinica-veterinaria.git
 
-**Please** read the user guide for a better explanation of how CI4 works!
 
-## Repository Management
+- Configure o ambiente:
+- Crie um banco de dados MySQL
+- Edite o arquivo .env com suas credenciais
+- Execute as migrações:
+php spark migrate
+- Inicie o servidor local:
+php spark serve
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
 
-## Server Requirements
+👥 Contribuições
+Contribuições são muito bem-vindas! Sinta-se à vontade para abrir issues, sugerir melhorias ou enviar pull requests.
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+📄 Licença
+Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para mais detalhes.
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+📣 Contato
+Desenvolvido por Reginaldo Bueno
+📧 Email: tuti.bueno@gmail.com
+🐾 Instagram: @clinica.veterinaria.dev
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+---
 
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
