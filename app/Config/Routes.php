@@ -78,7 +78,7 @@ $routes->get('prescricoes/(:num)/medicamentos/create', 'PrescricaoMedicamentoCon
 $routes->post('prescricoes/(:num)/medicamentos/store', 'PrescricaoMedicamentoController::store/$1');
 
 // Rotas para Prescricoes CRUD
-$routes->group('prescricoes', function ($routes) {
+$routes->group('prescricoes', ['filter' => 'auth'], function ($routes) {
     $routes->get('', 'Prescricoes::index');                // Listagem de prescrições
     $routes->get('index/(:num)', 'Prescricoes::index/$1'); // Lista prescrições do pet
     $routes->get('create/(:num)', 'Prescricoes::create/$1');         // Formulário para criar prescrição (modal)
@@ -98,3 +98,10 @@ $routes->group('prescricoes', function ($routes) {
 
 });
 
+// Exames
+$routes->get('exames/(:num)', 'ExamesController::index/$1'); // lista exames do pet
+$routes->get('exames/create/(:num)', 'ExamesController::create/$1'); // pet_id
+$routes->post('exames/store/(:num)', 'ExamesController::store/$1'); // pet_id
+$routes->get('exames/edit/(:num)', 'ExamesController::edit/$1'); // exame_id
+$routes->post('exames/update/(:num)', 'ExamesController::update/$1'); // exame_id
+$routes->get('exames/delete/(:num)', 'ExamesController::delete/$1'); // exame_id

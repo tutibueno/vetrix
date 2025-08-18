@@ -157,7 +157,34 @@ class Pet extends BaseController
                 ->findAll();
         }
 
-        return view('pets/ficha', compact('pet', 'historico', 'vacinas', 'prescricoes'));
+
+        //5 Solicitações de Exame
+        $exameModel = new \App\Models\SolicitacaoExameModel();
+        $exameItemModel = new \App\Models\SolicitacaoExameDetalheModel();
+        $motivoModel = new \App\Models\SolicitacaoExameMotivoModel();
+
+
+        $exames = $exameModel
+            ->select('solicitacoes_exames.*, veterinarios.nome as veterinario_nome')
+            ->join('veterinarios', 'veterinarios.id = solicitacoes_exames.veterinario_id')
+            ->where('pet_id', $id)
+            ->orderBy('data_solicitacao', 'DESC')
+            ->findAll();
+
+        // 5.1️⃣ Para cada exame, buscar itens e motivos
+        foreach ($exames as &$exame) {
+            $exame['itens'] = $exameItemModel
+                ->where('solicitacao_id', $exame['id'])
+                ->orderBy('id', 'ASC')
+                ->findAll();
+
+            $exame['motivos'] = $motivoModel
+                ->where('solicitacao_id', $exame['id'])
+                ->orderBy('id', 'ASC')
+                ->findAll();
+        }
+
+        return view('pets/ficha', compact('pet', 'historico', 'vacinas', 'prescricoes','exames'));
     }
 
 }

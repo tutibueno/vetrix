@@ -52,6 +52,7 @@ class HistoricoMedico extends BaseController
         return view('historico_medico/_form', [
             'action' => site_url('historico_medico/store'),
             'pet_id' => $pet_id,
+            'nome_pet' => $pet['nome'],
             'veterinarios' => $veterinarios
         ]);
     }
