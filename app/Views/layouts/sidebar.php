@@ -3,7 +3,7 @@
     <!-- Logo -->
     <a href="<?= base_url() ?>" class="brand-link">
         <img src="<?= base_url(); ?>adminlte/dist/img/logo.png" alt="Logo"
-            class="brand-image img-circle elevation-3" style="opacity: .8">
+            class="brand-image img-circle elevation-3" style="opacity: 1">
         <span class="brand-text font-weight-light">Sistema Vet</span>
 
     </a>

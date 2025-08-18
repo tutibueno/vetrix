@@ -385,9 +385,9 @@ class Prescricoes extends Controller
         $html = view('prescricoes/imprimir', $dados);
 
         
-        $mpdf = new Mpdf();
-        $mpdf->WriteHTML($html);
-        return $mpdf->Output('filename.pdf', 'D');
+        //$mpdf = new Mpdf();
+        //$mpdf->WriteHTML($html);
+        //return $mpdf->Output('filename.pdf', 'D');
 
     }
 }
