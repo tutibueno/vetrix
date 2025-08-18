@@ -12,10 +12,10 @@ class SolicitacoesExames extends Migration
             'id'                 => ['type' => 'INT', 'unsigned' => true, 'auto_increment' => true],
             'pet_id'             => ['type' => 'INT', 'unsigned' => true],
             'veterinario_id'     => ['type' => 'INT', 'unsigned' => true],
-            'data_solicitacao'   => ['type' => 'DATETIME', 'null' => true],
+            'data_solicitacao'   => ['type' => 'DATE', 'null' => false],
             'observacoes'        => ['type' => 'TEXT', 'null' => true],
-            'created_at'         => ['type' => 'DATETIME', 'null' => true],
-            'updated_at'         => ['type' => 'DATETIME', 'null' => true],
+            'created_at'         => ['type' => 'DATETIME', 'null' => false],
+            'updated_at'         => ['type' => 'DATETIME', 'null' => false],
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('pet_id', 'pets', 'id', 'CASCADE', 'CASCADE');

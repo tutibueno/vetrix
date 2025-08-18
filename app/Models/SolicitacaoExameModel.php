@@ -11,5 +11,9 @@ class SolicitacaoExameModel extends Model
     protected $allowedFields = ['pet_id', 'veterinario_id', 'data_solicitacao', 'observacoes'];
 
     protected $useSoftDeletes   = false;
+    // Caso queira que as datas sejam gerenciadas automaticamente
     protected $useTimestamps = true;
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = '';
 }

@@ -13,6 +13,8 @@ class SolicitacaoExamesDetalhes extends Migration
             'solicitacao_id' => ['type' => 'INT', 'unsigned' => true],
             'nome_exame'     => ['type' => 'VARCHAR', 'constraint' => 255],
             'observacoes'    => ['type' => 'TEXT', 'null' => true],
+            'created_at'     => ['type' => 'DATETIME', 'null' => false],
+            'updated_at'     => ['type' => 'DATETIME', 'null' => false],
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('solicitacao_id', 'solicitacoes_exames', 'id', 'CASCADE', 'CASCADE');
