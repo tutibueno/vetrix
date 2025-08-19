@@ -39,9 +39,9 @@ git clone https://github.com/tutibueno/clinica-veterinaria.git
 - Crie um banco de dados MySQL
 - Edite o arquivo .env com suas credenciais
 - Execute as migrações:
-php spark migrate
+`php spark migrate`
 - Inicie o servidor local:
-php spark serve
+`php spark serve`
 
 
 
@@ -59,6 +59,55 @@ Desenvolvido por Reginaldo Bueno
 
 ---
 
+🗑️ Limpeza de Sessões no Banco de Dados
+
+Este projeto usa sessions armazenadas no banco (ci_sessions).
+Como a configuração está com sessionExpiration = 0 (expiração infinita), as sessões antigas não expiram automaticamente.
+Para evitar que a tabela cresça indefinidamente, criamos um comando customizado no CodeIgniter para limpeza periódica.
+
+🔹 Executar manualmente
+
+No terminal, dentro do diretório do projeto:
+
+`php spark session:cleanup`
+
+
+👉 Por padrão, remove sessões com mais de 30 dias.
+
+Se quiser um período diferente, passe o número de dias como argumento.
+Exemplo: para limpar sessões mais antigas que 7 dias:
+
+
+<pre> ```bash php spark session:cleanup 7 ``` </pre>
+
+🔹 Agendamento automático (cron job no Linux)
+
+Você pode agendar a execução automática no cron.
+Para editar o cron:
+
+<pre> ``` crontab -e ``` </pre>
+
+E adicionar, por exemplo, para rodar todo domingo às 3h da manhã:
+
+<pre> ``` 0 3 * * 0 /usr/bin/php /var/www/seuprojeto/spark session:cleanup 30 >> /var/www/seuprojeto/writable/logs/session_cleanup.log 2>&1
+ ``` </pre>
+
+
+Isso vai:
+
+Executar o comando session:cleanup
+
+Manter somente sessões com até 30 dias
+
+Registrar logs em writable/logs/session_cleanup.log
+
+🔹 Boas práticas
+
+Ajuste o número de dias conforme sua necessidade.
+
+Se sua aplicação tiver muito tráfego, agende a limpeza com frequência maior (ex.: diariamente).
+
+Para bancos muito grandes, considere criar índices na coluna timestamp da tabela ci_sessions para acelerar a exclusão.
 
 
 ## 🖼️ Capturas de Tela
