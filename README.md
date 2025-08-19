@@ -32,8 +32,21 @@ Roadmap:
 
 📦 Instalação
 - Clone o repositório:
-git clone https://github.com/tutibueno/clinica-veterinaria.git
 
+<pre>git clone https://github.com/tutibueno/clinica-veterinaria.git</pre>
+
+💻 Gerenciamento de Dependências com Composer
+
+Este projeto utiliza Composer para gerenciar pacotes PHP.
+
+🔹 Instalar dependências
+
+No terminal, dentro do diretório do projeto, execute:
+
+<pre>composer install</pre>
+
+
+Isso vai baixar todas as dependências definidas no arquivo composer.json.
 
 - Configure o ambiente:
 - Crie um banco de dados MySQL
@@ -78,19 +91,19 @@ Se quiser um período diferente, passe o número de dias como argumento.
 Exemplo: para limpar sessões mais antigas que 7 dias:
 
 
-<pre> ```bash php spark session:cleanup 7 ``` </pre>
+<pre> php spark session:cleanup 7 </pre>
 
 🔹 Agendamento automático (cron job no Linux)
 
 Você pode agendar a execução automática no cron.
 Para editar o cron:
 
-<pre> ``` crontab -e ``` </pre>
+<pre> crontab -e </pre>
 
 E adicionar, por exemplo, para rodar todo domingo às 3h da manhã:
 
-<pre> ``` 0 3 * * 0 /usr/bin/php /var/www/seuprojeto/spark session:cleanup 30 >> /var/www/seuprojeto/writable/logs/session_cleanup.log 2>&1
- ``` </pre>
+<pre>  0 3 * * 0 /usr/bin/php /var/www/seuprojeto/spark session:cleanup 30 >> /var/www/seuprojeto/writable/logs/session_cleanup.log 2>&1
+  </pre>
 
 
 Isso vai:
