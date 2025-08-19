@@ -16,6 +16,13 @@
                 <label>E-mail</label>
                 <input type="email" name="email" class="form-control" required>
             </div>
+            <select name="perfil" class="form-control">
+                <?php foreach ($perfis as $key => $label): ?>
+                    <option value="<?= $key ?>" <?= set_select('perfil', $key, ($usuario['perfil'] ?? '') === $key) ?>>
+                        <?= $label ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
             <div class="form-group">
                 <label>Senha</label>
                 <input type="password" name="password" class="form-control" required>

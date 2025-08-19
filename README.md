@@ -64,24 +64,30 @@ php spark migrate
 ```
 
 
-👤 Usuário Admin
+### 👥 Usuários de Teste
 
-Para facilitar testes e acesso inicial, há um seed que cria um usuário administrador.
-
-🔹 Executar o seed
-
-No terminal, dentro do projeto:
+Existe um seed que cria usuários para cada perfil do sistema:
 
 ```bash
-php spark db:seed AdminUserSeeder
+php spark db:seed UserSeeder
 ```
 
-Usuario: admin
+Administrador
 
+Usuario: admin
 Senha: 123456
 
-⚠️ Recomenda-se alterar a senha após o primeiro login.
+Veterinário
 
+Usuario: veterinario
+Senha: 123456
+
+Recepcionista
+
+Usuario: recepcao
+Senha: 123456
+
+⚠️ Altere as senhas em produção!
 
 
 - Inicie o servidor local:

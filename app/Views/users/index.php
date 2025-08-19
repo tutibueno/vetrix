@@ -10,6 +10,7 @@
                 <tr>
                     <th>Nome</th>
                     <th>Email</th>
+                    <th>Perfil</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -18,6 +19,7 @@
                     <tr>
                         <td><?= esc($user['name']) ?></td>
                         <td><?= esc($user['email']) ?></td>
+                        <td><?= esc($user['perfil']) ?></td>
                         <td>
                             <a href="<?= base_url('users/edit/' . $user['id']) ?>" class="btn btn-warning btn-sm">Editar</a>
                             <a href="<?= base_url('users/delete/' . $user['id']) ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza?')">Excluir</a>

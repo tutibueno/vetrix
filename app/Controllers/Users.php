@@ -25,7 +25,12 @@ class Users extends BaseController
 
     public function create()
     {
-        return view('users/create', ['title' => 'Novo Usuário']);
+        helper('form');
+        $perfis = $this->userModel->getPerfis();
+        return view('users/create', [
+            'title' => 'Novo Usuário',
+            'perfis'  => $perfis
+        ]);
     }
 
     public function store()
@@ -34,6 +39,7 @@ class Users extends BaseController
             'username' => $this->request->getPost('username'),
             'name' => $this->request->getPost('name'),
             'email' => $this->request->getPost('email'),
+            'perfil' => $this->request->getPost('perfil'),
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT)
         ]);
         return redirect()->to('/users');
@@ -41,8 +47,14 @@ class Users extends BaseController
 
     public function edit($id)
     {
+        helper('form');
         $user = $this->userModel->find($id);
-        return view('users/edit', ['user' => $user, 'title' => 'Editar Usuário']);
+        $perfis = $this->userModel->getPerfis();
+        return view('users/edit', [
+            'user' => $user, 
+            'title' => 'Editar Usuário',
+            'perfis' => $perfis
+        ]);
     }
 
     public function update($id)
@@ -51,6 +63,7 @@ class Users extends BaseController
             'username' => $this->request->getPost('username'),
             'name' => $this->request->getPost('name'),
             'email' => $this->request->getPost('email'),
+            'perfil' => $this->request->getPost('perfil'),
         ]);
         return redirect()->to('/users');
     }

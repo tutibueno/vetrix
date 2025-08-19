@@ -27,10 +27,10 @@ class CreateUsersTable extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 255
             ],
-            'perfil' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-                'null' => true
+            'perfil'      => [
+                'type'       => 'ENUM',
+                'constraint' => ['admin', 'veterinario', 'recepcionista'],
+                'default'    => 'recepcionista',
             ],
             'created_at' => [
                 'type' => 'DATETIME',

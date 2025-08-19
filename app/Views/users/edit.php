@@ -16,6 +16,13 @@
                 <label>E-mail</label>
                 <input type="email" name="email" class="form-control" value="<?= esc($user['email']) ?>" required>
             </div>
+            <select name="perfil" class="form-control">
+                <?php foreach ($perfis as $key => $label): ?>
+                    <option value="<?= $key ?>" <?= set_select('perfil', $key, ($user['perfil'] ?? '') === $key) ?>>
+                        <?= $label ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
             <button type="submit" class="btn btn-success">Atualizar</button>
         </form>
     </div>
