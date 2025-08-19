@@ -1,5 +1,5 @@
-<?= $this->extend('layouts/main') ?>
-<?= $this->section('content') ?>
-<h1>Novo Atendimento</h1>
-<?= view('exames/_form') ?>
-<?= $this->endSection() ?>
+<?= view('exames/_form', [
+    'pet' => $pet,
+    'exame' => $exame,
+    'veterinarios' => $veterinarios
+]) ?>

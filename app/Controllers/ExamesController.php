@@ -8,6 +8,7 @@ use App\Models\PetModel;
 use App\Models\VeterinarioModel;
 use App\Models\SolicitacaoExameMotivoModel;
 use App\Models\SolicitacaoExameDetalheModel;
+use App\Models\ClientModel;
 
 class ExamesController extends BaseController
 {
@@ -80,10 +81,10 @@ class ExamesController extends BaseController
         // 3) Salva motivos vinculados
         if (!empty($data['motivos'])) {
             foreach ($data['motivos'] as $motivo) {
-                if (!empty($motivo['motivo'])) {
+                if (!empty($motivo['motivo_suspeita'])) {
                     $this->motivoModel->insert([
-                        'solicitacao_id' => $solicitacaoId,
-                        'motivo'         => $motivo['motivo'],
+                        'solicitacao_id'  => $solicitacaoId,
+                        'motivo_suspeita' => $motivo['motivo_suspeita'],
                     ]);
                 }
             }
@@ -91,11 +92,6 @@ class ExamesController extends BaseController
 
         return redirect()->to('/pet/ficha/' . $pet_id)
             ->with('success', 'Solicitação de exames cadastrada com sucesso!');
-
-        return redirect()->to('/pet/ficha/' . $pet_id)
-            ->with('success', 'Solicitação de exames cadastrada com sucesso!');
-
-        return redirect()->to(site_url("/pet/ficha/$pet_id"))->with('success', 'Solicitação de exame criada com sucesso!');
     }
 
     // Edita a solicitação (já sabemos o pet pelo exame)
@@ -107,7 +103,8 @@ class ExamesController extends BaseController
             return redirect()->back()->with('error', 'Solicitação não encontrada.');
         }
 
-        $exame['itens'] = $this->exameModel->where('solicitacao_id', $id)->findAll();
+        $exame['exames'] = $this->exameModel->where('solicitacao_id', $id)->findAll();
+        $exame['motivos'] = $this->motivoModel->where('solicitacao_id', $id)->findAll();
 
         $pet = $this->petModel->find($exame['pet_id']);
         $veterinarios = $this->veterinarioModel->findAll();
@@ -153,19 +150,17 @@ class ExamesController extends BaseController
         $this->motivoModel->where('solicitacao_id', $id)->delete();
         if (!empty($data['motivos'])) {
             foreach ($data['motivos'] as $motivo) {
-                if (!empty($motivo['motivo'])) {
+                if (!empty($motivo['motivo_suspeita'])) {
                     $this->motivoModel->insert([
-                        'solicitacao_id' => $id,
-                        'motivo'         => $motivo['motivo'],
+                        'solicitacao_id'  => $id,
+                        'motivo_suspeita' => $motivo['motivo_suspeita'],
                     ]);
                 }
             }
         }
 
-        return redirect()->to('/pets/ficha/' . $solicitacao['pet_id'])
+        return redirect()->to('/pet/ficha/' . $solicitacao['pet_id'])
             ->with('success', 'Solicitação de exames atualizada com sucesso!');
-
-        return redirect()->to("/pet/ficha/{$exame['pet_id']}")->with('success', 'Solicitação de exame atualizada!');
     }
 
     public function delete($id)
@@ -180,7 +175,85 @@ class ExamesController extends BaseController
         //$this->motivoModel->where('solicitacao_id', $id)->delete();
         $this->solicitacaoModel->delete($id);
 
-        return redirect()->to('/pets/ficha/' . $solicitacao['pet_id'])
-            ->with('success', 'Solicitação de exames removida com sucesso!');
+        return true; 
+            //redirect()->to('/pet/ficha/' . $solicitacao['pet_id'])
+            //->with('success', 'Solicitação de exames removida com sucesso!');
+    }
+
+    /**
+     * Método para imprimir uma solicitação de exame
+     */
+    public function imprimir($id)
+    {
+        // Busca a solicitação principal
+        $solicitacao = $this->solicitacaoModel
+            ->where('id', $id)
+            ->first();
+
+        if (!$solicitacao) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("Solicitação de exame não encontrada.");
+        }
+
+        // Buscar o pet
+        $pet = $this->petModel->find($solicitacao['pet_id']);
+
+        // Calcular idade do pet
+        $idadePet = '';
+        if (!empty($pet['data_nascimento'])) {
+            $dataNascimento = new \DateTime($pet['data_nascimento']);
+            $hoje = new \DateTime();
+            $idade = $hoje->diff($dataNascimento);
+
+            $idadePet = $idade->y . ' ano';
+            $idade->y == 0 || $idade->y > 1 ? $idadePet .= 's' : '';
+            $idadePet .= ' e ' . $idade->m;
+            $idade->m > 1 || $idade->m == 0 ? $idadePet .= ' meses' : $idadePet .= ' mês';
+
+            $pet['data_nascimento'] == '0000-00-00' ? $idadePet = '' : $idadePet;
+        }
+
+        //Busca o cliente
+        $clienteModel = new ClientModel();
+        $cliente = $clienteModel->find($pet['cliente_id']);
+
+        // Buscar o veterinário
+        $veterinario = $this->veterinarioModel->find($solicitacao['veterinario_id']);
+
+        // Buscar exames vinculados
+        $exames = $this->exameModel
+            ->where('solicitacao_id', $id)
+            ->findAll();
+
+        // Buscar motivos vinculados
+        $motivos = $this->motivoModel
+            ->where('solicitacao_id', $id)
+            ->findAll();
+
+        $info_clinica = [];
+        $info_clinica['rua'] = 'Rua Teodureto Souto';
+        $info_clinica['numero'] = '577';
+        $info_clinica['complemento'] = '(paralelo à av. Lins de Vasconcelos)';
+        $info_clinica['cep'] = '01536-000';
+        $info_clinica['cidade'] = 'São Paulo';
+        $info_clinica['uf'] = 'SP';
+        $info_clinica['bairro'] = 'Cambuci';
+        $info_clinica['telefone'] = '11-3206-7266';
+        $info_clinica['celular'] = '(11)99987-9989';
+        $info_clinica['whatsapp'] = '(11)99988-9989';
+        $info_clinica['email'] = 'clinica_vet@gmail.com';
+
+        $data = [
+            'solicitacao' => $solicitacao,
+            'pet' => $pet,
+            'veterinario' => $veterinario,
+            'exames' => $exames,
+            'motivos' => $motivos,
+            'cliente' => $cliente,
+            'info_clinica' => $info_clinica,
+            'idade_pet' => $idadePet
+        ];
+
+        // Retornar para a view de impressão
+        return view('exames/imprimir', $data);
     }
 }

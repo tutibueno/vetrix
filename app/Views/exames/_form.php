@@ -1,6 +1,7 @@
-<form action="<?= isset($exame)
-                    ? base_url('exames/update/' . $exame['id'])
-                    : base_url('exames/store/' . $pet['id']) ?>"
+<form id="formSolicitacaoExame"
+    action="<?= isset($exame)
+                ? base_url('exames/update/' . $exame['id'])
+                : base_url('exames/store/' . $pet['id']) ?>"
     method="post">
 
     <?= csrf_field() ?>
@@ -40,49 +41,40 @@
 
         <hr>
 
-        <!-- ================== EXAMES ================== -->
-        <h5>Exames</h5>
-        <table class="table table-bordered" id="tabelaExames">
-            <thead class="table-light">
-                <tr>
-                    <th>Nome do Exame</th>
-                    <th>Observações</th>
-                    <th style="width: 50px;">Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" name="exames[0][nome_exame]" class="form-control" required></td>
-                    <td><input type="text" name="exames[0][observacoes]" class="form-control"></td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-danger remove-exame">×</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <button type="button" class="btn btn-sm btn-success" id="addExame">+ Adicionar Exame</button>
+        <!-- ===== Exames ===== -->
+        <div class="mb-3">
+            <h6><i class="fas fa-vial"></i> Exames</h6>
+            <div id="exames-list">
+                <?php if (!empty($exame['exames'])): ?>
+                    <?php foreach ($exame['exames'] as $i => $ex): ?>
+                        <div class="input-group mb-2 exame-item">
+                            <input type="text" name="exames[<?= $i ?>][nome_exame]" class="form-control" placeholder="Nome do Exame" value="<?= esc($ex['nome_exame']) ?>" required>
+                            <input type="text" name="exames[<?= $i ?>][observacoes]" class="form-control" placeholder="Observações" value="<?= esc($ex['observacoes']) ?>">
+                            <button type="button" class="btn btn-danger remove-exame"><i class="fas fa-trash"></i></button>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+            <button type="button" class="btn btn-sm btn-secondary mt-2" id="addExame"><i class="fas fa-plus"></i> Adicionar Exame</button>
+        </div>
 
         <hr>
 
-        <!-- ================== MOTIVOS ================== -->
-        <h5>Motivos / Suspeitas</h5>
-        <table class="table table-bordered" id="tabelaMotivos">
-            <thead class="table-light">
-                <tr>
-                    <th>Motivo / Suspeita</th>
-                    <th style="width: 50px;">Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><input type="text" name="motivos[0][motivo]" class="form-control" required></td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-danger remove-motivo">×</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <button type="button" class="btn btn-sm btn-success" id="addMotivo">+ Adicionar Motivo</button>
+        <!-- ===== Motivos / Suspeitas ===== -->
+        <div class="mb-3">
+            <h6><i class="fas fa-question-circle"></i> Motivos / Suspeitas</h6>
+            <div id="motivos-list">
+                <?php if (!empty($exame['motivos'])): ?>
+                    <?php foreach ($exame['motivos'] as $i => $m): ?>
+                        <div class="input-group mb-2 motivo-item">
+                            <input type="text" name="motivos[<?= $i ?>][motivo_suspeita]" class="form-control" placeholder="Motivo/Suspeita" value="<?= esc($m['motivo_suspeita']) ?>" required>
+                            <button type="button" class="btn btn-danger remove-motivo"><i class="fas fa-trash"></i></button>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
+            <button type="button" class="btn btn-sm btn-secondary mt-2" id="addMotivo"><i class="fas fa-plus"></i> Adicionar Motivo</button>
+        </div>
 
     </div>
 
@@ -92,49 +84,69 @@
     </div>
 </form>
 <script>
-    let exameIndex = 1;
-    let motivoIndex = 1;
+    (function() {
+        const form = document.getElementById('formSolicitacaoExame');
+        if (!form) return;
 
-    // Adicionar exame
-    document.getElementById('addExame').addEventListener('click', function() {
-        let tabela = document.querySelector('#tabelaExames tbody');
-        let row = `
-      <tr>
-        <td><input type="text" name="exames[${exameIndex}][nome_exame]" class="form-control" required></td>
-        <td><input type="text" name="exames[${exameIndex}][observacoes]" class="form-control"></td>
-        <td class="text-center">
-          <button type="button" class="btn btn-sm btn-danger remove-exame">×</button>
-        </td>
-      </tr>`;
-        tabela.insertAdjacentHTML('beforeend', row);
-        exameIndex++;
-    });
+        const examesList = form.querySelector('#exames-list');
+        const motivosList = form.querySelector('#motivos-list');
+        const addExameBtn = form.querySelector('#addExame');
+        const addMotivoBtn = form.querySelector('#addMotivo');
 
-    // Remover exame
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-exame')) {
-            e.target.closest('tr').remove();
+        // índices baseados no que já veio da view (edição) 
+        let exameIndex = examesList.querySelectorAll('.exame-item').length;
+        let motivoIndex = motivosList.querySelectorAll('.motivo-item').length;
+
+        // Se não houver nenhuma linha, cria 1 padrão de cada
+        if (exameIndex === 0) addExameRow();
+        if (motivoIndex === 0) addMotivoRow();
+
+        // Handlers
+        if (addExameBtn) addExameBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            addExameRow();
+        });
+        if (addMotivoBtn) addMotivoBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            addMotivoRow();
+        });
+
+        examesList.addEventListener('click', function(e) {
+            const btn = e.target.closest('.remove-exame');
+            if (!btn) return;
+            const row = btn.closest('.exame-item');
+            row?.remove();
+        });
+
+        motivosList.addEventListener('click', function(e) {
+            const btn = e.target.closest('.remove-motivo');
+            if (!btn) return;
+            const row = btn.closest('.motivo-item');
+            row?.remove();
+        });
+
+        // Funções auxiliares
+        function addExameRow() {
+            const div = document.createElement('div');
+            div.className = 'input-group mb-2 exame-item';
+            div.innerHTML = `
+            <input type="text" name="exames[${exameIndex}][nome_exame]" class="form-control" placeholder="Nome do Exame" required>
+            <input type="text" name="exames[${exameIndex}][observacoes]" class="form-control" placeholder="Observações">
+            <button type="button" class="btn btn-danger remove-exame"><i class="fas fa-trash"></i></button>
+        `;
+            examesList.appendChild(div);
+            exameIndex++;
         }
-    });
 
-    // Adicionar motivo
-    document.getElementById('addMotivo').addEventListener('click', function() {
-        let tabela = document.querySelector('#tabelaMotivos tbody');
-        let row = `
-      <tr>
-        <td><input type="text" name="motivos[${motivoIndex}][motivo]" class="form-control" required></td>
-        <td class="text-center">
-          <button type="button" class="btn btn-sm btn-danger remove-motivo">×</button>
-        </td>
-      </tr>`;
-        tabela.insertAdjacentHTML('beforeend', row);
-        motivoIndex++;
-    });
-
-    // Remover motivo
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('remove-motivo')) {
-            e.target.closest('tr').remove();
+        function addMotivoRow() {
+            const div = document.createElement('div');
+            div.className = 'input-group mb-2 motivo-item';
+            div.innerHTML = `
+            <input type="text" name="motivos[${motivoIndex}][motivo_suspeita]" class="form-control" placeholder="Motivo/Suspeita" required>
+            <button type="button" class="btn btn-danger remove-motivo"><i class="fas fa-trash"></i></button>
+        `;
+            motivosList.appendChild(div);
+            motivoIndex++;
         }
-    });
+    })();
 </script>

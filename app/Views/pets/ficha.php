@@ -394,8 +394,18 @@
 
     function excluirPrescricao(id) {
         if (confirm('Tem certeza que deseja excluir esta prescrição?')) {
-            $.post(`/prescricoes/delete/${id}`, {
-                _method: 'DELETE'
+            $.get(`/prescricoes/delete/${id}`, {
+                _method: 'GET'
+            }, function() {
+                location.reload();
+            });
+        }
+    }
+
+    function excluirExame(id) {
+        if (confirm('Tem certeza que deseja excluir este exame?')) {
+            $.get(`/exames/delete/${id}`, {
+                _method: 'GET'
             }, function() {
                 location.reload();
             });

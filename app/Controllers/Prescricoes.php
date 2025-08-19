@@ -176,7 +176,7 @@ class Prescricoes extends Controller
             return redirect()->back()->with('error', 'Erro na transação ao atualizar dados')->withInput();
         }
 
-        return redirect()->to(site_url('pet/ficha/' . $post['pet_id']))->with('success', 'Prescrição atualizada com sucesso.');
+        return redirect()->to(site_url('pet/ficha/' . $post['pet_id']),null,'refresh');
     }
 
     public function index()
@@ -205,7 +205,7 @@ class Prescricoes extends Controller
             return redirect()->back()->with('error', 'Erro ao deletar prescrição');
         }
 
-        return redirect()->to(site_url('pet/ficha/' . $prescricao['pet_id']))->with('success', 'Prescrição deletada com sucesso.');
+        return true;
     }
 
     public function excluirMedicamento($id)

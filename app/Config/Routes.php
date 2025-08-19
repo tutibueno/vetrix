@@ -74,8 +74,8 @@ $routes->group('veterinarios', ['filter' => 'auth'], function ($routes) {
     $routes->get('delete/(:num)', 'Veterinarios::delete/$1');
 });
 
-$routes->get('prescricoes/(:num)/medicamentos/create', 'PrescricaoMedicamentoController::create/$1');
-$routes->post('prescricoes/(:num)/medicamentos/store', 'PrescricaoMedicamentoController::store/$1');
+//$routes->get('prescricoes/(:num)/medicamentos/create', 'PrescricaoMedicamentoController::create/$1');
+//$routes->post('prescricoes/(:num)/medicamentos/store', 'PrescricaoMedicamentoController::store/$1');
 
 // Rotas para Prescricoes CRUD
 $routes->group('prescricoes', ['filter' => 'auth'], function ($routes) {
@@ -85,23 +85,30 @@ $routes->group('prescricoes', ['filter' => 'auth'], function ($routes) {
     $routes->post('store', 'Prescricoes::store');          // Salvar nova prescrição
     $routes->get('edit/(:num)', 'Prescricoes::edit/$1');   // Formulário para editar prescrição (modal)
     $routes->post('update/(:num)', 'Prescricoes::update/$1'); // Atualizar prescrição
-    $routes->post('delete/(:num)', 'Prescricoes::delete/$1'); // Excluir prescrição
+    $routes->get('delete/(:num)', 'Prescricoes::delete/$1'); // Excluir prescrição
     $routes->get('list/(:num)', 'Prescricoes::list/$1'); // Lista prescrições do pet
 
     // Medicamentos dentro de uma prescrição
     $routes->get('medicamento/excluir/(:num)', 'Prescricoes::excluirMedicamento/$1');
-
+    
+    //Impressão
     $routes->get('imprimir/(:num)', 'Prescricoes::imprimir/$1');
 
+    //Impressão de PFP :TODO
     $routes->get('imprimir/pdf/(:num)', 'Prescricoes::imprimirPdf/$1');
-
 
 });
 
 // Exames
-$routes->get('exames/(:num)', 'ExamesController::index/$1'); // lista exames do pet
-$routes->get('exames/create/(:num)', 'ExamesController::create/$1'); // pet_id
-$routes->post('exames/store/(:num)', 'ExamesController::store/$1'); // pet_id
-$routes->get('exames/edit/(:num)', 'ExamesController::edit/$1'); // exame_id
-$routes->post('exames/update/(:num)', 'ExamesController::update/$1'); // exame_id
-$routes->get('exames/delete/(:num)', 'ExamesController::delete/$1'); // exame_id
+$routes->group('exames', ['filter' => 'auth'], function ($routes) {
+    $routes->get('(:num)', 'ExamesController::index/$1'); // lista exames do pet
+    $routes->get('create/(:num)', 'ExamesController::create/$1'); // pet_id
+    $routes->post('store/(:num)', 'ExamesController::store/$1'); // pet_id
+    $routes->get('edit/(:num)', 'ExamesController::edit/$1'); // exame_id
+    $routes->post('update/(:num)', 'ExamesController::update/$1'); // exame_id
+    $routes->get('delete/(:num)', 'ExamesController::delete/$1'); // exame_id
+    
+    //Impressão
+    $routes->get('imprimir/(:num)', 'ExamesController::imprimir/$1');
+    
+});
