@@ -33,26 +33,35 @@ Roadmap:
 📦 Instalação
 - Clone o repositório:
 
-<pre>git clone https://github.com/tutibueno/clinica-veterinaria.git</pre>
+```bash
+git clone https://github.com/seuusuario/seuprojeto.git
+cd clinica-veterinaria
+composer install
+```
 
-💻 Gerenciamento de Dependências com Composer
+- Copie o arquivo .env.example para .env ou env para .env e configure o banco de dados:
 
-Este projeto utiliza Composer para gerenciar pacotes PHP.
-
-🔹 Instalar dependências
-
-No terminal, dentro do diretório do projeto, execute:
-
-<pre>composer install</pre>
-
-
-Isso vai baixar todas as dependências definidas no arquivo composer.json.
+```pgsql
+database.default.hostname = localhost
+database.default.database = sua_base
+database.default.username = seu_usuario
+database.default.password = sua_senha
+database.default.DBDriver = MySQLi
+```
 
 - Configure o ambiente:
 - Crie um banco de dados MySQL
 - Edite o arquivo .env com suas credenciais
 - Execute as migrações:
 `php spark migrate`
+
+🗄️ Migrações e Seeds
+
+Crie as tabelas com as migrations:
+
+```bash
+php spark migrate
+```
 
 
 👤 Usuário Admin
@@ -63,7 +72,9 @@ Para facilitar testes e acesso inicial, há um seed que cria um usuário adminis
 
 No terminal, dentro do projeto:
 
-<pre>php spark db:seed AdminUserSeeder</pre>
+```bash
+php spark db:seed AdminUserSeeder
+```
 
 Usuario: admin
 
@@ -74,9 +85,18 @@ Senha: 123456
 
 
 - Inicie o servidor local:
-`php spark serve`
+```bash
+php spark serve
+```
 
+O sistema ficará disponível em:
+👉 http://localhost:8080
 
+Caso esteja hospedando o sistema altere o arquivo /app/Config/App.php conforme sua necessidade:
+
+```php
+public string $baseURL = 'http://seudominio.com.br/seuprojeto/';
+```
 
 👥 Contribuições
 Contribuições são muito bem-vindas! Sinta-se à vontade para abrir issues, sugerir melhorias ou enviar pull requests.
@@ -102,7 +122,9 @@ Para evitar que a tabela cresça indefinidamente, criamos um comando customizado
 
 No terminal, dentro do diretório do projeto:
 
-`php spark session:cleanup`
+```bash 
+php spark session:cleanup
+```
 
 
 👉 Por padrão, remove sessões com mais de 30 dias.

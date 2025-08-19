@@ -13,7 +13,7 @@ class AdminUserSeeder extends Seeder
             'name'       => 'Administrador',
             'email'      => 'admin@seuprojeto.com',
             'password'   => password_hash('123456', PASSWORD_DEFAULT),
-            'perfil'     => 'admin',  // se houver campo de perfil
+            'perfil'     => 'admin',
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ];

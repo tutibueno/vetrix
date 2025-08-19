@@ -77,7 +77,7 @@
         }
 
         .footer {
-            margin-top: 20px;
+            margin-top: 10px;
             font-size: 10pt;
         }
 
@@ -182,25 +182,29 @@
     </div>
 
 
-    <div class="section">
-        <strong>Motivos / Suspeitas</strong>
-        <ul>
-            <?php if (!empty($motivos)): ?>
+
+    <?php if (!empty($motivos)): ?>
+        <div class="section">
+            <strong>Motivos / Suspeitas</strong>
+            <ul>
                 <?php foreach ($motivos as $m): ?>
                     <li><?= esc($m['motivo_suspeita']) ?></li>
                 <?php endforeach; ?>
-            <?php endif; ?>
-        </ul>
-    </div>
+            </ul>
+        </div>
+    <?php endif; ?>
+
 
     <br>
     <!-- Instruções gerais -->
-    <div class="section">
-        <?php if (!empty($solicitacao['observacoes'])): ?>
+
+    <?php if (!empty($solicitacao['observacoes'])): ?>
+        <div class="section">
             <div><strong>INSTRUÇÕES/OBSERVAÇÕES GERAIS DA SOLICITAÇÃO:</strong></div><br>
             <div><?= nl2br(esc($solicitacao['observacoes'])) ?></div>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
+
 
     <br><br>
     <!-- Rodapé -->
@@ -211,7 +215,6 @@
             <strong><?= esc($veterinario['nome']) ?></strong><br>
             CRMV: <?= esc($veterinario['crmv']) ?><br><br>
         </div>
-
         <button id="btn-imprimir" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
     </div>
 
