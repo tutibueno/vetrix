@@ -53,6 +53,26 @@ Isso vai baixar todas as dependências definidas no arquivo composer.json.
 - Edite o arquivo .env com suas credenciais
 - Execute as migrações:
 `php spark migrate`
+
+
+👤 Usuário Admin
+
+Para facilitar testes e acesso inicial, há um seed que cria um usuário administrador.
+
+🔹 Executar o seed
+
+No terminal, dentro do projeto:
+
+<pre>php spark db:seed AdminUserSeeder</pre>
+
+Usuario: admin
+
+Senha: 123456
+
+⚠️ Recomenda-se alterar a senha após o primeiro login.
+
+
+
 - Inicie o servidor local:
 `php spark serve`
 
