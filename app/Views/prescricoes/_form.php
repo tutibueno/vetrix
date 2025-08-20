@@ -3,7 +3,7 @@
 
     <!-- Cabeçalho com título -->
     <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Prescrição</h5>
+        <h5 class="modal-title"><i class="fas fa-file-medical"></i>&nbsp;Prescrição</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
 

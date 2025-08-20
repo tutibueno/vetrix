@@ -279,6 +279,13 @@ class Prescricoes extends Controller
         }
 
         $info_clinica = [];
+        $info_clinica['nome_clinica'] = 'CLINICA VETERINÁRIA';
+        $info_clinica['crmv_clinica'] ='';
+        $info_clinica['razao_social'] = '';
+        $info_clinica['cnpj'] = '';
+        $info_clinica['registro_mapa'] = '';
+        $info_clinica['inscricao_municipal'] = '';
+        $info_clinica['inscricao_estadual'] = '';
         $info_clinica['rua'] = 'Rua Teodureto Souto';
         $info_clinica['numero'] = '577';
         $info_clinica['complemento'] = '(paralelo à av. Lins de Vasconcelos)';

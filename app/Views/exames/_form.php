@@ -6,7 +6,7 @@
 
     <?= csrf_field() ?>
     <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Solicitação de Exame</h5>
+        <h5 class="modal-title"><i class="fas fa-vials"></i>&nbsp;Solicitação de Exame</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
 

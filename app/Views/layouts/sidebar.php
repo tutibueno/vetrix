@@ -4,7 +4,7 @@
     <a href="<?= base_url() ?>" class="brand-link">
         <img src="<?= base_url(); ?>adminlte/dist/img/logo.png" alt="Logo"
             class="brand-image img-circle elevation-3" style="opacity: 1">
-        <span class="brand-text font-weight-light">Sistema Vet</span>
+        <span class="brand-text font-weight-light">Vetrix</span>
 
     </a>
 
@@ -28,7 +28,7 @@
                 <!-- Adicione mais itens conforme necessário -->
                 <?php if (session()->get('logged_in')): ?>
                     <li class="nav-item">
-                        <a href="<?= base_url() ?>" class="nav-link">
+                        <a href="<?= base_url() ?>" class="nav-link <?= uri_string() === '' ? 'active' : '' ?>">
                             <i class="nav-icon fas fa-home"></i>
                             <p>Início</p>
                         </a>
@@ -40,7 +40,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?= base_url('veterinarios') ?>" class="nav-link">
+                        <a href="<?= base_url('veterinarios') ?>" class="nav-link <?= uri_string() === 'veterinarios' ? 'active' : '' ?>">
                             <i class="nav-icon fas fa-user-md"></i>
                             <p>
                                 Veterinários
@@ -48,13 +48,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?= site_url('client') ?>" class="nav-link">
+                        <a href="<?= base_url('client') ?>" class="nav-link <?= uri_string() === 'client' ? 'active' : '' ?>">
                             <i class="nav-icon fas fa-users"></i>
                             <p>Clientes</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="<?= site_url('pet') ?>" class="nav-link">
+                        <a href="<?= base_url('pet') ?>" class="nav-link <?= uri_string() === 'pet' ? 'active' : '' ?>">
                             <i class="nav-icon fas fa-dog"></i>
                             <p>Pets</p>
                         </a>

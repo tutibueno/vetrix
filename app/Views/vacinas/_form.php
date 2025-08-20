@@ -3,7 +3,7 @@
 
     <!-- Cabeçalho com título -->
     <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Vacinação</h5>
+        <h5 class="modal-title"><i class="fas fa-syringe"></i>&nbsp;Vacinação</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
 

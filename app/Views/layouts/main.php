@@ -35,6 +35,7 @@
         <div class="content-wrapper">
             <section class="content">
                 <div class="container-fluid">
+                    <?= view('layouts/alerts') ?>
                     <?= $this->renderSection('content') ?>
                 </div>
                 <!-- /.container-fluid -->
@@ -42,6 +43,25 @@
         </div>
         <?= $this->include('layouts/footer') ?>
     </div>
+
+    <script>
+        const alertDurations = {
+            'success-alert': 3000,
+            'error-alert': 6000,
+            'warning-alert': 4500
+        };
+
+        Object.entries(alertDurations).forEach(([className, duration]) => {
+            const alert = document.querySelector(`.${className}`);
+            if (alert) {
+                setTimeout(() => {
+                    alert.classList.remove('show'); // inicia o fade
+                    setTimeout(() => alert.remove(), 500); // remove do DOM após fade
+                }, duration);
+            }
+        });
+    </script>
+
 </body>
 
 </html>

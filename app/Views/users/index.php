@@ -1,13 +1,13 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
-<section class="content">
-    <div class="container-fluid">
+
         <h1>Usuários</h1>
         <a href="<?= base_url('users/create') ?>" class="btn btn-primary mb-3">Novo Usuário</a>
 
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
+                    <th>Username</th>
                     <th>Nome</th>
                     <th>Email</th>
                     <th>Perfil</th>
@@ -17,6 +17,7 @@
             <tbody>
                 <?php foreach ($users as $user): ?>
                     <tr>
+                        <td><?= esc($user['username']) ?></td>
                         <td><?= esc($user['name']) ?></td>
                         <td><?= esc($user['email']) ?></td>
                         <td><?= esc($user['perfil']) ?></td>
@@ -28,6 +29,5 @@
                 <?php endforeach ?>
             </tbody>
         </table>
-    </div>
-</section>
+
 <?= $this->endSection() ?>

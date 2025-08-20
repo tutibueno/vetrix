@@ -28,7 +28,7 @@
         <p><strong>Pelagem:</strong> <?= $pet['pelagem'] ?: 'Não informada' ?></p>
         <p><strong>Número de Identificação:</strong> <?= $pet['numero_identificacao'] ?: 'Não informado' ?></p>
         <p><strong>Alergias:</strong> <?= $pet['alergias'] ?: 'Nenhuma' ?></p>
-        <div class="mb-3">
+        <div class="mb-1">
             <button class="btn btn-primary" id="btnAdicionarAtendimento" data-pet="<?= $pet['id'] ?>">
                 <i class="fas fa-notes-medical"></i>&nbsp;&nbsp;<i class="fas fa-plus"></i>&nbsp;Atendimento
             </button>
@@ -128,10 +128,10 @@
                             <!-- Rodapé do card com ações -->
                             <div class=" card-footer d-flex justify-content-end gap-2">
                                 <a class="btn btn-sm btn-warning" onclick="editarVacina(<?= $v['id'] ?>)">
-                                    <i class="fas fa-edit"></i>
+                                    <i class="fas fa-edit"></i> Editar
                                 </a>
                                 <a href="<?= base_url('vacinas/delete/' . $v['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Remover vacina?')">
-                                    <i class="fas fa-trash"></i>
+                                    <i class="fas fa-trash"></i> Excluir
                                 </a>
                             </div>
                         </div>

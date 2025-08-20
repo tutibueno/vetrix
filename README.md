@@ -34,12 +34,13 @@ Roadmap:
 - Clone o repositório:
 
 ```bash
-git clone https://github.com/seuusuario/seuprojeto.git
+git clone https://github.com/tutibueno/clinica-veterinaria.git
 cd clinica-veterinaria
 composer install
 ```
 
-- Copie o arquivo .env.example para .env ou env para .env e configure o banco de dados:
+- Crie um banco de dados MySQL (collation utf8mb4_generial_ci recomendada)
+- Configure o ambiente: Copie o arquivo .env.example para .env ou env para .env e configure o banco de dados:
 
 ```pgsql
 database.default.hostname = localhost
@@ -48,12 +49,6 @@ database.default.username = seu_usuario
 database.default.password = sua_senha
 database.default.DBDriver = MySQLi
 ```
-
-- Configure o ambiente:
-- Crie um banco de dados MySQL
-- Edite o arquivo .env com suas credenciais
-- Execute as migrações:
-`php spark migrate`
 
 🗄️ Migrações e Seeds
 
