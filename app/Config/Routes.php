@@ -112,3 +112,10 @@ $routes->group('exames', ['filter' => 'auth'], function ($routes) {
     $routes->get('imprimir/(:num)', 'ExamesController::imprimir/$1');
     
 });
+
+// Rotas da Clínica
+$routes->group('clinica', ['filter' => 'auth'], function ($routes) {
+    $routes->get('', 'ClinicaController::show');                       // Mostrar dados da clínica
+    $routes->get('edit/(:num)', 'ClinicaController::edit/$1');         // Formulário para edição
+    $routes->post('update/(:num)', 'ClinicaController::update/$1');    // Atualizar dados
+});

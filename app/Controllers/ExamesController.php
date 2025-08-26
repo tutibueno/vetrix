@@ -9,6 +9,7 @@ use App\Models\VeterinarioModel;
 use App\Models\SolicitacaoExameMotivoModel;
 use App\Models\SolicitacaoExameDetalheModel;
 use App\Models\ClientModel;
+use App\Models\ClinicaModel;
 
 class ExamesController extends BaseController
 {
@@ -17,6 +18,7 @@ class ExamesController extends BaseController
     protected $solicitacaoModel;
     protected $exameModel;
     protected $motivoModel;
+    protected $clinicaModel;
 
     public function __construct()
     {
@@ -25,6 +27,7 @@ class ExamesController extends BaseController
         $this->solicitacaoModel = new SolicitacaoExameModel();
         $this->exameModel       = new SolicitacaoExameDetalheModel();
         $this->motivoModel      = new SolicitacaoExameMotivoModel();
+        $this->clinicaModel     = new ClinicaModel();
     }
 
     // Lista todos os exames de um pet
@@ -229,18 +232,10 @@ class ExamesController extends BaseController
             ->where('solicitacao_id', $id)
             ->findAll();
 
-        $info_clinica = [];
-        $info_clinica['rua'] = 'Rua Teodureto Souto';
-        $info_clinica['numero'] = '577';
-        $info_clinica['complemento'] = '(paralelo à av. Lins de Vasconcelos)';
-        $info_clinica['cep'] = '01536-000';
-        $info_clinica['cidade'] = 'São Paulo';
-        $info_clinica['uf'] = 'SP';
-        $info_clinica['bairro'] = 'Cambuci';
-        $info_clinica['telefone'] = '11-3206-7266';
-        $info_clinica['celular'] = '(11)99987-9989';
-        $info_clinica['whatsapp'] = '(11)99988-9989';
-        $info_clinica['email'] = 'clinica_vet@gmail.com';
+        $info_clinica = $this->clinicaModel->first();
+
+        if(!$info_clinica)
+            $info_clinica['nome_clinica'] = 'CONFIGURAR CLÍNICA!!';
 
         $data = [
             'solicitacao' => $solicitacao,

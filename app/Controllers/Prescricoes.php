@@ -9,18 +9,21 @@ use App\Models\ClientModel;
 use App\Models\PetModel;
 use CodeIgniter\Controller;
 use App\Libraries\Mypdf;
+use App\Models\ClinicaModel;
 use \Mpdf\Mpdf;
 
 class Prescricoes extends Controller
 {
     protected $prescricaoModel;
     protected $medicamentoModel;
+    protected $clinicaModel;
     protected $db;
 
     public function __construct()
     {
         $this->prescricaoModel = new PrescricaoModel();
         $this->medicamentoModel = new PrescricaoMedicamentoModel();
+        $this->clinicaModel = new ClinicaModel();
         $this->db = \Config\Database::connect();
     }
 
@@ -278,25 +281,10 @@ class Prescricoes extends Controller
             $medicamentosPorVia[$via][] = $med;
         }
 
-        $info_clinica = [];
-        $info_clinica['nome_clinica'] = 'CLINICA VETERINÁRIA';
-        $info_clinica['crmv_clinica'] ='';
-        $info_clinica['razao_social'] = '';
-        $info_clinica['cnpj'] = '';
-        $info_clinica['registro_mapa'] = '';
-        $info_clinica['inscricao_municipal'] = '';
-        $info_clinica['inscricao_estadual'] = '';
-        $info_clinica['rua'] = 'Rua Teodureto Souto';
-        $info_clinica['numero'] = '577';
-        $info_clinica['complemento'] = '(paralelo à av. Lins de Vasconcelos)';
-        $info_clinica['cep'] = '01536-000';
-        $info_clinica['cidade'] = 'São Paulo';
-        $info_clinica['uf'] = 'SP';
-        $info_clinica['bairro'] = 'Cambuci';
-        $info_clinica['telefone'] = '11-3206-7266';
-        $info_clinica['celular'] = '(11)99987-9989';
-        $info_clinica['whatsapp'] = '(11)99988-9989';
-        $info_clinica['email'] = 'clinica_vet@gmail.com';
+        $clinica = $this->clinicaModel->first();
+
+        if(!$clinica)
+            $clinica['nome_clinica'] = 'CONFIGURAR CLÍNICA!!';
 
         $dados = [
             'prescricao' => $prescricao,
@@ -305,7 +293,7 @@ class Prescricoes extends Controller
             'cliente' => $cliente,
             'veterinario' => $veterinario,
             'medicamentosPorVia' => $medicamentosPorVia,
-            'info_clinica' => $info_clinica
+            'info_clinica' => $clinica
         ];
 
         return view('prescricoes/imprimir', $dados);
@@ -365,18 +353,7 @@ class Prescricoes extends Controller
             $medicamentosPorVia[$via][] = $med;
         }
 
-        $info_clinica = [];
-        $info_clinica['rua'] = 'Rua Teodureto Souto';
-        $info_clinica['numero'] = '577';
-        $info_clinica['complemento'] = '(paralelo à av. Lins de Vasconcelos)';
-        $info_clinica['cep'] = '01536-000';
-        $info_clinica['cidade'] = 'São Paulo';
-        $info_clinica['uf'] = 'SP';
-        $info_clinica['bairro'] = 'Cambuci';
-        $info_clinica['telefone'] = '11-3206-7266';
-        $info_clinica['celular'] = '(11)99987-9989';
-        $info_clinica['whatsapp'] = '(11)99988-9989';
-        $info_clinica['email'] = 'clinica_vet@gmail.com';
+        $clinica = $this->clinicaModel->find(1);
 
         $dados = [
             'prescricao' => $prescricao,
@@ -385,7 +362,7 @@ class Prescricoes extends Controller
             'cliente' => $cliente,
             'veterinario' => $veterinario,
             'medicamentosPorVia' => $medicamentosPorVia,
-            'info_clinica' => $info_clinica
+            'info_clinica' => $clinica
         ];
 
         // Carregar view em HTML

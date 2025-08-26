@@ -33,7 +33,7 @@ class ClientModel extends Model
         'cpf_cnpj'     => 'permit_empty|is_unique[clients.cpf_cnpj,id,{id}]',
         'telefone'     => 'permit_empty',
         'email'        => 'permit_empty|valid_email',
-        'cep'          => 'required',
+        'cep'          => 'permit_empty',
         'data_nascimento' => 'permit_empty|valid_date',
     ];
 }

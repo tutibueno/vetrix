@@ -133,16 +133,16 @@
 
     <!-- Cabeçalho -->
     <div class="header">
-        <h2>CLÍNICA VETERINÁRIA</h2>
+        <h2><?= esc($info_clinica['nome_clinica'] ?? '') ?></h2>
         <div><?= esc($veterinario['nome']) ?></div>
         <div>CRMV: <?= esc($veterinario['crmv']) ?></div>
         <div style="font-size: 10px;">
             <br>
-            <?= esc($info_clinica['rua']) ?>, <?= esc($info_clinica['numero']) ?><?= $info_clinica['complemento'] ? ' ' . esc($info_clinica['complemento']) : '' ?>
-            <?= esc($info_clinica['cep']) ?> - <?= esc($info_clinica['bairro']) ?> - <?= esc($info_clinica['cidade']) ?> - <?= esc($info_clinica['uf']) ?>
+            <?= esc($info_clinica['rua'] ?? '') ?>, <?= esc($info_clinica['numero'] ?? '') ?><?= esc($info_clinica['complemento']  ?? '')?>
+            <?= esc($info_clinica['cep'] ?? '') ?> - <?= esc($info_clinica['bairro'] ?? '') ?> - <?= esc($info_clinica['cidade'] ?? '') ?> - <?= esc($info_clinica['uf'] ?? '') ?>
             <br>
-            Tel: <?= esc($info_clinica['telefone']) ?> - Cel.: <?= esc($info_clinica['celular']) ?> - Whatsapp: <?= esc($info_clinica['whatsapp']) ?>
-            <?= esc($info_clinica['email']) ?>
+            Tel: <?= esc($info_clinica['telefone'] ?? '') ?> - Cel.: <?= esc($info_clinica['celular'] ?? '') ?> - Whatsapp: <?= esc($info_clinica['whatsapp'] ?? '') ?>
+            <?= esc($info_clinica['email'] ?? '') ?>
         </div>
 
         <hr>
@@ -223,7 +223,7 @@
 
     <button id="btn-imprimir" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
 
-    
+
 
 </body>
 

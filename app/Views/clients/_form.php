@@ -86,12 +86,12 @@ $client = $client ?? [];
         // Mudança de CPF para CNPJ dinamicamente (opcional)
         $('input[name="cpf_cnpj"]').on('input', function() {
             const val = $(this).val().replace(/\D/g, '');
-            if (val.length > 11) {
-                $(this).mask('00.000.000/0000-00', {
+            if (val.length <= 11) {
+                $(this).mask('000.000.000-00', {
                     reverse: true
                 });
             } else {
-                $(this).mask('000.000.000-00', {
+                $(this).mask('00.000.000/0000-00', {
                     reverse: true
                 });
             }
@@ -117,10 +117,8 @@ $client = $client ?? [];
 <script>
     document.querySelector('form').addEventListener('submit', function(e) {
         let nome = document.querySelector('[name="nome"]');
-        let cpf_cnpj = document.querySelector('[name="cpf_cnpj"]');
-        let telefone = document.querySelector('[name="telefone"]');
 
-        if (!nome.value.trim() || !cpf_cnpj.value.trim() || !telefone.value.trim()) {
+        if (!nome.value.trim()) {
             e.preventDefault();
             alert('Por favor, preencha os campos obrigatórios: Nome, CPF/CNPJ, Telefone, etc.');
         }
