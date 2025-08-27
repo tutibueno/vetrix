@@ -164,6 +164,8 @@
                             <strong>Data:</strong> <?= date('d/m/Y', strtotime($p['data_prescricao'])) ?>
                             <br>
                             <strong>Médico Responsável:</strong> <?= esc($p['veterinario_nome']) ?>
+                            <br>
+                            <strong>Tipo de Receita:</strong> <?= esc($p['tipo_prescricao']) ?>
                         </p>
 
                         <div class="row">

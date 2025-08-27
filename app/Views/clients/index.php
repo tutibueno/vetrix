@@ -19,12 +19,12 @@
             <?php
             // Função rápida para mascarar CPF/CNPJ
             $doc = $client['cpf_cnpj'];
-            if (strlen($doc) === 11) {
+            if (strlen($doc) === 14) {
                 // CPF -> 215.xxx.xxx-xx
-                $doc = substr($doc, 0, 4) . '.xxx.xxx-' . substr($doc, -2);
+                $doc = substr($doc, 0, 3) . '.***.***-' . substr($doc, -2);
             } elseif (strlen($doc) === 14) {
                 // CNPJ -> 12.xxx.xxx/xxxx-xx
-                $doc = substr($doc, 0, 3) . '.xxx.xxx/xxxx-' . substr($doc, -2);
+                $doc = substr($doc, 0, 3) . '.***.***/****-' . substr($doc, -2);
             }
 
             // Formatar data de cadastro

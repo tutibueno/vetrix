@@ -80,6 +80,20 @@ class Client extends BaseController
         return redirect()->to('/client')->with('success', 'Cliente excluído com sucesso.');
     }
 
+    function esconderDoc($doc)
+    {
+        // Função rápida para mascarar CPF/CNPJ
+        if (strlen($doc) === 14) {
+            // CPF -> 215.xxx.xxx-xx
+            $doc = substr($doc, 0, 3) . '.***.***-' . substr($doc, -2);
+        } elseif (strlen($doc) === 14) {
+            // CNPJ -> 12.xxx.xxx/xxxx-xx
+            $doc = substr($doc, 0, 3) . '.***.***/****-' . substr($doc, -2);
+        }
+
+        return $doc;
+    }
+
     public function buscar()
     {
         $term = $this->request->getGet('term');
@@ -93,7 +107,7 @@ class Client extends BaseController
             $result[] = [
                 'id' => $c['id'],
                 'nome' => $c['nome'],
-                'cpf_cnpj' => $c['cpf_cnpj'],
+                'cpf_cnpj' => $this->esconderDoc($c['cpf_cnpj']),
                 'telefone' => $c['telefone']
             ];
         }

@@ -52,6 +52,7 @@
             font-weight: bold;
             text-align: center;
             margin-bottom: 5px;
+            width: 100%;
         }
 
         .med-table {
@@ -95,6 +96,10 @@
         .footer {
             margin-top: 20px;
             font-size: 10pt;
+            bottom: 0;
+            left: 0;
+            position: relative;
+            width: 100%;
         }
 
         .linha-pontilhada {
@@ -138,7 +143,7 @@
         <div>CRMV: <?= esc($veterinario['crmv']) ?></div>
         <div style="font-size: 10px;">
             <br>
-            <?= esc($info_clinica['rua'] ?? '') ?>, <?= esc($info_clinica['numero'] ?? '') ?><?= esc($info_clinica['complemento']  ?? '')?>
+            <?= esc($info_clinica['rua'] ?? '') ?>, <?= esc($info_clinica['numero'] ?? '') ?> - <?= esc($info_clinica['complemento']  ?? '') ?>
             <?= esc($info_clinica['cep'] ?? '') ?> - <?= esc($info_clinica['bairro'] ?? '') ?> - <?= esc($info_clinica['cidade'] ?? '') ?> - <?= esc($info_clinica['uf'] ?? '') ?>
             <br>
             Tel: <?= esc($info_clinica['telefone'] ?? '') ?> - Cel.: <?= esc($info_clinica['celular'] ?? '') ?> - Whatsapp: <?= esc($info_clinica['whatsapp'] ?? '') ?>
@@ -149,33 +154,21 @@
     </div>
 
     <!-- Tipo de prescrição -->
-    <div class="center"><strong>Receita <?= esc($prescricao['tipo_prescricao']) ?></strong></div>
+    <?php if (esc($prescricao['tipo_prescricao']) != 'Simples'): ?>
+        <div class="center">
+            <strong>Receita de <?= esc($prescricao['tipo_prescricao']) ?>:</strong>
+            <strong> 1&ordf; Via para Farmácia - 2&ordf; Via para Paciente</strong>
+        </div>
+        <!-- Informações Animal / Tutor -->
+        <?= view('prescricoes/animal_tutor_controlada') ?>
+
+    <?php else: ?>
+        <div class="center"><strong>Receita <?= esc($prescricao['tipo_prescricao']) ?></strong></div>
+        <!-- Informações Animal / Tutor -->
+        <?= view('prescricoes/animal_tutor_simples') ?>
+    <?php endif; ?>
 
 
-    <!-- Informações Animal / Tutor -->
-    <table class="info-table">
-        <tr>
-            <td style="text-align: center;">
-                <div class="info-title">Animal</div>
-                Nome: <?= esc($pet['nome']) ?><br>
-                Espécie: <?= esc($pet['especie']) ?><br>
-                <?php if (!empty($pet['sexo'])): ?>
-                    Sexo: <?= esc($pet['sexo']) ?><br>
-                <?php endif; ?>
-                <?php if (!empty($idade_pet)): ?>
-                    Idade: <?= $idade_pet ?><br>
-                <?php endif; ?>
-            </td>
-            <td style="text-align: center;">
-                <div class="info-title">Tutor</div>
-                <?= esc($cliente['nome']) ?><br>
-                <?= esc($cliente['cpf_cnpj']) ?><br>
-                <?= esc($cliente['rua']) ?>, <?= esc($cliente['numero']) ?> <?= esc($cliente['complemento']) ?><br>
-                <?= esc($cliente['cidade']) ?> <?= esc($cliente['cep']) ?><br>
-            </td>
-        </tr>
-
-    </table>
 
 
     <!-- Medicamentos -->
@@ -215,13 +208,20 @@
 
     <!-- Rodapé -->
     <div class="footer">
-        <?= date('d/m/Y', strtotime($prescricao['data_prescricao'])) ?><br>
-        Assinado Digitalmente por:<br>
-        <strong><?= esc($veterinario['nome']) ?></strong><br>
-        CRMV: <?= esc($veterinario['crmv']) ?><br><br>
+        <?php if (esc($prescricao['tipo_prescricao']) != 'Simples'): ?>
+            <?= view('prescricoes/rodape_controlada') ?>
+        <?php else: ?>
+            <?= view('prescricoes/rodape_simples') ?>
+        <?php endif; ?>
+        <button id="btn-imprimir" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
     </div>
 
-    <button id="btn-imprimir" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
+
+
+
+
+
+
 
 
 

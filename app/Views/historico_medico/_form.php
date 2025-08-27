@@ -15,7 +15,7 @@
 
         <div class="form-group">
             <label for="data_consulta">Data da Consulta</label>
-            <input type="date" name="data_consulta" id="data" class="form-control"
+            <input type="date" name="data_consulta" id="data_consulta" class="form-control"
                 value="<?= old('data_consulta', $prescricao['data_consulta'] ?? date('Y-m-d')) ?>" required>
         </div>
 
@@ -37,7 +37,7 @@
         <!-- anamnese (antes sintomas) -->
         <div class="form-group">
             <label>Anamnese</label>
-            <textarea name="anamnese" class="form-control"><?= esc($historico['anamnese'] ?? '') ?></textarea>
+            <textarea name="anamnese" id="anamnese" class="form-control"><?= esc($historico['anamnese'] ?? '') ?></textarea>
         </div>
 
         <!-- sinais clínicos -->
