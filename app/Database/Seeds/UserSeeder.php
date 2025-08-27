@@ -12,7 +12,7 @@ class AdminUserSeeder extends Seeder
             [
                 'username'   => 'admin',
                 'name'       => 'Administrador',
-                'email'      => 'admin@seuprojeto.com',
+                'email'      => 'admin@vetrix.com.br',
                 'password'   => password_hash('123456', PASSWORD_DEFAULT),
                 'perfil'     => 'admin',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -21,7 +21,7 @@ class AdminUserSeeder extends Seeder
             [
                 'username'  => 'vet',
                 'name'      => 'Dr. Veterinário',
-                'email'     => 'veterinario@seuprojeto.com',
+                'email'     => 'veterinario@vetrix.com.br',
                 'senha'     => password_hash('123456', PASSWORD_DEFAULT),
                 'perfil'    => 'veterinario',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -29,7 +29,7 @@ class AdminUserSeeder extends Seeder
             [
                 'username'   => 'recepcao',
                 'name'      => 'Recepcionista',
-                'email'     => 'recepcao@seuprojeto.com',
+                'email'     => 'recepcao@vetrix.com.br',
                 'senha'     => password_hash('123456', PASSWORD_DEFAULT),
                 'perfil'    => 'recepcionista',
                 'created_at' => date('Y-m-d H:i:s'),

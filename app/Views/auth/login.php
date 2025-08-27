@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-<?php if (session()->getFlashdata('error')): ?>
-    <div class="alert alert-danger">
-        <?= session()->getFlashdata('error') ?>
-    </div>
-<?php endif; ?>
+
 
 <head>
     <meta charset="UTF-8">
@@ -17,10 +13,11 @@
 </head>
 
 <body class="hold-transition login-page">
+    <?= view('layouts/alerts') ?>
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="#" class="h1"><b>Meu</b>Sistema</a>
+                <a href="#" class="h1"><b>C</b>línica</a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Faça login para iniciar</p>
@@ -53,5 +50,23 @@
     <script src="<?= base_url('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= base_url('adminlte/dist/js/adminlte.min.js') ?>"></script>
 </body>
+
+<script>
+    const alertDurations = {
+        'success-alert': 3000,
+        'error-alert': 6000,
+        'warning-alert': 4500
+    };
+
+    Object.entries(alertDurations).forEach(([className, duration]) => {
+        const alert = document.querySelector(`.${className}`);
+        if (alert) {
+            setTimeout(() => {
+                alert.classList.remove('show'); // inicia o fade
+                setTimeout(() => alert.remove(), 500); // remove do DOM após fade
+            }, duration);
+        }
+    });
+</script>
 
 </html>

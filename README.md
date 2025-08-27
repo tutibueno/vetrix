@@ -1,4 +1,7 @@
-# 🐾 Clínica Veterinária - Sistema de Gestão
+```markdown
+![Tela de login](public/logotipo_conceitual.png)
+
+# 🐾 Vetrix - Sistema de Gestão para Clínica Veterinária
 
 Sistema de código aberto desenvolvido em PHP com CodeIgniter 4 para gestão de clínicas veterinárias. Ideal para profissionais da saúde animal que buscam organização, eficiência e controle da rotina clínica.
 
@@ -34,8 +37,8 @@ Roadmap:
 - Clone o repositório:
 
 ```bash
-git clone https://github.com/tutibueno/clinica-veterinaria.git
-cd clinica-veterinaria
+git clone https://github.com/tutibueno/vetrix.git
+cd vetrix
 composer install
 ```
 
@@ -96,7 +99,7 @@ O sistema ficará disponível em:
 Caso esteja hospedando o sistema altere o arquivo /app/Config/App.php conforme sua necessidade:
 
 ```php
-public string $baseURL = 'http://seudominio.com.br/seuprojeto/';
+public string $baseURL = 'http://seudominio.com.br/vetrix/';
 ```
 
 👥 Contribuições
