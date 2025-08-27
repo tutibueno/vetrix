@@ -21,7 +21,7 @@ class Pet extends BaseController
     {
         $search = $this->request->getGet('search');
         $pets = $this->petModel
-            ->select('pets.*, clients.nome as tutor')
+            ->select('pets.*, clients.nome as tutor, clients.telefone as telefone')
             ->join('clients', 'clients.id = pets.cliente_id');
 
         if ($search) {
@@ -32,7 +32,7 @@ class Pet extends BaseController
         }
 
         return view('pets/index', [
-            'pets' => $pets->paginate(10),
+            'pets' => $pets->paginate(9),
             'pager' => $this->petModel->pager,
             'search' => $search
         ]);
@@ -40,25 +40,40 @@ class Pet extends BaseController
 
     public function create()
     {
-        return view('pets/create', [
-            'clientes' => $this->clienteModel->findAll()
-        ]);
+        return view('pets/create');
     }
 
     public function store()
     {
         $post = $this->request->getPost();
 
-        // Upload da foto
-        $file = $this->request->getFile('foto');
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            $newName = $file->getRandomName();
-            $file->move('uploads/pets', $newName);
-            $post['foto'] = $newName; // <- Isso é ESSENCIAL
-        }
-
         if (!$this->validate($this->petModel->getValidationRules())) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $foto = $this->request->getFile('foto');
+
+        if ($foto && $foto->isValid() && !$foto->hasMoved()) {
+
+            // Validar tipo
+            $validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!in_array($foto->getMimeType(), $validTypes)) {
+                return redirect()->back()->with('error', 'Formato de imagem inválido.');
+            }
+
+            $newName = $foto->getRandomName();
+
+            // Redimensionar se necessário
+            $image = \Config\Services::image()
+                ->withFile($foto->getTempName());
+
+            if ($image->getWidth() > 1024) {
+                $image->resize(1024, 1024, true); // mantém proporção
+                $image->save('uploads/pets/' . $newName);
+            }
+
+            // Salvar nome no banco
+            $post['foto'] = $newName;
         }
 
         $this->petModel->insert($post);
@@ -74,7 +89,7 @@ class Pet extends BaseController
 
         return view('pets/edit', [
             'pet' => $pet,
-            'clientes' => $this->clienteModel->findAll()
+            'cliente' => $this->clienteModel->find($pet['cliente_id'])
         ]);
     }
 
@@ -82,21 +97,33 @@ class Pet extends BaseController
     {
         $post = $this->request->getPost();
 
-        $file = $this->request->getFile('foto');
-        if ($file && $file->isValid() && !$file->hasMoved()) {
-            // Deleta a foto anterior
-            $old = $this->petModel->find($id);
-            if ($old && $old['foto'] && file_exists('uploads/pets/' . $old['foto'])) {
-                unlink('uploads/pets/' . $old['foto']);
-            }
-
-            $newName = $file->getRandomName();
-            $file->move('uploads/pets', $newName);
-            $post['foto'] = $newName;
-        }
-
         if (!$this->validate($this->petModel->getValidationRules())) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
+        $foto = $this->request->getFile('foto');
+
+        if ($foto && $foto->isValid() && !$foto->hasMoved()) {
+            
+            // Validar tipo
+            $validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!in_array($foto->getMimeType(), $validTypes)) {
+                return redirect()->back()->with('error', 'Formato de imagem inválido.');
+            }
+
+            $newName = $foto->getRandomName();
+
+            // Redimensionar se necessário
+            $image = \Config\Services::image()
+                ->withFile($foto->getTempName());
+
+            if ($image->getWidth() > 1024) {
+                $image->resize(1024, 1024, true); // mantém proporção
+                $image->save('uploads/pets/'. $newName);
+            }
+
+            // Salvar nome no banco
+            $post['foto'] = $newName;
         }
 
         $this->petModel->update($id, $post);

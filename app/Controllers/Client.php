@@ -24,6 +24,8 @@ class Client extends BaseController
             $query = $query->like('nome', $search)->orLike('cpf_cnpj', $search);
         }
 
+        $query = $query->orderBy('created_at', 'DESC');
+
         $data['clients'] = $query->paginate(10);
         $data['pager'] = $query->pager;
         $data['search'] = $search;
@@ -72,7 +74,30 @@ class Client extends BaseController
 
     public function delete($id)
     {
-        $this->clientModel->delete($id);
+        //Desabilitado por padrão
+
+        //$this->clientModel->delete($id);
         return redirect()->to('/client')->with('success', 'Cliente excluído com sucesso.');
+    }
+
+    public function buscar()
+    {
+        $term = $this->request->getGet('term');
+
+        $clientes = $this->clientModel
+            ->like('nome', $term)
+            ->findAll(10); // limite para não sobrecarregar
+
+        $result = [];
+        foreach ($clientes as $c) {
+            $result[] = [
+                'id' => $c['id'],
+                'nome' => $c['nome'],
+                'cpf_cnpj' => $c['cpf_cnpj'],
+                'telefone' => $c['telefone']
+            ];
+        }
+
+        return $this->response->setJSON($result);
     }
 }

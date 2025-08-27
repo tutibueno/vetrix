@@ -67,7 +67,7 @@
                 <?php if (!empty($exame['motivos'])): ?>
                     <?php foreach ($exame['motivos'] as $i => $m): ?>
                         <div class="input-group mb-2 motivo-item">
-                            <input type="text" name="motivos[<?= $i ?>][motivo_suspeita]" class="form-control" placeholder="Motivo/Suspeita" value="<?= esc($m['motivo_suspeita']) ?>" required>
+                            <input type="text" name="motivos[<?= $i ?>][motivo_suspeita]" class="form-control" placeholder="Motivo/Suspeita" value="<?= esc($m['motivo_suspeita']) ?>">
                             <button type="button" class="btn btn-danger remove-motivo"><i class="fas fa-trash"></i></button>
                         </div>
                     <?php endforeach; ?>
@@ -142,7 +142,7 @@
             const div = document.createElement('div');
             div.className = 'input-group mb-2 motivo-item';
             div.innerHTML = `
-            <input type="text" name="motivos[${motivoIndex}][motivo_suspeita]" class="form-control" placeholder="Motivo/Suspeita" required>
+            <input type="text" name="motivos[${motivoIndex}][motivo_suspeita]" class="form-control" placeholder="Motivo/Suspeita">
             <button type="button" class="btn btn-danger remove-motivo"><i class="fas fa-trash"></i></button>
         `;
             motivosList.appendChild(div);

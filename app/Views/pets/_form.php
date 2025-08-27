@@ -1,27 +1,27 @@
 <?php $errors = session('errors');
-$pet = $pet ?? []; ?>
+$pet = $pet ?? [];
+?>
 
 <div class="row">
     <div class="col-md-6">
-        <div class="form-group">
+        <!-- ===== Tutor ===== -->
+        <div class="form-group position-relative">
             <label>Tutor (Cliente)</label>
-            <select name="cliente_id" class="form-control <?= isset($errors['cliente_id']) ? 'is-invalid' : '' ?>">
-                <option value="">Selecione</option>
-                <?php foreach ($clientes as $cliente): ?>
-                    <option value="<?= $cliente['id'] ?>" <?= old('cliente_id', $pet['cliente_id'] ?? '') == $cliente['id'] ? 'selected' : '' ?>>
-                        <?= esc($cliente['nome']) ?>
-                    </option>
-                <?php endforeach ?>
-            </select>
+            <input type="hidden" name="cliente_id" id="cliente_id" value="<?= old('cliente_id', $pet['cliente_id'] ?? '') ?>">
+            <input type="text" id="cliente_nome" class="form-control <?= isset($errors['cliente_id']) ? 'is-invalid' : '' ?>"
+                placeholder="Digite o nome do tutor" value="<?= old('cliente_nome', $cliente['nome'] ?? '') ?>" autocomplete="off">
             <div class="invalid-feedback"><?= $errors['cliente_id'] ?? '' ?></div>
+            <div class="suggestions" id="cliente_suggestions" style="display:none;"></div>
         </div>
 
+        <!-- Nome do Pet -->
         <div class="form-group">
             <label>Nome do Pet</label>
             <input type="text" name="nome" class="form-control <?= isset($errors['nome']) ? 'is-invalid' : '' ?>" value="<?= old('nome', $pet['nome'] ?? '') ?>">
             <div class="invalid-feedback"><?= $errors['nome'] ?? '' ?></div>
         </div>
 
+        <!-- Espécie -->
         <div class="form-group">
             <label for="especie">Espécie</label>
             <input type="text" name="especie" id="especie" class="form-control"
@@ -31,15 +31,19 @@ $pet = $pet ?? []; ?>
                 <option value="Canino">
                 <option value="Felino">
                 <option value="Ave">
+                <option value="Roedor">
+                <option value="Réptil">
                 <option value="Equino">
             </datalist>
         </div>
 
+        <!-- Raça -->
         <div class="form-group">
             <label>Raça</label>
             <input type="text" name="raca" class="form-control" value="<?= old('raca', $pet['raca'] ?? '') ?>">
         </div>
 
+        <!-- Sexo -->
         <div class="form-group">
             <label>Sexo</label>
             <select name="sexo" class="form-control <?= isset($errors['sexo']) ? 'is-invalid' : '' ?>">
@@ -50,6 +54,7 @@ $pet = $pet ?? []; ?>
             <div class="invalid-feedback"><?= $errors['sexo'] ?? '' ?></div>
         </div>
 
+        <!-- Peso -->
         <div class="form-group">
             <label>Peso (Kg)</label>
             <input type="text" name="peso" value="<?= isset($pet['peso']) ? esc($pet['peso']) : '' ?>" class="form-control" placeholder="Ex: 5.20">
@@ -74,8 +79,9 @@ $pet = $pet ?? []; ?>
         </div>
     </div>
 
-
     <div class="col-md-6">
+
+
         <div class="form-group">
             <label>Pelagem</label>
             <input type="text" name="pelagem" class="form-control" value="<?= old('pelagem', $pet['pelagem'] ?? '') ?>">
@@ -100,6 +106,7 @@ $pet = $pet ?? []; ?>
             <textarea name="observacoes" class="form-control"><?= old('observacoes', $pet['observacoes'] ?? '') ?></textarea>
         </div>
 
+        <!-- Foto do Pet -->
         <div class="form-group">
             <label>Foto do Pet</label><br>
             <input type="file" name="foto" accept="image/*" capture="environment" class="form-control-file">
@@ -111,34 +118,54 @@ $pet = $pet ?? []; ?>
                 <img src="<?= base_url('uploads/pets/' . $pet['foto']) ?>" alt="Foto do pet" class="img-thumbnail" width="200">
             </div>
         <?php endif ?>
-
     </div>
 </div>
 
+<!-- ===== Scripts ===== -->
 <script>
     $(document).ready(function() {
-        // Máscara de peso
-        $('input[name="peso"]').mask('000.00', {
-            reverse: true
+
+        // Autocomplete tutor
+        $('#cliente_nome').on('input', function() {
+            let term = $(this).val();
+            if (term.length < 1) {
+                $('#cliente_suggestions').hide();
+                return;
+            }
+            $.getJSON('<?= site_url("client/buscar") ?>', {
+                term: term
+            }, function(data) {
+                let html = '';
+                data.forEach(c => {
+                    html += `<div data-id="${c.id}">${c.nome} ${c.cpf_cnpj} ${c.telefone}</div>`;
+                });
+                if (html) {
+                    $('#cliente_suggestions').html(html).show();
+                } else {
+                    $('#cliente_suggestions').hide();
+                }
+            });
         });
 
-        // Validação simples antes de enviar
-        $('form').on('submit', function(e) {
-            let peso = $('input[name="peso"]').val();
-            let vivo = $('select[name="esta_vivo"]').val();
-            let castrado = $('select[name="castrado"]').val();
+        // Selecionar tutor
+        $(document).on('click', '#cliente_suggestions div', function() {
+            let nome = $(this).text();
+            let id = $(this).data('id');
+            $('#cliente_nome').val(nome);
+            $('#cliente_id').val(id);
+            $('#cliente_suggestions').hide();
+        });
 
-            // Peso não pode ser negativo ou zero (se informado)
-            if (peso && parseFloat(peso) < 0) {
-                alert('O peso deve ser maior que zero.');
-                e.preventDefault();
+        // Fechar suggestions se clicar fora
+        $(document).click(function(e) {
+            if (!$(e.target).closest('#cliente_nome, #cliente_suggestions').length) {
+                $('#cliente_suggestions').hide();
             }
+        });
 
-            // Se o pet não está vivo, não faz sentido marcar como castrado = sim
-            if (vivo === 'nao' && castrado === 'sim') {
-                alert('Um pet falecido não pode estar castrado.');
-                e.preventDefault();
-            }
+        // Máscara de peso
+        $('input[name="peso"]').mask('000.000', {
+            reverse: true
         });
     });
 </script>
@@ -163,4 +190,3 @@ $pet = $pet ?? []; ?>
         background: #f0f0f0;
     }
 </style>
-

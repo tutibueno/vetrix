@@ -6,7 +6,7 @@
 
     <form action="<?= site_url('pet/store') ?>" method="post" enctype="multipart/form-data">
         <?= csrf_field() ?>
-        <?= view('pets/_form', ['clientes' => $clientes]) ?>
+        <?= view('pets/_form') ?>
         <button type="submit" class="btn btn-success">Salvar</button>
         <a href="<?= site_url('pet') ?>" class="btn btn-secondary">Cancelar</a>
     </form>

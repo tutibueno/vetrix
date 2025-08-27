@@ -30,6 +30,7 @@ $routes->group('client', ['filter' => 'auth'], function ($routes) {
     $routes->get('edit/(:num)', 'Client::edit/$1');
     $routes->post('update/(:num)', 'Client::update/$1');
     $routes->get('delete/(:num)', 'Client::delete/$1');
+    $routes->get('buscar', 'Client::buscar');
 });
 
 //Pets
