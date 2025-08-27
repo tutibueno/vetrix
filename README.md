@@ -1,5 +1,4 @@
-```markdown
-![Tela de login](public/logotipo_conceitual.png)
+![alt text](https://github.com/tutibueno/vetrix/blob/dev/public/logotipo_conceitual.png?raw=true)
 
 # 🐾 Vetrix - Sistema de Gestão para Clínica Veterinária
 
