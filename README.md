@@ -42,7 +42,7 @@ composer install
 ```
 
 - Crie um banco de dados MySQL (collation utf8mb4_generial_ci recomendada)
-- Configure o ambiente: Copie o arquivo .env.example para .env ou env para .env e configure o banco de dados:
+- Configure o ambiente: Renomeie o arquivo env para .env e configure o banco de dados:
 
 ```pgsql
 database.default.hostname = localhost
