@@ -18,7 +18,7 @@
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="#" class="h1"><b>C</b>línica</a>
+                <a href="#" class="h1"><b>V</b>etrix</a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Faça login para iniciar</p>
