@@ -23,7 +23,7 @@
         <div class="card shadow-sm h-100 pet-card">
           <div class="card-header text-center bg-light">
             <?php if (!empty($pet['foto'])): ?>
-              <img src="<?= base_url('uploads/pets/' . $pet['foto']) ?>"
+              <img src="<?= base_url('public/uploads/pets/' . $pet['foto']) ?>"
                 class="img-fluid rounded-circle"
                 style="width:100px; height:100px; object-fit:cover;"
                 alt="Foto do pet">

@@ -51,30 +51,7 @@ class Pet extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $foto = $this->request->getFile('foto');
-
-        if ($foto && $foto->isValid() && !$foto->hasMoved()) {
-
-            // Validar tipo
-            $validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!in_array($foto->getMimeType(), $validTypes)) {
-                return redirect()->back()->with('error', 'Formato de imagem inválido.');
-            }
-
-            $newName = $foto->getRandomName();
-
-            // Redimensionar se necessário
-            $image = \Config\Services::image()
-                ->withFile($foto->getTempName());
-
-            if ($image->getWidth() > 1024) {
-                $image->resize(1024, 1024, true); // mantém proporção
-                $image->save('uploads/pets/' . $newName);
-            }
-
-            // Salvar nome no banco
-            $post['foto'] = $newName;
-        }
+        $this->processaFoto();
 
         $this->petModel->insert($post);
         return redirect()->to('/pet')->with('success', 'Pet cadastrado com sucesso!');
@@ -101,30 +78,7 @@ class Pet extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $foto = $this->request->getFile('foto');
-
-        if ($foto && $foto->isValid() && !$foto->hasMoved()) {
-            
-            // Validar tipo
-            $validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!in_array($foto->getMimeType(), $validTypes)) {
-                return redirect()->back()->with('error', 'Formato de imagem inválido.');
-            }
-
-            $newName = $foto->getRandomName();
-
-            // Redimensionar se necessário
-            $image = \Config\Services::image()
-                ->withFile($foto->getTempName());
-
-            if ($image->getWidth() > 1024) {
-                $image->resize(1024, 1024, true); // mantém proporção
-                $image->save('uploads/pets/'. $newName);
-            }
-
-            // Salvar nome no banco
-            $post['foto'] = $newName;
-        }
+        $this->processaFoto();
 
         $this->petModel->update($id, $post);
         return redirect()->to('/pet')->with('success', 'Pet atualizado com sucesso!');
@@ -212,6 +166,34 @@ class Pet extends BaseController
         }
 
         return view('pets/ficha', compact('pet', 'historico', 'vacinas', 'prescricoes','exames'));
+    }
+
+    public function processaFoto()
+    {
+        $foto = $this->request->getFile('foto');
+
+        if ($foto && $foto->isValid() && !$foto->hasMoved()) {
+
+            // Validar tipo
+            $validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!in_array($foto->getMimeType(), $validTypes)) {
+                return redirect()->back()->with('error', 'Formato de imagem inválido.');
+            }
+
+            $newName = $foto->getRandomName();
+
+            // Redimensionar se necessário
+            $image = \Config\Services::image()
+                ->withFile($foto->getTempName());
+
+            if ($image->getWidth() > 1024) {
+                $image->resize(1024, 1024, true); // mantém proporção
+                $image->save('uploads/pets/' . $newName);
+            }
+
+            // Salvar nome no banco
+            $post['foto'] = $newName;
+        }
     }
 
 }

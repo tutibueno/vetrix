@@ -9,7 +9,7 @@
     <div class="card-body">
         <?php if ($pet['foto']): ?>
             <div class="mb-3 text-center">
-                <img src="<?= base_url('uploads/pets/' . $pet['foto']) ?>" alt="Foto do pet" class="img-thumbnail" style="max-height: 300px;">
+                <img src="<?= base_url('public/uploads/pets/' . $pet['foto']) ?>" alt="Foto do pet" class="img-thumbnail" style="max-height: 300px;">
             </div>
         <?php endif; ?>
 
