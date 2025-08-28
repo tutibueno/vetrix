@@ -51,7 +51,9 @@ class Pet extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $this->processaFoto();
+        $foto = $this->processaFoto();
+        if($foto != '')
+            $post['foto'] = $foto;
 
         $this->petModel->insert($post);
         return redirect()->to('/pet')->with('success', 'Pet cadastrado com sucesso!');
@@ -78,7 +80,9 @@ class Pet extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        $this->processaFoto();
+        $foto = $this->processaFoto();
+        if ($foto != '')
+            $post['foto'] = $foto;
 
         $this->petModel->update($id, $post);
         return redirect()->to('/pet')->with('success', 'Pet atualizado com sucesso!');
@@ -170,6 +174,7 @@ class Pet extends BaseController
 
     public function processaFoto()
     {
+        $newName = '';
         $foto = $this->request->getFile('foto');
 
         if ($foto && $foto->isValid() && !$foto->hasMoved()) {
@@ -188,12 +193,13 @@ class Pet extends BaseController
 
             if ($image->getWidth() > 1024) {
                 $image->resize(1024, 1024, true); // mantém proporção
-                $image->save('uploads/pets/' . $newName);
+                $image->save('public/uploads/pets/' . $newName);
             }
 
-            // Salvar nome no banco
-            $post['foto'] = $newName;
         }
+
+        return $newName;
+
     }
 
 }
