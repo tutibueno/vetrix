@@ -4,7 +4,10 @@
             <?= date('d/m/Y', strtotime($prescricao['data_prescricao'])) ?><br>
             <strong><?= esc($veterinario['nome']) ?></strong><br>
             CRMV: <?= esc($veterinario['crmv']) ?>
-            Registro no MAPA: <?= esc($veterinario['registro_mapa']) ?><br><br>
+            <?php if (esc($veterinario['registro_mapa'])): ?>
+                Registro no MAPA: <?= esc($veterinario['registro_mapa']) ?>
+            <?php endif; ?>
+            <br><br>
             <p>____________________</p>
             Assinatura
         </td>
