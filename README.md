@@ -91,14 +91,22 @@ Senha: 123456
 ```bash
 php spark serve
 ```
+⚠️
+Obs.: Caso ocorram problemas pelo php spark serve, utilize o um servidor Apache, por exemplo, Xampp.
 
 O sistema ficará disponível em:
 👉 http://localhost:8080
 
-Caso esteja hospedando o sistema altere o arquivo /app/Config/App.php conforme sua necessidade:
+Caso esteja hospedando o sistema ou executando pelo Xampp, altere o arquivo /app/Config/App.php conforme sua necessidade:
 
 ```php
-public string $baseURL = 'http://seudominio.com.br/vetrix/';
+public string $baseURL = 'https://seudominio.com.br/vetrix/';
+```
+
+ou para o Xampp:
+
+```php
+public string $baseURL = 'http://localhost/vetrix/';
 ```
 
 👥 Contribuições
@@ -110,7 +118,7 @@ Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para mai
 📣 Contato
 Desenvolvido por Reginaldo Bueno
 📧 Email: tuti.bueno@gmail.com
-🐾 Instagram: @clinica.veterinaria.dev
+🐾 Instagram: @tuti.bueno
 
 
 ---
