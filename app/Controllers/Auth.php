@@ -6,7 +6,7 @@ namespace App\Controllers;
 use App\Models\UserModel;
 use CodeIgniter\Controller;
 
-class Auth extends BaseController
+class Auth extends Controller
 {
     public function login()
     {
@@ -22,11 +22,24 @@ class Auth extends BaseController
         $user = $model->getUserByUsername($username);
 
         if ($user && password_verify($password, $user['password'])) {
-            $session->set([
+
+            //Criar sessão com dados do usuário
+            $sessionData = [
+                'user' => [
+                    'id'       => $user['id'],
+                    'name'     => $user['name'],
+                    'email'    => $user['email'],
+                    'perfil'   => $user['perfil'],
+                ],
                 'user_id' => $user['id'],
                 'user_name' => $user['name'],
-                'logged_in' => true
-            ]);
+                'perfil' => $user['perfil'],
+                'logged_in' => true,
+                'isLoggedIn' => true
+            ];
+
+            session()->set($sessionData);
+
             return redirect()->to('/');
         }
 

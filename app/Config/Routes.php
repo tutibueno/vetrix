@@ -9,13 +9,22 @@ $routes->get('/home', 'Home::index');
 
 $routes->get('/', 'Dashboard::index', ['filter' => 'auth']);
 
-//Users
+$routes->group('users', function ($routes) {
+    // Apenas administradores podem criar, salvar e excluir
+    $routes->get('create', 'Users::create', ['filter' => 'userPermission:manage']);
+    $routes->post('store', 'Users::store', ['filter' => 'userPermission:manage']);
+    $routes->get('delete/(:num)', 'Users::delete/$1', ['filter' => 'userPermission:manage']);
+
+    // Admin OU dono da conta pode editar
+    $routes->get('edit/(:num)', 'Users::edit/$1', ['filter' => 'userPermission:edit']);
+    $routes->post('update/(:num)', 'Users::update/$1', ['filter' => 'userPermission:edit']);
+
+    // Listagem: qualquer usuário logado
+    $routes->get('/', 'Users::index', ['filter' => 'auth']);
+});
+
+// listagem liberada para todos logados
 $routes->get('users', 'Users::index', ['filter' => 'auth']);
-$routes->get('users/create', 'Users::create', ['filter' => 'auth']);
-$routes->post('users/store', 'Users::store', ['filter' => 'auth']);
-$routes->get('users/edit/(:num)', 'Users::edit/$1', ['filter' => 'auth']);
-$routes->post('users/update/(:num)', 'Users::update/$1', ['filter' => 'auth']);
-$routes->get('users/delete/(:num)', 'Users::delete/$1', ['filter' => 'auth']);
 
 //Login
 $routes->get('login', 'Auth::login');
@@ -116,7 +125,7 @@ $routes->group('exames', ['filter' => 'auth'], function ($routes) {
 
 // Rotas da Clínica
 $routes->group('clinica', ['filter' => 'auth'], function ($routes) {
-    $routes->get('', 'ClinicaController::show');                       // Mostrar dados da clínica
-    $routes->get('edit/(:num)', 'ClinicaController::edit/$1');         // Formulário para edição
-    $routes->post('update/(:num)', 'ClinicaController::update/$1');    // Atualizar dados
+    $routes->get('', 'ClinicaController::show', ['filter' => 'userPermission:manage']);                       // Mostrar dados da clínica
+    $routes->get('edit/(:num)', 'ClinicaController::edit/$1', ['filter' => 'userPermission:manage']);         // Formulário para edição
+    $routes->post('update/(:num)', 'ClinicaController::update/$1', ['filter' => 'userPermission:manage']);    // Atualizar dados
 });

@@ -26,17 +26,19 @@
                     value="<?= old('email', $user['email'] ?? '') ?>" required>
             </div>
 
-            <div class="form-group">
-                <label>Perfil</label>
-                <select name="perfil" class="form-control">
-                    <?php foreach ($perfis as $key => $label): ?>
-                        <option value="<?= $key ?>"
-                            <?= set_select('perfil', $key, ($user['perfil'] ?? '') === $key) ?>>
-                            <?= $label ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
+            <?php if ($currentUser['perfil'] === 'admin'): ?>
+                <!-- Admin pode alterar perfil -->
+                <div class="form-group">
+                    <label>Perfil</label>
+                    <select name="perfil" class="form-control">
+                        <?php foreach ($perfis as $key => $label): ?>
+                            <option value="<?= $key ?>" <?= set_select('perfil', $key, ($user['perfil'] ?? '') === $key) ?>>
+                                <?= $label ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            <?php endif; ?>
 
             <?php if (isset($isEdit) && $isEdit): ?>
                 <hr>

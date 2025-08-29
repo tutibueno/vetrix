@@ -42,7 +42,7 @@
             </div>
         </li>
 
-        <?php if (session()->get('logged_in')): ?>
+        <?php if (session()->get('user')): ?>
             <li class="nav-item">
                 <a class="nav-link" href="<?= base_url('logout') ?>">Sair</a>
             </li>

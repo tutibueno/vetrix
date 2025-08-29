@@ -98,17 +98,44 @@ class Users extends BaseController
     public function edit($id)
     {
         helper('form');
-        $user = $this->userModel->find($id);
-        $perfis = $this->userModel->getPerfis();
+
+        $userModel = $this->userModel;
+        $currentUser = session()->get('user'); // supondo que você guarda usuário logado na sessão
+
+        // Regras de acesso
+        if ($currentUser['perfil'] !== 'admin' && $currentUser['id'] != $id) {
+            return redirect()->to('/users')->with('error', 'Você não tem permissão para editar este usuário.');
+        }
+
+        $user = $userModel->find($id);
+
+        if (!$user) {
+            return redirect()->to('/users')->with('error', 'Usuário não encontrado.');
+        }
+
+        $perfis = [
+            'admin' => 'Administrador',
+            'veterinario' => 'Veterinário',
+            'recepcionista' => 'Recepcionista',
+        ];
+
         return view('users/edit', [
-            'user' => $user, 
-            'title' => 'Editar Usuário',
-            'perfis' => $perfis
+            'user' => $user,
+            'perfis' => $perfis,
+            'currentUser' => $currentUser
         ]);
     }
 
     public function update($id)
     {
+
+        $currentUser = session()->get('user');
+
+        // Regras de acesso
+        if ($currentUser['perfil'] !== 'admin' && $currentUser['id'] != $id) {
+            return redirect()->to('/users')->with('error', 'Você não tem permissão para alterar este usuário.');
+        }
+
         //Regras básicas
         $rules = [
             'name' => [
