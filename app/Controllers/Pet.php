@@ -177,6 +177,9 @@ class Pet extends BaseController
         $newName = '';
         $foto = $this->request->getFile('foto');
 
+        if($foto == null || $foto == '')
+            $foto = $this->request->getFile('foto_camera');
+
         if ($foto && $foto->isValid() && !$foto->hasMoved()) {
 
             // Validar tipo
@@ -184,9 +187,9 @@ class Pet extends BaseController
             if (!in_array($foto->getMimeType(), $validTypes)) {
                 return redirect()->back()->with('error', 'Formato de imagem inválido.');
             }
-
+            
             $newName = $foto->getRandomName();
-
+            
             // Redimensionar se necessário
             $image = \Config\Services::image()
                 ->withFile($foto->getTempName());
@@ -195,7 +198,7 @@ class Pet extends BaseController
                 $image->resize(1024, 1024, true); // mantém proporção
                 $image->save('public/uploads/pets/' . $newName);
             }
-
+        
         }
 
         return $newName;
