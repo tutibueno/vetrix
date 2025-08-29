@@ -109,13 +109,26 @@ $pet = $pet ?? [];
         <!-- Foto do Pet -->
         <div class="form-group">
             <label>Foto do Pet</label><br>
-            <input type="file" name="foto" accept="image/*" capture="environment" class="form-control-file">
+
+            <!-- Botão para galeria -->
+            <div class="custom-file mb-2">
+                <input type="file" class="custom-file-input" id="foto_galeria" name="foto" accept="image/*">
+                <label class="custom-file-label" for="foto_galeria">Selecionar da galeria</label>
+            </div>
+
+            <!-- Botão para câmera (somente mobile) -->
+            <div class="custom-file d-none" id="cameraWrapper">
+                <input type="file" class="custom-file-input" id="foto_camera" name="foto_camera" accept="image/*" capture="environment">
+                <label class="custom-file-label" for="foto_camera">
+                    <i class="fas fa-camera"></i> Tirar foto agora
+                </label>
+            </div>
         </div>
 
         <?php if (!empty($pet['foto'])): ?>
             <div class="form-group">
                 <label>Foto atual:</label><br>
-                <img src="<?= base_url('uploads/pets/' . $pet['foto']) ?>" alt="Foto do pet" class="img-thumbnail" width="200">
+                <img src="<?= base_url('public/uploads/pets/' . $pet['foto']) ?>" alt="Foto do pet" class="img-thumbnail" width="200">
             </div>
         <?php endif ?>
     </div>
@@ -169,6 +182,24 @@ $pet = $pet ?? [];
         });
     });
 </script>
+
+<script>
+    $(document).ready(function() {
+        // Atualiza label com nome do arquivo selecionado
+        $('.custom-file-input').on('change', function() {
+            let fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName || 'Selecionar arquivo');
+        });
+
+        // Detecta se é mobile
+        let isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            $('#cameraWrapper').removeClass('d-none');
+        }
+    });
+</script>
+
 
 <style>
     .suggestions {

@@ -68,6 +68,13 @@ class Users extends BaseController
                     'required'   => 'A senha é obrigatória.',
                     'min_length' => 'A senha deve ter no mínimo 6 caracteres.'
                 ]
+            ],
+            'password_confirm' => [
+                'rules'  => 'matches[password]',
+                'errors' => [
+                    'required'   => 'A senha é obrigatória.',
+                    'min_length' => 'Confirmação de senha inválida.'
+                ]
             ]
         ];
 
@@ -102,6 +109,7 @@ class Users extends BaseController
 
     public function update($id)
     {
+        //Regras básicas
         $rules = [
             'name' => [
                 'rules'  => "required|min_length[3]|max_length[150]",
@@ -130,18 +138,41 @@ class Users extends BaseController
             ]
         ];
 
-        if ($this->request->getPost()) {
-            if (! $this->validate($rules)) {
-                return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-            }
-
-            $this->userModel->update($id, [
-                'username' => $this->request->getPost('username'),
-                'name' => $this->request->getPost('name'),
-                'email' => $this->request->getPost('email'),
-                'perfil' => $this->request->getPost('perfil')
-            ]);
+        // se senha foi preenchida, adiciona regra
+        if ($this->request->getPost('password')) {
+            $rules += [
+                'password' => [
+                'rules'  => 'required|min_length[6]',
+                'errors' => [
+                    'required'   => 'A senha é obrigatória.',
+                    'min_length' => 'A senha deve ter no mínimo 6 caracteres.'
+                ]
+                ],
+                'password_confirm' => [
+                    'rules'  => 'matches[password]',
+                    'errors' => [
+                        'required'   => 'A senha é obrigatória.',
+                        'min_length' => 'Confirmação de senha inválida.'
+                    ]
+                ]
+            ];
         }
+
+        if (! $this->validate($rules)) {
+            return redirect()->back()->withInput()->with('error', $this->validator->listErrors());
+        }
+
+        $data = [
+            'name'   => $this->request->getPost('name'),
+            'email'  => $this->request->getPost('email'),
+            'perfil' => $this->request->getPost('perfil'),
+        ];
+
+        if ($this->request->getPost('password')) {
+            $data['password'] = password_hash($this->request->getPost('password'), PASSWORD_DEFAULT);
+        }
+
+        $this->userModel->update($id, $data);
 
         return redirect()->to('/users')->with('success', 'Usuário atualizado com sucesso!');
     }
