@@ -129,3 +129,24 @@ $routes->group('clinica', ['filter' => 'auth'], function ($routes) {
     $routes->get('edit/(:num)', 'ClinicaController::edit/$1', ['filter' => 'userPermission:manage']);         // Formulário para edição
     $routes->post('update/(:num)', 'ClinicaController::update/$1', ['filter' => 'userPermission:manage']);    // Atualizar dados
 });
+
+// Rotas de Consultas
+$routes->group('consultas', ['filter' => 'auth'], function ($routes) {
+
+
+    $routes->get('/', 'Consultas::index');
+
+    // Agenda visual
+    $routes->get('agenda', 'Consultas::agenda');           // Exibe o calendário
+    $routes->get('agendaJson', 'Consultas::agendaJson');   // Retorna consultas em JSON para o FullCalendar
+
+    // CRUD de consultas
+    $routes->get('create/(:num)', 'Consultas::create/$1'); // Criar nova consulta, $1 = pet_id opcional
+    $routes->post('store', 'Consultas::store');            // Salvar nova consulta
+    $routes->get('edit/(:num)', 'Consultas::edit/$1');    // Editar consulta
+    $routes->post('update/(:num)', 'Consultas::update/$1'); // Atualizar consulta
+    $routes->get('delete/(:num)', 'Consultas::delete/$1'); // Deletar consulta
+
+    // Consultas de um pet específico (para modal na ficha do pet)
+    $routes->get('pet/(:num)', 'Consultas::consultasDoPet/$1'); // $1 = pet_id
+});

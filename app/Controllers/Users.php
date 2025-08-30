@@ -27,9 +27,11 @@ class Users extends BaseController
     {
         helper('form');
         $perfis = $this->userModel->getPerfis();
+        $currentUser = session()->get('user');
         return view('users/create', [
             'title' => 'Novo Usuário',
-            'perfis'  => $perfis
+            'perfis'  => $perfis,
+            'currentUser' => $currentUser
         ]);
     }
 
