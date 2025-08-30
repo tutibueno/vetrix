@@ -75,15 +75,29 @@ class Consultas extends BaseController
     {
         $consultas = $this->consultaModel->getWithRelations();
 
+
         $events = [];
+
         foreach ($consultas as $c) {
+            $status = strtolower($c['status'] ?? '');
+
+            $map = [
+                'confirmada' => ['bg' => '#28a745', 'border' => '#28a745', 'text' => '#ffffff', 'class' => 'evt-confirmada'],
+                'pendente'   => ['bg' => '#ffc107', 'border' => '#ffc107', 'text' => '#000000', 'class' => 'evt-pendente'],
+                'cancelada'  => ['bg' => '#dc3545', 'border' => '#dc3545', 'text' => '#ffffff', 'class' => 'evt-cancelada'],
+            ];
+            $cfg = $map[$status] ?? ['bg' => '#3788d8', 'border' => '#3788d8', 'text' => '#ffffff', 'class' => 'evt-default'];
+
             $events[] = [
-                'id' => $c['id'],
-                'title' => $c['pet_nome'] . ' - ' . $c['vet_nome'],
-                'start' => $c['data_consulta'],
-                'url' => site_url('consultas/edit/' . $c['id']),
-                'backgroundColor' => $c['status'] == 'agendada' ? '#007bff' : ($c['status'] == 'realizada' ? '#28a745' : '#dc3545'),
-                'borderColor' => '#000000',
+                'id'              => $c['id'],
+                'title'           => $c['pet_nome'] . ' - ' . $c['vet_nome'],
+                'start'           => date('c', strtotime($c['data_consulta'])),
+                'allDay'          => false, // força a mostrar a hora
+                'url'             => site_url('consultas/edit/' . $c['id']),
+                'backgroundColor' => $cfg['bg'],
+                'borderColor'     => $cfg['border'],
+                'textColor'       => $cfg['text'],
+                'classNames'      => [$cfg['class']],
             ];
         }
 

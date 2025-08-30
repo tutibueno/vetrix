@@ -1,16 +1,5 @@
-<?= $this->extend('layouts/main') ?>
-<?= $this->section('content') ?>
 
-<div class="card shadow rounded-2xl">
-    <div class="card-header">
-        <h3 class="card-title"><i class="fas fa-calendar-alt"></i> Agenda de Consultas</h3>
-    </div>
-    <div class="card-body">
-        <div id="calendar"></div>
-    </div>
-</div>
 
-<script src="<?= base_url('public/fullcalendar/dist/index.global.min.js') ?>"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -41,5 +30,3 @@
         calendar.render();
     });
 </script>
-
-<?= $this->endSection() ?>

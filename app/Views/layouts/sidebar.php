@@ -48,7 +48,7 @@
 
                     <!-- Menu de Consultas -->
                     <li class="nav-item">
-                        <a href="<?= site_url('consultas/agenda') ?>" class="nav-link">
+                        <a href="<?= site_url('consultas') ?>" class="nav-link">
                             <i class="nav-icon fas fa-calendar-check"></i>
                             <p>Consultas</p>
                         </a>
