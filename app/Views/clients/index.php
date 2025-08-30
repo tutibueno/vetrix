@@ -34,16 +34,20 @@
             ?>
             <div class="col-12 mb-3">
                 <div class="card shadow-sm position-relative">
-                    <div class="card-body d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="card-title mb-1"><?= esc($client['nome']) ?></h5>
-                            <p class="card-text mb-1"><strong>CPF/CNPJ:</strong> <?= esc($doc) ?></p>
-                            <p class="card-text mb-1"><strong>Telefone:</strong> <?= esc($client['telefone']) ?></p>
-                            <p class="card-text mb-1"><strong>Email:</strong> <?= esc($client['email']) ?></p>
-                            <p class="card-text mb-1 text-muted"><small><strong>Cadastrado em:</strong> <?= esc($dataCadastro) ?></small></p>
-                            <a href="<?= site_url('client/edit/' . $client['id']) ?>" class="btn btn-sm btn-warning"> <i class="fas fa-edit"></i> Editar Informações</a>
-
-                        </div>
+                    <div class="card-body">
+                        <h5 class="card-title mb-1"><?= esc($client['nome']) ?></h5>
+                        <p class="card-text mb-1"><strong>CPF/CNPJ:</strong> <?= esc($doc) ?></p>
+                        <p class="card-text mb-1"><strong>Telefone:</strong> <?= esc($client['telefone']) ?></p>
+                        <p class="card-text mb-1"><strong>Email:</strong> <?= esc($client['email']) ?></p>
+                        <p class="card-text mb-1 text-muted"><small><strong>Cadastrado em:</strong> <?= esc($dataCadastro) ?></small></p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-end">
+                        <a href="<?= site_url('client/edit/' . $client['id']) ?>" class="btn btn-sm btn-warning me-2">
+                            <i class="fas fa-edit"></i> Editar
+                        </a>
+                        <a href="<?= site_url('client/delete/' . $client['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este cliente?')">
+                            <i class="fas fa-trash"></i> Excluir
+                        </a>
                     </div>
                 </div>
             </div>
