@@ -11,20 +11,6 @@
         transform: rotate(180deg);
     }
 
-    /* título aberto com destaque */
-    .card-header button[aria-expanded="true"] {
-        background-color: #e6f0ff;
-        /* azul claro */
-        color: #0d6efd;
-        /* azul bootstrap */
-        font-weight: 600;
-        border-radius: 0.5rem;
-    }
-
-    .card-header button {
-        transition: all 0.3s ease;
-        border-radius: 0.5rem;
-    }
 </style>
 
 <div class="card shadow rounded-2xl mb-4">
@@ -334,5 +320,152 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalFormulario" tabindex="-1" role="dialog" aria-labelledby="modalFormularioLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false"
+    aria-labelledby="meuModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" id="modalContent">
+            <!-- Conteúdo AJAX será carregado aqui -->
+        </div>
+    </div>
+</div>
+
+<!-- Modal Impressão-->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pré-visualização da Prescrição</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="previewContent" style="min-height:70vh; overflow:auto;">
+                <!-- Conteúdo será injetado via JS -->
+            </div>
+            <div class="modal-footer">
+                <a href="<?= site_url('prescricoes/imprimir/pdf/' . 6) ?>" target="_blank" class="btn btn-success">
+                    Baixar PDF
+                </a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#btnAdicionarAtendimento').on('click', function() {
+            const petId = $(this).data('pet');
+            $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+            $('#modalFormulario').modal('show');
+            $.get("<?= base_url('historico_medico/create') ?>/" + petId, function(data) {
+                $('#modalContent').html(data);
+            });
+        });
+
+        $('#btnAdicionarVacina').on('click', function() {
+            const petId = $(this).data('pet');
+            $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+            $('#modalFormulario').modal('show');
+            $.get("<?= base_url('vacinas/nova') ?>/" + petId, function(data) {
+                $('#modalContent').html(data);
+            });
+        });
+
+        $('#btnAdicionarPrescricao').on('click', function() {
+            const petId = $(this).data('pet');
+            $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+            $('#modalFormulario').modal('show');
+            $.get("<?= base_url('prescricoes/create') ?>/" + petId, function(data) {
+                $('#modalContent').html(data);
+            });
+        });
+
+        $('#btnAdicionarExame').on('click', function() {
+            const petId = $(this).data('pet');
+            $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+            $('#modalFormulario').modal('show');
+            $.get("<?= base_url('exames/create') ?>/" + petId, function(data) {
+                $('#modalContent').html(data);
+            });
+        });
+    });
+</script>
+
+<script>
+    function editarVacina(id) {
+        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalFormulario').modal('show');
+        $.get("<?= base_url('vacinas/editar') ?>/" + id, function(data) {
+            $('#modalContent').html(data);
+        });
+    }
+</script>
+
+<script>
+    function editarAtendimento(id) {
+        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalFormulario').modal('show');
+        $.get("<?= base_url('historico_medico/edit') ?>/" + id, function(data) {
+            $('#modalContent').html(data);
+        });
+    }
+</script>
+
+<script>
+    function editarExame(id) {
+        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalFormulario').modal('show');
+        $.get("<?= base_url('exames/edit') ?>/" + id, function(data) {
+            $('#modalContent').html(data);
+        });
+    }
+</script>
+
+<script>
+    function editarPrescricao(id) {
+        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalFormulario').modal('show');
+        $.get("<?= base_url('prescricoes/edit') ?>/" + id, function(data) {
+            $('#modalContent').html(data);
+        });
+    }
+
+    function excluirPrescricao(id) {
+        if (confirm('Tem certeza que deseja excluir esta prescrição?')) {
+            $.get(`/prescricoes/delete/${id}`, {
+                _method: 'GET'
+            }, function() {
+                location.reload();
+            });
+        }
+    }
+
+    function excluirExame(id) {
+        if (confirm('Tem certeza que deseja excluir este exame?')) {
+            $.get(`/exames/delete/${id}`, {
+                _method: 'GET'
+            }, function() {
+                location.reload();
+            });
+        }
+    }
+
+    function VisualizarImpressao(id) {
+
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (!isMobile) {
+            document.getElementById("previewContent").innerHTML =
+                `<iframe src="<?= site_url('prescricoes/imprimir/') ?>${id}" style="width:100%; height:70vh; border:none;"></iframe>`;
+        } else {
+            document.getElementById("previewContent").innerHTML =
+                `<iframe src="<?= site_url('prescricoes/imprimir/') ?>${id}" style="width:100%; height:70vh; border:none;"></iframe>`;
+        }
+        var modal = new bootstrap.Modal(document.getElementById('previewModal'));
+        modal.show();
+
+    }
+</script>
+
 
 <?= $this->endSection() ?>
