@@ -22,7 +22,17 @@ class Consultas extends BaseController
     public function index()
     {
         $consultas = $this->consultaModel->getWithRelations();
-        return view('consultas/index', ['consultas' => $consultas]);
+
+        // Calcula data_consulta_fim (30 min depois)
+        foreach ($consultas as &$c) {
+            $c['data_consulta_fim'] = date('Y-m-d H:i:s', strtotime($c['data_consulta'] . ' +30 minutes'));
+            $c['cor_status'] = $this->getStatusColor($c['status']);
+        }
+        unset($c); // evita referência residual
+
+        return view('consultas/index', [
+            'consultas' => $consultas
+        ]);
     }
 
     public function create()
@@ -102,5 +112,16 @@ class Consultas extends BaseController
         }
 
         return $this->response->setJSON($events);
+    }
+
+    // Helper dentro do controller ou método privado
+    private function getStatusColor(string $status): string
+    {
+        return match (strtolower($status)) {
+            'agendada'  => '#007bff', // azul
+            'realizada' => '#28a745', // verde
+            'cancelada' => '#dc3545', // vermelho
+            default     => '#6c757d', // cinza fallback
+        };
     }
 }

@@ -1,9 +1,8 @@
-<?= $this->extend('layouts/main') ?>
-<?= $this->section('content') ?>
-
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title"><i class="fas fa-calendar-plus"></i> <?= $consulta ? 'Editar Consulta' : 'Agendar Consulta' ?></h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+</div>
 <div class="container-fluid">
-    <h1 class="mt-4"><?= $consulta ? 'Editar Consulta' : 'Agendar Consulta' ?></h1>
-
     <form method="post" action="<?= $consulta ? site_url('consultas/update/' . $consulta['id']) : site_url('consultas/store') ?>">
         <?= csrf_field() ?>
 
@@ -33,7 +32,7 @@
 
         <div class="form-group mb-3">
             <label for="data_consulta">Data e Hora</label>
-            <input type="datetime-local" name="data_consulta" class="form-control"
+            <input type="datetime-local" name="data_consulta" class="form-control" id="data_consulta"
                 value="<?= $consulta ? date('Y-m-d\TH:i', strtotime($consulta['data_consulta'])) : '' ?>" required>
         </div>
 
@@ -60,5 +59,3 @@
         <a href="<?= site_url('consultas') ?>" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
-
-<?= $this->endSection() ?>

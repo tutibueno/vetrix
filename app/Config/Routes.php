@@ -141,7 +141,7 @@ $routes->group('consultas', ['filter' => 'auth'], function ($routes) {
     $routes->get('agendaJson', 'Consultas::agendaJson');   // Retorna consultas em JSON para o FullCalendar
 
     // CRUD de consultas
-    $routes->get('create/(:num)', 'Consultas::create/$1'); // Criar nova consulta, $1 = pet_id opcional
+    $routes->get('create', 'Consultas::create'); // Criar nova consulta
     $routes->post('store', 'Consultas::store');            // Salvar nova consulta
     $routes->get('edit/(:num)', 'Consultas::edit/$1');    // Editar consulta
     $routes->post('update/(:num)', 'Consultas::update/$1'); // Atualizar consulta

@@ -1,6 +1,14 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
+
+
+<!-- fullCalendar 2.2.5 -->
+<!--  <script src="public/adminlte/plugins/fullcalendar/main.js"></script> -->
+
+<!-- fullCalendar -->
+<!-- <link rel="stylesheet" href="public/adminlte/plugins/fullcalendar/main.css"> -->
+
 <script src="<?= base_url('public/fullcalendar/dist/index.global.min.js') ?>"></script>
 
 <div class="container-fluid">
@@ -9,13 +17,13 @@
     <!-- Nav Tabs -->
     <ul class="nav nav-tabs mb-3" id="consultasTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="lista-tab" data-toggle="tab" href="#lista" role="tab" aria-controls="lista" aria-selected="true">
-                <i class="fas fa-list"></i> Lista de Consultas
+            <a class="nav-link active" id="calendario-tab" data-bs-toggle="tab" href="#calendario" role="tab" aria-controls="calendario" aria-selected="true">
+                <i class="fas fa-calendar-alt"></i> Calendário
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="calendario-tab" data-toggle="tab" href="#calendario" role="tab" aria-controls="calendario" aria-selected="false">
-                <i class="fas fa-calendar-alt"></i> Calendário
+            <a class="nav-link" id="lista-tab" data-bs-toggle="tab" href="#lista" role="tab" aria-controls="lista" aria-selected="false">
+                <i class="fas fa-list"></i> Lista de Consultas
             </a>
         </li>
     </ul>
@@ -23,11 +31,24 @@
     <!-- Conteúdo Tabs -->
     <div class="tab-content" id="consultasTabContent">
 
+        <!-- CALENDÁRIO -->
+        <div class="tab-pane fade show active" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
+            <div class="card shadow rounded-2xl">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-calendar-alt"></i> Agenda de Consultas</h3>
+                </div>
+                <div class="card-body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- LISTA -->
-        <div class="tab-pane fade show active" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-            <a href="<?= site_url('consultas/create') ?>" class="btn btn-primary mb-3">
+        <div class="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
+            <a onclick="novaConsulta()" class="btn btn-primary mb-3">
                 <i class="fas fa-calendar-plus"></i> Nova Consulta
             </a>
+
 
             <div class="row">
                 <?php if (!empty($consultas)): ?>
@@ -45,9 +66,9 @@
                                         <p class="mb-1"><strong>Status:</strong> <?= ucfirst($c['status']) ?></p>
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <a href="<?= site_url('consultas/edit/' . $c['id']) ?>" class="btn btn-sm btn-warning">
+                                        <button class="btn btn-sm btn-warning" onclick="editarConsulta(<?= $c['id'] ?>)">
                                             <i class="fas fa-edit"></i> Editar
-                                        </a>
+                                        </button>
                                         <a href="<?= site_url('consultas/delete/' . $c['id']) ?>" class="btn btn-sm btn-danger"
                                             onclick="return confirm('Deseja cancelar esta consulta?')">
                                             <i class="fas fa-trash"></i> Excluir
@@ -65,28 +86,45 @@
             </div>
         </div>
 
-        <!-- CALENDÁRIO -->
-        <div class="tab-pane fade" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
-            <div class="card shadow rounded-2xl">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-calendar-alt"></i> Agenda de Consultas</h3>
-                </div>
-                <div class="card-body">
-                    <div id="calendar"></div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
+
+<!-- Modal para criar consulta -->
+<div class="modal fade" id="modalFormulario" tabindex="-1" aria-labelledby="modalFormularioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="modalContent">
+                <div class="text-center p-4">Carregando...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function editarConsulta(id) {
+        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalFormulario').modal('show');
+        $.get("<?= base_url('consultas/edit') ?>/" + id, function(data) {
+            $('#modalContent').html(data);
+        });
+    }
+    function novaConsulta() {
+        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalFormulario').modal('show');
+        $.get("<?= base_url('consultas/create') ?>", function(data) {
+            $('#modalContent').html(data);
+        });
+    }
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth', // visualização inicial
-            locale: 'pt-br', // idioma português
+            initialView: 'dayGridMonth',
+            locale: 'pt-br',
+            timeZone: 'UTC-3',
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
@@ -95,76 +133,110 @@
             navLinks: true, // clique em dias/semana
             editable: false,
             selectable: true,
-            events: '<?= site_url('consultas/agendaJson') ?>', // rota que retorna os eventos em JSON
+            events: [
+                <?php foreach ($consultas as $c): ?> {
+                        id: '<?= esc($c['id']) ?>',
+                        title: '<?= esc($c['pet_nome']) ?> - <?= esc($c['vet_nome']) ?>',
+                        start: '<?= $c['data_consulta'] ?>',
+                        end: '<?= $c['data_consulta_fim'] ?>',
+                        color: '<?= $c['cor_status'] ?>',
+                        extendedProps: {
+                            status: '<?= ucfirst($c['status']) ?>',
+                            pet: '<?= esc($c['pet_nome']) ?>',
+                            vet: '<?= esc($c['vet_nome']) ?>'
+                        }
+                    },
+                <?php endforeach; ?>
+            ],
+            eventClick: function(info) {
+                info.jsEvent.preventDefault(); // evita navegação
 
-            eventContent: function(arg) {
-                let hora = arg.event.start.toLocaleTimeString('pt-BR', {
-                    hour: '2-digit',
-                    minute: '2-digit'
+                const id = info.event.id; // o id da consulta
+                const url = "<?= base_url('consultas/edit') ?>/" + id;
+
+                // Abre o modal
+                $('#modalFormulario').modal('show');
+                $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
+
+                // Carrega o form de edição via AJAX
+                $.get(url, function(data) {
+                    $('#modalContent').html(data);
+                }).fail(function() {
+                    $('#modalContent').html('<div class="alert alert-danger">Erro ao carregar a consulta.</div>');
                 });
-
-                let fullText = `${hora} - ${arg.event.title}`;
-                let color = arg.event.backgroundColor || '#3788d8'; // fallback caso não tenha cor
-
-                return {
-                    html: `<div class="fc-custom-event" title="${fullText}" style="background-color:${color}; color:white; padding:2px 4px; border-radius:4px; ">
-                   <b>${hora}</b> - ${arg.event.title}
-               </div>`
-                };
             },
             dateClick: function(info) {
-                // ação ao clicar em um dia vazio
-                alert('Data selecionada: ' + info.dateStr);
-            }
+                // Se já estiver na visão diária
+                if (calendar.view.type === 'timeGridDay') {
+                    const clickedDate = info.date; // Objeto Date
+                    const formattedDate = clickedDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM (para input datetime-local)
+                    //alert(formattedDate + ' / ' + info.date);
+                    // Abre modal
+                    $('#modalFormulario').modal('show');
+                    $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
 
+                    // Carrega formulário via AJAX
+                    $.get("<?= base_url('consultas/create') ?>", function(data) {
+                        $('#modalContent').html(data);
+
+                        // Pré-preenche a data/hora
+                        const datetimeInput = $('#modalFormulario').find('input[name="data_consulta"]');
+                        if (datetimeInput.length) {
+                            datetimeInput.val(formattedDate);
+                        }
+                    });
+                } else {
+                    // Caso contrário, muda para a visão diária e foca na data clicada
+                    calendar.changeView('timeGridDay', info.dateStr);
+                }
+            },
+            eventDidMount: function(info) {
+                // Determina a cor de acordo com o status
+                let statusColor = info.event.color;
+
+                // Conteúdo HTML do tooltip
+                const tooltipContent = `
+        <div style="color: #fff; background-color: ${statusColor}; padding: 5px 10px; border-radius: 4px;">
+            <strong>Pet:</strong> ${info.event.extendedProps.pet}<br>
+            <strong>Veterinário:</strong> ${info.event.extendedProps.vet}<br>
+            <strong>Status:</strong> ${info.event.color}<br>
+            <strong>Data:</strong> ${info.event.start.toLocaleString('pt-BR', {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            })}<br>
+            <strong>Fim:</strong> ${info.event.end.toLocaleString('pt-BR', {
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            })}
+
+        </div>
+    `;
+
+                // Cria tooltip com HTML
+                new bootstrap.Tooltip(info.el, {
+                    title: tooltipContent,
+                    html: true, // permite HTML
+                    placement: 'top',
+                    trigger: 'hover',
+                    container: 'body'
+                });
+            },
+
+            dayMaxEventRows: 3
         });
 
-        calendar.render();
-    });
+        // Render inicial
+        if (document.getElementById('calendario').classList.contains('show')) {
+            calendar.render();
+        }
 
+
+    });
 </script>
 
 <style>
-    /* Força as cores utilizando CSS variables do FullCalendar (v5/v6) */
-    .fc .evt-confirmada {
-        --fc-event-bg-color: #28a745;
-        --fc-event-border-color: #28a745;
-        --fc-event-text-color: #ffffff;
-    }
 
-    .fc .evt-pendente {
-        --fc-event-bg-color: #ffc107;
-        --fc-event-border-color: #ffc107;
-        --fc-event-text-color: #000000;
-    }
 
-    .fc .evt-cancelada {
-        --fc-event-bg-color: #dc3545;
-        --fc-event-border-color: #dc3545;
-        --fc-event-text-color: #ffffff;
-    }
-
-    .fc .evt-default {
-        --fc-event-bg-color: #3788d8;
-        --fc-event-border-color: #3788d8;
-        --fc-event-text-color: #ffffff;
-    }
-
-    .fc-event-title,
-    .fc-event-time,
-    .fc-custom-event {
-        white-space: nowrap;
-        /* impede quebra de linha */
-        overflow: hidden;
-        /* corta o excesso */
-        text-overflow: ellipsis;
-        /* coloca "..." no final */
-        max-width: 100%;
-        /* respeita a largura da célula */
-        display: block;
-        font-size: 0.85rem;
-        /* deixa mais compacto */
-    }
 </style>
 
 <?= $this->endSection() ?>
