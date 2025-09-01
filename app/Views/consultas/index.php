@@ -267,6 +267,7 @@
             calendar.render();
         }
 
+        //Resize quando trocar de tabs
         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function() {
             calendar.updateSize();
         });
