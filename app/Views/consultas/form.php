@@ -6,16 +6,9 @@
     <form method="post" action="<?= $consulta ? site_url('consultas/update/' . $consulta['id']) : site_url('consultas/store') ?>">
         <?= csrf_field() ?>
 
-        <div class="form-group mb-3">
+        <div class="form-group">
             <label for="pet_id">Pet</label>
-            <select name="pet_id" class="form-control" required>
-                <option value="">Selecione...</option>
-                <?php foreach ($pets as $pet): ?>
-                    <option value="<?= $pet['id'] ?>" <?= $consulta && $consulta['pet_id'] == $pet['id'] ? 'selected' : '' ?>>
-                        <?= esc($pet['nome']) ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
+            <select id="pet_id" name="pet_id" class="form-control" style="width: 100%"></select>
         </div>
 
         <div class="form-group mb-3">
@@ -56,6 +49,44 @@
         </div>
 
         <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
-        <a href="<?= site_url('consultas') ?>" class="btn btn-secondary">Cancelar</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Fechar">Cancelar</button>
     </form>
 </div>
+
+<script>
+    $(function() {
+        // Inicializa o Select2 no campo Pet
+        $('#pet_id').select2({
+            theme: 'bootstrap4',
+            placeholder: "Selecione o Pet",
+            allowClear: true,
+            ajax: {
+                url: '<?= base_url("pet/search") ?>', // rota que busca no banco
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term // termo digitado
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(item) {
+                            return {
+                                id: item.id,
+                                text: item.nome + " (" + item.tutor_nome + ")"
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+    });
+</script>
+
+<style>
+    .select2-container {
+        z-index: 99999 !important;
+    }
+</style>

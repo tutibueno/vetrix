@@ -205,4 +205,22 @@ class Pet extends BaseController
 
     }
 
+    public function search()
+    {
+        $term = $this->request->getVar('q');
+
+        $petModel = new \App\Models\PetModel();
+
+        $builder = $petModel->select('pets.id, pets.nome, clients.nome as tutor_nome')
+            ->join('clients', 'clients.id = pets.cliente_id');
+
+        if (!empty($term)) {
+            $builder->like('pets.nome', $term);
+        }
+
+        $pets = $builder->findAll(10);
+
+        return $this->response->setJSON($pets);
+    }
+
 }

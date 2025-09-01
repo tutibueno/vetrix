@@ -1,7 +1,11 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
+<!-- Select2 -->
+<link rel="stylesheet" href="<?= base_url('public/adminlte/plugins/select2/css/select2.min.css') ?>">
+<link rel="stylesheet" href="<?= base_url('public/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') ?>">
 
+<script src="<?= base_url('public/adminlte/plugins/select2/js/select2.full.min.js') ?>"></script>
 
 <!-- fullCalendar 2.2.5 -->
 <!--  <script src="public/adminlte/plugins/fullcalendar/main.js"></script> -->
@@ -90,7 +94,7 @@
 </div>
 
 <!-- Modal para criar consulta -->
-<div class="modal fade" id="modalFormulario" tabindex="-1" aria-labelledby="modalFormularioLabel" aria-hidden="true">
+<div class="modal fade" id="modalFormulario" tabindex="-1" aria-labelledby="modalFormularioLabel" aria-hidden="true" data-focus="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body" id="modalContent">
@@ -108,6 +112,7 @@
             $('#modalContent').html(data);
         });
     }
+
     function novaConsulta() {
         $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
         $('#modalFormulario').modal('show');
@@ -191,15 +196,22 @@
                 }
             },
             eventDidMount: function(info) {
-                // Determina a cor de acordo com o status
-                let statusColor = info.event.color;
+                if (window.matchMedia("(pointer: coarse)").matches) {
+                    // Mobile ou tablet → não criar tooltip
+                    return;
+                }
 
-                // Conteúdo HTML do tooltip
+                // Desktop → cria tooltip
+                let statusColor = '#007bff';
+                if (info.event.extendedProps.status.toLowerCase() === 'agendada') statusColor = '#007bff';
+                else if (info.event.extendedProps.status.toLowerCase() === 'realizada') statusColor = '#ffc107';
+                else if (info.event.extendedProps.status.toLowerCase() === 'cancelada') statusColor = '#dc3545';
+
                 const tooltipContent = `
         <div style="color: #fff; background-color: ${statusColor}; padding: 5px 10px; border-radius: 4px;">
             <strong>Pet:</strong> ${info.event.extendedProps.pet}<br>
             <strong>Veterinário:</strong> ${info.event.extendedProps.vet}<br>
-            <strong>Status:</strong> ${info.event.color}<br>
+            <strong>Status:</strong> ${info.event.extendedProps.status}<br>
             <strong>Data:</strong> ${info.event.start.toLocaleString('pt-BR', {
                 day: '2-digit', month: '2-digit', year: 'numeric',
                 hour: '2-digit', minute: '2-digit'
@@ -208,19 +220,18 @@
                 day: '2-digit', month: '2-digit', year: 'numeric',
                 hour: '2-digit', minute: '2-digit'
             })}
-
         </div>
     `;
 
-                // Cria tooltip com HTML
                 new bootstrap.Tooltip(info.el, {
                     title: tooltipContent,
-                    html: true, // permite HTML
+                    html: true,
                     placement: 'top',
                     trigger: 'hover',
                     container: 'body'
                 });
             },
+
 
             dayMaxEventRows: 3
         });
@@ -235,8 +246,22 @@
 </script>
 
 <style>
+    .fc-event {
+        cursor: pointer !important;
+    }
 
+    /* Eventos do calendário */
+    .fc-event {
+        cursor: pointer !important;
+    }
 
+    /* Slots clicáveis (quando a pessoa clica no dia/hora do calendário) */
+    .fc-daygrid-day,
+    /* células da visão month */
+    .fc-timegrid-slot {
+        /* células da visão week/day */
+        cursor: pointer !important;
+    }
 </style>
 
 <?= $this->endSection() ?>

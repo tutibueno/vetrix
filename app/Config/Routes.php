@@ -51,6 +51,7 @@ $routes->group('pet', ['filter' => 'auth'], function ($routes) {
     $routes->post('update/(:num)', 'Pet::update/$1');
     $routes->get('delete/(:num)', 'Pet::delete/$1');
     $routes->get('ficha/(:num)', 'Pet::ficha/$1');
+    $routes->get('search', 'Pet::search');
 });
 
 //$routes->get('pets/ficha/(:num)', 'Pet::ficha/$1');
