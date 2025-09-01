@@ -6,8 +6,8 @@ Sistema de código aberto desenvolvido em PHP com CodeIgniter 4 para gestão de 
 
 Link para a versão do sistema funcionando: https://rnbtecnologia.com.br/vetrix
 
-Usuário: admin
-Senha: 123456
+- Usuário: admin
+- Senha: 123456
 
 ---
 
@@ -19,11 +19,11 @@ Senha: 123456
 - Controle de Atendimentos
 - Controle de prescrições com impressão das prescrições
 - Controle de solicitação de exames com impressão das solicitaçoes
+- Agendamento de consultas
 - Sistema multi-usuários
 
 Roadmap:
 
-- Agendamento de consultas
 - Controle de serviços como banho e tosa.
 - Controle financeiro
 
