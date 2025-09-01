@@ -4,6 +4,11 @@
 
 Sistema de código aberto desenvolvido em PHP com CodeIgniter 4 para gestão de clínicas veterinárias. Ideal para profissionais da saúde animal que buscam organização, eficiência e controle da rotina clínica.
 
+Link para a versão do sistema funcionando: https://rnbtecnologia.com.br/vetrix
+
+Usuário: admin
+Senha: 123456
+
 ---
 
 ## 🚀 Funcionalidades
