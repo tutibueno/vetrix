@@ -15,7 +15,6 @@ class Auth extends Controller
 
     public function doLogin()
     {
-        $session = session();
         $model = new UserModel();
         $username = $this->request->getPost('username');
         $password = $this->request->getPost('password');
@@ -39,6 +38,8 @@ class Auth extends Controller
             ];
 
             session()->set($sessionData);
+
+            setcookie("remember_username", $this->request->getPost('username'), time() + 60 * 60 * 24 * 180, "/"); // 180 dias
 
             return redirect()->to('/');
         }

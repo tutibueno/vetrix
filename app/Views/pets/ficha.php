@@ -10,7 +10,6 @@
     .card-header button[aria-expanded="true"] .fa-chevron-down {
         transform: rotate(180deg);
     }
-
 </style>
 
 <div class="card shadow rounded-2xl mb-4">
@@ -36,6 +35,7 @@
             <p><strong>Raça:</strong> <?= esc($pet['raca']) ?></p>
             <p><strong>Sexo:</strong> <?= esc($pet['sexo']) ?></p>
             <p><strong>Data de Nascimento:</strong> <?= esc(date('d/m/Y', strtotime($pet['data_nascimento']))) ?></p>
+            <p><strong>Idade:</strong> <span id="idade_pet"></span></p>
             <p><strong>Tutor:</strong> <?= esc($pet['nome_tutor']) ?> - <?= esc($pet['telefone']) ?></p>
             <p><strong>Observações:</strong> <?= esc($pet['observacoes']) ?></p>
             <p><strong>Castrado:</strong> <?= ucfirst($pet['castrado']) ?></p>
@@ -465,6 +465,44 @@
         modal.show();
 
     }
+</script>
+
+<script>
+    function calcularIdade(dataNascimento) {
+        if (!dataNascimento) return "";
+
+        const hoje = new Date();
+        const nasc = new Date(dataNascimento);
+
+        let anos = hoje.getFullYear() - nasc.getFullYear();
+        let meses = hoje.getMonth() - nasc.getMonth();
+        let dias = hoje.getDate() - nasc.getDate();
+
+        if (dias < 0) {
+            meses--;
+            const ultimoDiaMesAnterior = new Date(hoje.getFullYear(), hoje.getMonth(), 0).getDate();
+            dias += ultimoDiaMesAnterior;
+        }
+
+        if (meses < 0) {
+            anos--;
+            meses += 12;
+        }
+
+        if (anos > 0) {
+            return `${anos} ano${anos > 1 ? 's' : ''} e ${meses} mes${meses !== 1 ? 'es' : ''}`;
+        } else if (meses > 0) {
+            return `${meses} mes${meses !== 1 ? 'es' : ''} e ${dias} dia${dias !== 1 ? 's' : ''}`;
+        } else {
+            return `${dias} dia${dias !== 1 ? 's' : ''}`;
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const dataNascimento = "<?= $pet['data_nascimento'] ?? '' ?>";
+        const idadeTexto = calcularIdade(dataNascimento);
+        document.getElementById("idade_pet").textContent = idadeTexto || "-";
+    });
 </script>
 
 

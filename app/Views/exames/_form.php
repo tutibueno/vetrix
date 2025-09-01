@@ -47,10 +47,12 @@
             <div id="exames-list">
                 <?php if (!empty($exame['exames'])): ?>
                     <?php foreach ($exame['exames'] as $i => $ex): ?>
-                        <div class="input-group mb-2 exame-item">
-                            <input type="text" name="exames[<?= $i ?>][nome_exame]" class="form-control" placeholder="Nome do Exame" value="<?= esc($ex['nome_exame']) ?>" required>
-                            <input type="text" name="exames[<?= $i ?>][observacoes]" class="form-control" placeholder="Observações" value="<?= esc($ex['observacoes']) ?>">
-                            <button type="button" class="btn btn-danger remove-exame"><i class="fas fa-trash"></i></button>
+                        <div class="exame-item mb-2 border p-2 rounded d-flex flex-column flex-sm-row align-items-sm-center justify-content-between">
+                            <div class="flex-grow-1 me-sm-2">
+                                <input type="text" name="exames[<?= $i ?>][nome_exame]" class="form-control mb-1" placeholder="Nome do Exame" value="<?= esc($ex['nome_exame']) ?>" required>
+                                <input type="text" name="exames[<?= $i ?>][observacoes]" class="form-control" placeholder="Observações" value="<?= esc($ex['observacoes']) ?>">
+                            </div>
+                            <button type="button" class="btn btn-danger btn-sm mt-2 mt-sm-0 remove-exame"><i class="fas fa-trash"></i></button>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -128,12 +130,14 @@
         // Funções auxiliares
         function addExameRow() {
             const div = document.createElement('div');
-            div.className = 'input-group mb-2 exame-item';
+            div.className = 'exame-item mb-2 border p-2 rounded d-flex flex-column flex-sm-row align-items-sm-center justify-content-between';
             div.innerHTML = `
-            <input type="text" name="exames[${exameIndex}][nome_exame]" class="form-control" placeholder="Nome do Exame" required>
+        <div class="flex-grow-1 me-sm-2">
+            <input type="text" name="exames[${exameIndex}][nome_exame]" class="form-control mb-1" placeholder="Nome do Exame" required>
             <input type="text" name="exames[${exameIndex}][observacoes]" class="form-control" placeholder="Observações">
-            <button type="button" class="btn btn-danger remove-exame"><i class="fas fa-trash"></i></button>
-        `;
+        </div>
+        <button type="button" class="btn btn-danger btn-sm mt-2 mt-sm-0 remove-exame"><i class="fas fa-trash"></i></button>
+    `;
             examesList.appendChild(div);
             exameIndex++;
         }
