@@ -69,7 +69,7 @@
 <script>
     function inserirPadrao() {
         document.getElementById('sinais_clinicos').value =
-            "=== Dados do Pet ===\n" +
+            "=== Dados do Paciente ===\n" +
             "Peso: 0.00 kg\n" +
             "\n" +
             "=== Exame Físico ===\n" +

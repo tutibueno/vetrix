@@ -229,6 +229,7 @@
                     // Caso contrário, muda para a visão diária e foca na data clicada
                     calendar.changeView('timeGridDay', info.dateStr);
                 }
+
             },
             eventDidMount: function(info) {
                 if (window.matchMedia("(pointer: coarse)").matches) {
@@ -274,13 +275,11 @@
         // Render inicial
         if (document.getElementById('calendario').classList.contains('show')) {
             calendar.render();
-            initPetSelect();
         }
 
         //Resize quando trocar de tabs
         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function() {
             calendar.updateSize();
-            initPetSelect();
         });
 
 

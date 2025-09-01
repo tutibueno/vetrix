@@ -39,7 +39,7 @@
             <p><strong>Tutor:</strong> <?= esc($pet['nome_tutor']) ?> - <?= esc($pet['telefone']) ?></p>
             <p><strong>Observações:</strong> <?= esc($pet['observacoes']) ?></p>
             <p><strong>Castrado:</strong> <?= ucfirst($pet['castrado']) ?></p>
-            <p><strong>Peso:</strong> <?= $pet['peso'] ? number_format($pet['peso'], 2, ',', '.') . ' kg' : 'Não informado' ?></p>
+            <p><strong>Peso:</strong> <?= $pet['peso'] ? number_format($pet['peso'], 3, ',', '.') . ' kg' : 'Não informado' ?></p>
             <p><strong>Pelagem:</strong> <?= $pet['pelagem'] ?: 'Não informada' ?></p>
             <p><strong>Número de Identificação:</strong> <?= $pet['numero_identificacao'] ?: 'Não informado' ?></p>
             <p><strong>Alergias:</strong> <?= $pet['alergias'] ?: 'Nenhuma' ?></p>

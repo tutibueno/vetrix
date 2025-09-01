@@ -65,7 +65,13 @@ $pet = $pet ?? [];
         <!-- Peso -->
         <div class="form-group">
             <label>Peso (Kg)</label>
-            <input type="text" name="peso" value="<?= isset($pet['peso']) ? esc($pet['peso']) : '' ?>" class="form-control" placeholder="Ex: 5.20">
+            <input type="number"
+                step="0.001"
+                inputmode="decimal"
+                name="peso"
+                id="peso"
+                class="form-control"
+                value="<?= old('peso', $pet['peso'] ?? '') ?>">
         </div>
 
         <!-- Castrado -->
@@ -249,7 +255,7 @@ $pet = $pet ?? [];
             }
         }
     });
-    
+
     $(document).ready(function() {
         // Inicializa o Datepicker
         $('#data_nascimento').datepicker({
