@@ -267,6 +267,10 @@
             calendar.render();
         }
 
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function() {
+            calendar.updateSize();
+        });
+
 
     });
 </script>
