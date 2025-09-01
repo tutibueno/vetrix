@@ -8,7 +8,10 @@
 
         <div class="form-group">
             <label for="pet_id">Pet</label>
-            <select id="pet_id" name="pet_id" class="form-control" style="width: 100%"></select>
+            <select id="pet_id" name="pet_id" class="form-control" style="width: 100%"
+                data-selected="<?= $consulta ? $consulta['pet_id'] : '' ?>"
+                data-selected-text="<?= $consulta ? esc($consulta['pet_nome']) : '' ?>">
+            </select>
         </div>
 
         <div class="form-group mb-3">
@@ -50,43 +53,12 @@
 
         <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Fechar">Cancelar</button>
+        <?php if (!empty($consulta['id'])): ?>
+            <a href="<?= site_url('consultas/delete/' . $consulta['id']) ?>"
+                class="btn btn-danger"
+                onclick="return confirm('Deseja realmente excluir esta consulta?');">
+                <i class="fas fa-trash"></i> Excluir
+            </a>
+        <?php endif; ?>
     </form>
 </div>
-
-<script>
-    $(function() {
-        // Inicializa o Select2 no campo Pet
-        $('#pet_id').select2({
-            theme: 'bootstrap4',
-            placeholder: "Selecione o Pet",
-            allowClear: true,
-            ajax: {
-                url: '<?= base_url("pet/search") ?>', // rota que busca no banco
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        q: params.term // termo digitado
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: $.map(data, function(item) {
-                            return {
-                                id: item.id,
-                                text: item.nome + " (" + item.tutor_nome + ")"
-                            }
-                        })
-                    };
-                },
-                cache: true
-            }
-        });
-    });
-</script>
-
-<style>
-    .select2-container {
-        z-index: 99999 !important;
-    }
-</style>

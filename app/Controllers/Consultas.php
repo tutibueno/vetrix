@@ -54,12 +54,13 @@ class Consultas extends BaseController
 
     public function edit($id)
     {
-        $consulta = $this->consultaModel->find($id);
-        $pets = $this->petModel->findAll();
+        $consulta = $this->consultaModel->select('consultas.*, pets.nome as pet_nome')
+            ->join('pets', 'pets.id = consultas.pet_id')
+            ->where('consultas.id', $id)
+            ->first();
         $veterinarios = $this->vetModel->findAll();
         return view('consultas/form', [
             'consulta' => $consulta,
-            'pets' => $pets,
             'veterinarios' => $veterinarios
         ]);
     }

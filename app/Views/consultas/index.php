@@ -94,32 +94,84 @@
 </div>
 
 <!-- Modal para criar consulta -->
-<div class="modal fade" id="modalFormulario" tabindex="-1" aria-labelledby="modalFormularioLabel" aria-hidden="true" data-focus="false">
+<div class="modal fade" id="modalFormulario" tabindex="-1" aria-labelledby="modalFormularioLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body" id="modalContent">
-                <div class="text-center p-4">Carregando...</div>
+                <div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    function editarConsulta(id) {
-        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+    function abrirModalConsulta(url, dataSelecionada = null) {
+        $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
         $('#modalFormulario').modal('show');
-        $.get("<?= base_url('consultas/edit') ?>/" + id, function(data) {
+
+        $.get(url, function(data) {
             $('#modalContent').html(data);
+
+            // Pré-preenche data/hora se fornecida
+            if (dataSelecionada) {
+                const datetimeInput = $('#modalFormulario').find('input[name="data_consulta"]');
+                if (datetimeInput.length) {
+                    datetimeInput.val(dataSelecionada);
+                }
+            }
+        }).fail(function() {
+            $('#modalContent').html('<div class="alert alert-danger">Erro ao carregar o formulário da consulta.</div>');
         });
     }
 
-    function novaConsulta() {
-        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
-        $('#modalFormulario').modal('show');
-        $.get("<?= base_url('consultas/create') ?>", function(data) {
-            $('#modalContent').html(data);
-        });
+    // Função para criar nova consulta
+    function novaConsulta(dataSelecionada = null) {
+        abrirModalConsulta("<?= base_url('consultas/create') ?>", dataSelecionada);
     }
+
+    // Função para editar consulta
+    function editarConsulta(id) {
+        abrirModalConsulta("<?= base_url('consultas/edit') ?>/" + id);
+    }
+
+    // Inicializa o Select2 quando o modal for mostrado
+    $('#modalFormulario').on('shown.bs.modal', function() {
+        // Inicializa o Select2 do campo pet
+        $('#pet_id').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Selecione o pet',
+            allowClear: true,
+            dropdownParent: $('#modalFormulario'),
+            ajax: {
+                url: '<?= base_url('pet/search') ?>',
+                dataType: 'json',
+                delay: 250,
+                data: function(params) {
+                    return {
+                        q: params.term
+                    };
+                },
+                processResults: function(data) {
+                    return {
+                        results: data.map(pet => ({
+                            id: pet.id,
+                            text: pet.nome + ' - Tutor: ' + pet.tutor_nome
+                        }))
+                    };
+                },
+                cache: true
+            },
+            width: '100%'
+        });
+
+        // Pré-seleciona o pet quando estamos editando
+        var selectedPetId = $('#pet_id').data('selected');
+        var selectedPetText = $('#pet_id').data('selected-text');
+        if (selectedPetId && selectedPetText) {
+            var option = new Option(selectedPetText, selectedPetId, true, true);
+            $('#pet_id').append(option).trigger('change');
+        }
+    });
 </script>
 
 <script>
@@ -155,41 +207,15 @@
             ],
             eventClick: function(info) {
                 info.jsEvent.preventDefault(); // evita navegação
-
                 const id = info.event.id; // o id da consulta
-                const url = "<?= base_url('consultas/edit') ?>/" + id;
-
-                // Abre o modal
-                $('#modalFormulario').modal('show');
-                $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-
-                // Carrega o form de edição via AJAX
-                $.get(url, function(data) {
-                    $('#modalContent').html(data);
-                }).fail(function() {
-                    $('#modalContent').html('<div class="alert alert-danger">Erro ao carregar a consulta.</div>');
-                });
+                editarConsulta(id);
             },
             dateClick: function(info) {
                 // Se já estiver na visão diária
-                if (calendar.view.type === 'timeGridDay') {
+                if (calendar.view.type === 'timeGridDay' || calendar.view.type === 'timeGridWeek') {
                     const clickedDate = info.date; // Objeto Date
                     const formattedDate = clickedDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM (para input datetime-local)
-                    //alert(formattedDate + ' / ' + info.date);
-                    // Abre modal
-                    $('#modalFormulario').modal('show');
-                    $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
-
-                    // Carrega formulário via AJAX
-                    $.get("<?= base_url('consultas/create') ?>", function(data) {
-                        $('#modalContent').html(data);
-
-                        // Pré-preenche a data/hora
-                        const datetimeInput = $('#modalFormulario').find('input[name="data_consulta"]');
-                        if (datetimeInput.length) {
-                            datetimeInput.val(formattedDate);
-                        }
-                    });
+                    novaConsulta(formattedDate);
                 } else {
                     // Caso contrário, muda para a visão diária e foca na data clicada
                     calendar.changeView('timeGridDay', info.dateStr);
