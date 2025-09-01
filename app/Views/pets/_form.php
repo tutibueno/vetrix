@@ -2,6 +2,18 @@
 $pet = $pet ?? [];
 ?>
 
+<script src="<?= base_url('public/adminlte/plugins/select2/js/select2.full.min.js') ?>"></script>
+
+<!-- Select2 CSS -->
+<link href="<?= base_url('public/adminlte/plugins/select2/css/select2.min.css') ?>" rel="stylesheet">
+<link href="<?= base_url('public/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') ?>" rel="stylesheet">
+
+<!-- Bootstrap Datepicker CSS e JS -->
+<link rel="stylesheet" href="<?= base_url('public/adminlte/plugins/bootstrap-datepicker/css/bootstrap-datepicker.min.css') ?>">
+<script src="<?= base_url('public/adminlte/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js') ?>"></script>
+<script src="<?= base_url('public/adminlte/plugins/bootstrap-datepicker/locales/bootstrap-datepicker.pt-BR.min.js') ?>"></script>
+
+
 <div class="row">
     <div class="col-md-6">
         <!-- ===== Tutor ===== -->
@@ -21,20 +33,17 @@ $pet = $pet ?? [];
             <div class="invalid-feedback"><?= $errors['nome'] ?? '' ?></div>
         </div>
 
-        <!-- Espécie -->
         <div class="form-group">
             <label for="especie">Espécie</label>
-            <input type="text" name="especie" id="especie" class="form-control"
-                value="<?= old('especie', $pet['especie'] ?? '') ?>"
-                list="especiesPadrao" required>
-            <datalist id="especiesPadrao">
-                <option value="Canino">
-                <option value="Felino">
-                <option value="Ave">
-                <option value="Roedor">
-                <option value="Réptil">
-                <option value="Equino">
-            </datalist>
+            <select name="especie" id="especie" class="form-control" required>
+                <option value="">Selecione ou digite...</option>
+                <option value="Canino" <?= old('especie', $pet['especie'] ?? '') === 'Canino' ? 'selected' : '' ?>>Canino</option>
+                <option value="Felino" <?= old('especie', $pet['especie'] ?? '') === 'Felino' ? 'selected' : '' ?>>Felino</option>
+                <option value="Ave" <?= old('especie', $pet['especie'] ?? '') === 'Ave' ? 'selected' : '' ?>>Ave</option>
+                <option value="Roedor" <?= old('especie', $pet['especie'] ?? '') === 'Roedor' ? 'selected' : '' ?>>Roedor</option>
+                <option value="Réptil" <?= old('especie', $pet['especie'] ?? '') === 'Réptil' ? 'selected' : '' ?>>Réptil</option>
+                <option value="Equino" <?= old('especie', $pet['especie'] ?? '') === 'Equino' ? 'selected' : '' ?>>Equino</option>
+            </select>
         </div>
 
         <!-- Raça -->
@@ -45,13 +54,12 @@ $pet = $pet ?? [];
 
         <!-- Sexo -->
         <div class="form-group">
-            <label>Sexo</label>
-            <select name="sexo" class="form-control <?= isset($errors['sexo']) ? 'is-invalid' : '' ?>">
-                <option value="">Selecione</option>
-                <option value="M" <?= old('sexo', $pet['sexo'] ?? '') === 'M' ? 'selected' : '' ?>>Macho</option>
-                <option value="F" <?= old('sexo', $pet['sexo'] ?? '') === 'F' ? 'selected' : '' ?>>Fêmea</option>
+            <label for="sexo">Sexo</label>
+            <select name="sexo" id="sexo" class="form-control" required>
+                <option value="">Selecione ou digite...</option>
+                <option value="M" <?= old('sexo', $pet['sexo'] ?? 'M') === 'M' ? 'selected' : '' ?>>Macho</option>
+                <option value="F" <?= old('sexo', $pet['sexo'] ?? 'F') === 'F' ? 'selected' : '' ?>>Fêmea</option>
             </select>
-            <div class="invalid-feedback"><?= $errors['sexo'] ?? '' ?></div>
         </div>
 
         <!-- Peso -->
@@ -60,11 +68,13 @@ $pet = $pet ?? [];
             <input type="text" name="peso" value="<?= isset($pet['peso']) ? esc($pet['peso']) : '' ?>" class="form-control" placeholder="Ex: 5.20">
         </div>
 
+        <!-- Castrado -->
         <div class="form-group">
-            <label>Castrado?</label>
-            <select name="castrado" class="form-control">
-                <option value="nao" <?= isset($pet['castrado']) && $pet['castrado'] == 'sim' ? '' : 'selected' ?>>Não</option>
-                <option value="sim" <?= isset($pet['castrado']) && $pet['castrado'] == 'sim' ? 'selected' : '' ?>>Sim</option>
+            <label for="castrado">Castrado</label>
+            <select name="castrado" id="castrado" class="form-control" required>
+                <option value="">Selecione ou digite...</option>
+                <option value="sim" <?= old('castrado', $pet['castrado'] ?? 'nao') === 'sim' ? 'selected' : '' ?>>Sim</option>
+                <option value="nao" <?= old('castrado', $pet['castrado'] ?? 'nao') === 'nao' ? 'selected' : '' ?>>Não</option>
             </select>
         </div>
 
@@ -87,17 +97,27 @@ $pet = $pet ?? [];
             <input type="text" name="pelagem" class="form-control" value="<?= old('pelagem', $pet['pelagem'] ?? '') ?>">
         </div>
 
+        <!-- Data de Nascimento -->
         <div class="form-group">
-            <label>Data de Nascimento</label>
-            <input type="date" name="data_nascimento" class="form-control <?= isset($errors['data_nascimento']) ? 'is-invalid' : '' ?>" value="<?= old('data_nascimento', $pet['data_nascimento'] ?? '') ?>">
-            <div class="invalid-feedback"><?= $errors['data_nascimento'] ?? '' ?></div>
+            <label for="data_nascimento">Data de Nascimento</label>
+            <input type="text" name="data_nascimento" id="data_nascimento" class="form-control"
+                value="<?= old('data_nascimento', isset($pet['data_nascimento']) ? date('d/m/Y', strtotime($pet['data_nascimento'])) : '') ?>"
+                autocomplete="off" placeholder="dd/mm/aaaa">
+            <small id="idadePet" class="form-text text-muted mt-1"></small>
         </div>
 
+        <!-- Idade exibida dinamicamente -->
         <div class="form-group">
-            <label>Está Vivo?</label>
-            <select name="esta_vivo" class="form-control">
-                <option value="sim" <?= isset($pet['esta_vivo']) && $pet['esta_vivo'] == 'sim' ? 'selected' : '' ?>>Sim</option>
-                <option value="nao" <?= isset($pet['esta_vivo']) && $pet['esta_vivo'] == 'nao' ? 'selected' : '' ?>>Não</option>
+            <small id="idade_pet" class="form-text text-muted"></small>
+        </div>
+
+        <!-- Está Vivo -->
+        <div class="form-group">
+            <label for="esta_vivo">Está Vivo</label>
+            <select name="esta_vivo" id="esta_vivo" class="form-control" required>
+                <option value="">Selecione ou digite...</option>
+                <option value="sim" <?= old('vivo', $pet['esta_vivo'] ?? 'sim') === 'sim' ? 'selected' : 'sim' ?>>Sim</option>
+                <option value="nao" <?= old('vivo', $pet['esta_vivo'] ?? 'sim') === 'nao' ? 'selected' : '' ?>>Não</option>
             </select>
         </div>
 
@@ -180,6 +200,25 @@ $pet = $pet ?? [];
         $('input[name="peso"]').mask('000.000', {
             reverse: true
         });
+
+        $(function() {
+            $('#especie').select2({
+                theme: 'bootstrap4', // usa o tema do AdminLTE
+                placeholder: "Selecione ou digite a espécie",
+                allowClear: true,
+                tags: true, // permite o usuário digitar valores novos
+                width: '100%'
+            });
+        });
+
+        $(function() {
+            $('#sexo, #castrado, #esta_vivo').select2({
+                theme: 'bootstrap4',
+                placeholder: "Selecione...",
+                allowClear: true,
+                width: '100%'
+            });
+        });
     });
 </script>
 
@@ -200,6 +239,67 @@ $pet = $pet ?? [];
     });
 </script>
 
+<script>
+    $('#formPet').on('submit', function() {
+        const input = $(this).find('input[name="data_nascimento"]');
+        if (input.length) {
+            const parts = input.val().split('/'); // dd/mm/yyyy
+            if (parts.length === 3) {
+                input.val(`${parts[2]}-${parts[1]}-${parts[0]}`); // yyyy-mm-dd
+            }
+        }
+    });
+    
+    $(document).ready(function() {
+        // Inicializa o Datepicker
+        $('#data_nascimento').datepicker({
+            format: 'dd/mm/yyyy',
+            endDate: '+0d', // Não permite datas futuras
+            startView: 2, // Começa na visão de anos
+            autoclose: true,
+            todayHighlight: true,
+            language: 'pt-BR'
+        });
+
+        // Função para calcular idade
+        function calcularIdade(dataStr) {
+            if (!dataStr) return '';
+            const parts = dataStr.split('/');
+            if (parts.length !== 3) return '';
+            const dia = parseInt(parts[0], 10);
+            const mes = parseInt(parts[1], 10) - 1; // JS: 0-11
+            const ano = parseInt(parts[2], 10);
+
+            const hoje = new Date();
+            const nascimento = new Date(ano, mes, dia);
+
+            let anos = hoje.getFullYear() - nascimento.getFullYear();
+            let meses = hoje.getMonth() - nascimento.getMonth();
+
+            if (hoje.getDate() < nascimento.getDate()) {
+                meses--;
+            }
+            if (meses < 0) {
+                anos--;
+                meses += 12;
+            }
+
+            return anos + ' anos' + (meses > 0 ? ' e ' + meses + ' meses' : '');
+        }
+
+        // Atualiza idade ao mudar a data
+        $('#data_nascimento').on('change', function() {
+            const idade = calcularIdade($(this).val());
+            $('#idadePet').text(idade ? 'Idade: ' + idade : '');
+        });
+
+        // Se já houver data preenchida (edição), calcula a idade
+        const dataAtual = $('#data_nascimento').val();
+        if (dataAtual) {
+            $('#idadePet').text('Idade: ' + calcularIdade(dataAtual));
+        }
+    });
+</script>
 
 <style>
     .suggestions {

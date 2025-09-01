@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<h1 class="mt-4">Pets</h1>
+<h1 class="mt-4">Pets / Pacientes</h1>
 
 <form method="get" class="mb-3">
   <div class="input-group">
@@ -13,7 +13,7 @@
 </form>
 
 <a href="<?= site_url('pet/create') ?>" class="btn btn-primary mb-4">
-  <i class="fas fa-plus"></i> Novo Pet
+  <i class="nav-icon fas fa-dog"></i><i class="fas fa-plus"></i> Novo Pet/Paciente
 </a>
 
 <div class="row">

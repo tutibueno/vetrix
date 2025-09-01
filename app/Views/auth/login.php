@@ -25,13 +25,28 @@
 
                 <form action="<?= base_url('login') ?>" method="post">
                     <div class="input-group mb-3">
-                        <input type="text" name="username" class="form-control" placeholder="Usuário">
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-control"
+                            autocomplete="username"
+                            value="<?= $_COOKIE['remember_username'] ?? '' ?>"
+                            placeholder="Usuário"
+                            required>
                         <div class="input-group-append">
                             <div class="input-group-text"><span class="fas fa-user"></span></div>
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" name="password" class="form-control" placeholder="Senha">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Senha"
+                            autocomplete="current-password"
+                            required>
                         <div class="input-group-append">
                             <div class="input-group-text"><span class="fas fa-lock"></span></div>
                         </div>

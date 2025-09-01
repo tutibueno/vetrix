@@ -215,7 +215,7 @@
                 <?php endforeach; ?>
             ],
             eventClick: function(info) {
-                info.jsEvent.preventDefault(); // evita navegação
+                //info.jsEvent.preventDefault(); // evita navegação
                 const id = info.event.id; // o id da consulta
                 editarConsulta(id);
             },
@@ -280,6 +280,7 @@
         //Resize quando trocar de tabs
         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function() {
             calendar.updateSize();
+            initPetSelect();
         });
 
 

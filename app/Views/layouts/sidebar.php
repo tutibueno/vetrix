@@ -42,7 +42,7 @@
                     <li class="nav-item">
                         <a href="<?= base_url('pet') ?>" class="nav-link <?= uri_string() === 'pet' ? 'active' : '' ?>">
                             <i class="nav-icon fas fa-dog"></i>
-                            <p>Pets</p>
+                            <p>Pets / Pacientes</p>
                         </a>
                     </li>
 
