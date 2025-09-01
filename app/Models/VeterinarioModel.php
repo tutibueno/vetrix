@@ -11,10 +11,12 @@ class VeterinarioModel extends Model
     protected $allowedFields = [
         'nome',
         'crmv',
+        'registro_mapa',
         'telefone',
         'email',
         'especialidade',
         'observacoes'
     ];
     protected $useTimestamps = true;
+    protected $useSoftDeletes   = true;
 }

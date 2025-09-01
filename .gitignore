@@ -124,3 +124,7 @@ _modules/*
 
 /results/
 /phpunit*.xml
+
+# Diretório de upload dos pets
+public/uploads/pets/*
+!public/uploads/pets/.gitkeep

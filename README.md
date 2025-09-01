@@ -1,68 +1,187 @@
-# CodeIgniter 4 Application Starter
+![alt text](https://github.com/tutibueno/vetrix/blob/dev/public/logotipo_conceitual.png?raw=true)
 
-## What is CodeIgniter?
+# 🐾 Vetrix - Sistema de Gestão para Clínica Veterinária
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+Sistema de código aberto desenvolvido em PHP com CodeIgniter 4 para gestão de clínicas veterinárias. Ideal para profissionais da saúde animal que buscam organização, eficiência e controle da rotina clínica.
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+---
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## 🚀 Funcionalidades
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+- Cadastro de clientes e pacientes (pets)
+- Histórico clínico dos animais com ficha completa
+- Controle de aplicação de vacinas
+- Controle de Atendimentos
+- Controle de prescrições com impressão das prescrições
+- Controle de solicitação de exames com impressão das solicitaçoes
+- Sistema multi-usuários
 
-## Installation & updates
+Roadmap:
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+- Agendamento de consultas
+- Controle de serviços como banho e tosa.
+- Controle financeiro
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
 
-## Setup
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+🛠️ Tecnologias Utilizadas
+- PHP 8+
+- CodeIgniter 4
+- MySQL
+- Bootstrap
+- jQuery
+- AdminLTE 
 
-## Important Change with index.php
+📦 Instalação
+- Clone o repositório:
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+```bash
+git clone https://github.com/tutibueno/vetrix.git
+cd vetrix
+composer install
+```
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+- Crie um banco de dados MySQL (collation utf8mb4_generial_ci recomendada)
+- Configure o ambiente: Renomeie o arquivo env para .env e configure o banco de dados:
 
-**Please** read the user guide for a better explanation of how CI4 works!
+```pgsql
+database.default.hostname = localhost
+database.default.database = sua_base
+database.default.username = seu_usuario
+database.default.password = sua_senha
+database.default.DBDriver = MySQLi
+```
 
-## Repository Management
+🗄️ Migrações e Seeds
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+Crie as tabelas com as migrations:
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+```bash
+php spark migrate
+```
 
-## Server Requirements
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+### 👥 Usuários de Teste
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+Existe um seed que cria usuários para cada perfil do sistema:
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+```bash
+php spark db:seed UserSeeder
+```
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+Administrador
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+Usuario: admin
+Senha: 123456
+
+Veterinário
+
+Usuario: veterinario
+Senha: 123456
+
+Recepcionista
+
+Usuario: recepcao
+Senha: 123456
+
+⚠️ Altere as senhas em produção!
+
+
+- Inicie o servidor local:
+```bash
+php spark serve
+```
+⚠️
+Obs.: Caso ocorram problemas pelo php spark serve, utilize o um servidor Apache, por exemplo, Xampp.
+
+O sistema ficará disponível em:
+👉 http://localhost:8080
+
+Caso esteja hospedando o sistema ou executando pelo Xampp, altere o arquivo /app/Config/App.php conforme sua necessidade:
+
+```php
+public string $baseURL = 'https://seudominio.com.br/vetrix/';
+```
+
+ou para o Xampp:
+
+```php
+public string $baseURL = 'http://localhost/vetrix/';
+```
+
+👥 Contribuições
+Contribuições são muito bem-vindas! Sinta-se à vontade para abrir issues, sugerir melhorias ou enviar pull requests.
+
+📄 Licença
+Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para mais detalhes.
+
+📣 Contato
+Desenvolvido por Reginaldo Bueno
+📧 Email: tuti.bueno@gmail.com
+🐾 Instagram: @tuti.bueno
+
+
+---
+
+🗑️ Limpeza de Sessões no Banco de Dados
+
+Este projeto usa sessions armazenadas no banco (ci_sessions).
+Como a configuração está com sessionExpiration = 0 (expiração infinita), as sessões antigas não expiram automaticamente.
+Para evitar que a tabela cresça indefinidamente, criamos um comando customizado no CodeIgniter para limpeza periódica.
+
+🔹 Executar manualmente
+
+No terminal, dentro do diretório do projeto:
+
+```bash 
+php spark session:cleanup
+```
+
+
+👉 Por padrão, remove sessões com mais de 30 dias.
+
+Se quiser um período diferente, passe o número de dias como argumento.
+Exemplo: para limpar sessões mais antigas que 7 dias:
+
+
+<pre> php spark session:cleanup 7 </pre>
+
+🔹 Agendamento automático (cron job no Linux)
+
+Você pode agendar a execução automática no cron.
+Para editar o cron:
+
+<pre> crontab -e </pre>
+
+E adicionar, por exemplo, para rodar todo domingo às 3h da manhã:
+
+<pre>  0 3 * * 0 /usr/bin/php /var/www/seuprojeto/spark session:cleanup 30 >> /var/www/seuprojeto/writable/logs/session_cleanup.log 2>&1
+  </pre>
+
+
+Isso vai:
+
+Executar o comando session:cleanup
+
+Manter somente sessões com até 30 dias
+
+Registrar logs em writable/logs/session_cleanup.log
+
+🔹 Boas práticas
+
+Ajuste o número de dias conforme sua necessidade.
+
+Se sua aplicação tiver muito tráfego, agende a limpeza com frequência maior (ex.: diariamente).
+
+Para bancos muito grandes, considere criar índices na coluna timestamp da tabela ci_sessions para acelerar a exclusão.
+
+
+## 🖼️ Capturas de Tela
+
+> 
+
+```markdown
+![Tela de login](caminho/para/imagem-login.png)
+![Dashboard](caminho/para/imagem-dashboard.png)
+
+

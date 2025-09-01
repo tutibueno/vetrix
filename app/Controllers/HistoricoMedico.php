@@ -27,6 +27,7 @@ class HistoricoMedico extends BaseController
             ->join('veterinarios', 'veterinarios.id = historico_medico.veterinario_id', 'left')
             ->where('pet_id', $pet_id)
             ->orderBy('data_consulta', 'DESC')
+            ->orderBy('id', 'DESC')
             ->get()
             ->getResult();
 
@@ -41,9 +42,18 @@ class HistoricoMedico extends BaseController
     {
         $veterinarios = $this->veterinarioModel->findAll();
 
-        return view('historico_medico/create', [
-            'veterinarios' => $veterinarios,
-            'pet_id' => $pet_id
+        $petModel = new \App\Models\PetModel();
+        $pet = $petModel->find($pet_id);
+
+        if (!$pet) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Pet não encontrado");
+        }
+
+        return view('historico_medico/_form', [
+            'action' => site_url('historico_medico/store'),
+            'pet_id' => $pet_id,
+            'nome_pet' => $pet['nome'],
+            'veterinarios' => $veterinarios
         ]);
     }
 
@@ -51,17 +61,19 @@ class HistoricoMedico extends BaseController
     public function store()
     {
         $data = [
-            'pet_id'         => $this->request->getPost('pet_id'),
-            'veterinario_id' => $this->request->getPost('veterinario_id') ?: null,
-            'data_consulta'  => $this->request->getPost('data_consulta'),
-            'sintomas'       => $this->request->getPost('sintomas'),
-            'diagnostico'    => $this->request->getPost('diagnostico'),
-            'tratamento'     => $this->request->getPost('tratamento'),
-            'observacoes'    => $this->request->getPost('observacoes'),
+            'pet_id'                    => $this->request->getPost('pet_id'),
+            'veterinario_id'            => $this->request->getPost('veterinario_id') ?: null,
+            'data_consulta'             => $this->request->getPost('data_consulta'),
+            'anamnese'                  => $this->request->getPost('anamnese'),
+            'sinais_clinicos'           => $this->request->getPost('sinais_clinicos'),
+            'diagnostico'               => $this->request->getPost('diagnostico'),
+            'solicitacao_exame'         => $this->request->getPost('solicitacao_exame'),
+            'prescricao_medica'         => $this->request->getPost('prescricao_medica'),
+            'observacoes'               => $this->request->getPost('observacoes'),
         ];
 
         if ($this->historicoModel->insert($data)) {
-            return redirect()->to(site_url('historico_medico/index/' . $data['pet_id']))
+            return redirect()->to(site_url('pet/ficha/' . $data['pet_id']))
                 ->with('success', 'Histórico médico criado com sucesso.');
         } else {
             return redirect()->back()->withInput()->with('errors', $this->historicoModel->errors());
@@ -78,7 +90,8 @@ class HistoricoMedico extends BaseController
 
         $veterinarios = $this->veterinarioModel->findAll();
 
-        return view('historico_medico/edit', [
+        return view('historico_medico/_form', [
+            'action' => site_url('historico_medico/update/' . $id),
             'historico' => $historico,
             'veterinarios' => $veterinarios,
             'pet_id' => $historico['pet_id']
@@ -94,17 +107,19 @@ class HistoricoMedico extends BaseController
         }
 
         $data = [
-            'pet_id'         => $this->request->getPost('pet_id'),
-            'veterinario_id' => $this->request->getPost('veterinario_id') ?: null,
-            'data_consulta'  => $this->request->getPost('data_consulta'),
-            'sintomas'       => $this->request->getPost('sintomas'),
-            'diagnostico'    => $this->request->getPost('diagnostico'),
-            'tratamento'     => $this->request->getPost('tratamento'),
-            'observacoes'    => $this->request->getPost('observacoes'),
+            'pet_id'                    => $this->request->getPost('pet_id'),
+            'veterinario_id'            => $this->request->getPost('veterinario_id') ?: null,
+            'data_consulta'             => $this->request->getPost('data_consulta'),
+            'anamnese'                  => $this->request->getPost('anamnese'),
+            'sinais_clinicos'           => $this->request->getPost('sinais_clinicos'),
+            'diagnostico'               => $this->request->getPost('diagnostico'),
+            'solicitacao_exame'         => $this->request->getPost('solicitacao_exame'),
+            'prescricao_medica'         => $this->request->getPost('prescricao_medica'),
+            'observacoes'               => $this->request->getPost('observacoes'),
         ];
 
         if ($this->historicoModel->update($id, $data)) {
-            return redirect()->to(site_url('historico_medico/index/' . $data['pet_id']))
+            return redirect()->to(site_url('pet/ficha/' . $data['pet_id']))
                 ->with('success', 'Histórico médico atualizado com sucesso.');
         } else {
             return redirect()->back()->withInput()->with('errors', $this->historicoModel->errors());
@@ -121,7 +136,7 @@ class HistoricoMedico extends BaseController
 
         $this->historicoModel->delete($id);
 
-        return redirect()->to(site_url('historico_medico/index/' . $historico->pet_id))
+        return redirect()->to(site_url('pet/ficha/' . $historico['pet_id']))
             ->with('success', 'Histórico médico excluído com sucesso.');
     }
 }

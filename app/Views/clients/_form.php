@@ -73,3 +73,54 @@ $client = $client ?? [];
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        // Máscaras
+        $('input[name="cpf_cnpj"]').mask('000.000.000-00', {
+            reverse: true
+        });
+        $('input[name="telefone"]').mask('(00) 00000-0000');
+        $('input[name="cep"]').mask('00000-000');
+
+        // Mudança de CPF para CNPJ dinamicamente (opcional)
+        $('input[name="cpf_cnpj"]').on('input', function() {
+            const val = $(this).val().replace(/\D/g, '');
+            if (val.length <= 11) {
+                $(this).mask('000.000.000-00', {
+                    reverse: true
+                });
+            } else {
+                $(this).mask('00.000.000/0000-00', {
+                    reverse: true
+                });
+            }
+        });
+
+        // Auto preencher endereço via ViaCEP
+        $('input[name="cep"]').on('blur', function() {
+            let cep = $(this).val().replace(/\D/g, '');
+            if (cep.length === 8) {
+                $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function(data) {
+                    if (!("erro" in data)) {
+                        $('input[name="rua"]').val(data.logradouro);
+                        $('input[name="bairro"]').val(data.bairro);
+                        $('input[name="cidade"]').val(data.localidade);
+                        $('input[name="estado"]').val(data.uf);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        let nome = document.querySelector('[name="nome"]');
+
+        if (!nome.value.trim()) {
+            e.preventDefault();
+            alert('Por favor, preencha os campos obrigatórios: Nome, CPF/CNPJ, Telefone, etc.');
+        }
+    });
+</script>

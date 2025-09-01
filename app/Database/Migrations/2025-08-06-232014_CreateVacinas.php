@@ -11,6 +11,7 @@ class CreateVacinas extends Migration
         $this->forge->addField([
             'id'                => ['type' => 'INT', 'auto_increment' => true],
             'pet_id'            => ['type' => 'INT', 'unsigned' => true, 'null' => false],
+            'veterinario_id'    => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'nome_vacina'       => ['type' => 'VARCHAR', 'constraint' => 255],
             'data_aplicacao'    => ['type' => 'DATE'],
             'data_reforco'      => ['type' => 'DATE', 'null' => true],
@@ -20,6 +21,7 @@ class CreateVacinas extends Migration
         ]);
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('pet_id', 'pets', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('veterinario_id', 'veterinarios', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('vacinas');
     }
 

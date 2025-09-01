@@ -1,0 +1,128 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\ConsultaModel;
+use App\Models\PetModel;
+use App\Models\VeterinarioModel;
+
+class Consultas extends BaseController
+{
+    protected $consultaModel;
+    protected $petModel;
+    protected $vetModel;
+
+    public function __construct()
+    {
+        $this->consultaModel = new ConsultaModel();
+        $this->petModel = new PetModel();
+        $this->vetModel = new VeterinarioModel();
+    }
+
+    public function index()
+    {
+        $consultas = $this->consultaModel->getWithRelations();
+
+        // Calcula data_consulta_fim (30 min depois)
+        foreach ($consultas as &$c) {
+            $c['data_consulta_fim'] = date('Y-m-d H:i:s', strtotime($c['data_consulta'] . ' +30 minutes'));
+            $c['cor_status'] = $this->getStatusColor($c['status']);
+        }
+        unset($c); // evita referência residual
+
+        return view('consultas/index', [
+            'consultas' => $consultas
+        ]);
+    }
+
+    public function create()
+    {
+        $pets = $this->petModel->findAll();
+        $veterinarios = $this->vetModel->findAll();
+        return view('consultas/form', [
+            'pets' => $pets,
+            'veterinarios' => $veterinarios,
+            'consulta' => null
+        ]);
+    }
+
+    public function store()
+    {
+        $this->consultaModel->save($this->request->getPost());
+        return redirect()->to('/consultas')->with('success', 'Consulta agendada com sucesso!');
+    }
+
+    public function edit($id)
+    {
+        $consulta = $this->consultaModel->select('consultas.*, pets.nome as pet_nome')
+            ->join('pets', 'pets.id = consultas.pet_id')
+            ->where('consultas.id', $id)
+            ->first();
+        $veterinarios = $this->vetModel->findAll();
+        return view('consultas/form', [
+            'consulta' => $consulta,
+            'veterinarios' => $veterinarios
+        ]);
+    }
+
+    public function update($id)
+    {
+        $this->consultaModel->update($id, $this->request->getPost());
+        return redirect()->to('/consultas')->with('success', 'Consulta atualizada com sucesso!');
+    }
+
+    public function delete($id)
+    {
+        $this->consultaModel->delete($id);
+        return redirect()->to('/consultas')->with('success', 'Consulta excluída!');
+    }
+
+    public function agenda()
+    {
+        return view('consultas/agenda');
+    }
+
+    public function agendaJson()
+    {
+        $consultas = $this->consultaModel->getWithRelations();
+
+
+        $events = [];
+
+        foreach ($consultas as $c) {
+            $status = strtolower($c['status'] ?? '');
+
+            $map = [
+                'confirmada' => ['bg' => '#28a745', 'border' => '#28a745', 'text' => '#ffffff', 'class' => 'evt-confirmada'],
+                'pendente'   => ['bg' => '#ffc107', 'border' => '#ffc107', 'text' => '#000000', 'class' => 'evt-pendente'],
+                'cancelada'  => ['bg' => '#dc3545', 'border' => '#dc3545', 'text' => '#ffffff', 'class' => 'evt-cancelada'],
+            ];
+            $cfg = $map[$status] ?? ['bg' => '#3788d8', 'border' => '#3788d8', 'text' => '#ffffff', 'class' => 'evt-default'];
+
+            $events[] = [
+                'id'              => $c['id'],
+                'title'           => $c['pet_nome'] . ' - ' . $c['vet_nome'],
+                'start'           => date('c', strtotime($c['data_consulta'])),
+                'allDay'          => false, // força a mostrar a hora
+                'url'             => site_url('consultas/edit/' . $c['id']),
+                'backgroundColor' => $cfg['bg'],
+                'borderColor'     => $cfg['border'],
+                'textColor'       => $cfg['text'],
+                'classNames'      => [$cfg['class']],
+            ];
+        }
+
+        return $this->response->setJSON($events);
+    }
+
+    // Helper dentro do controller ou método privado
+    private function getStatusColor(string $status): string
+    {
+        return match (strtolower($status)) {
+            'agendada'  => '#007bff', // azul
+            'realizada' => '#28a745', // verde
+            'cancelada' => '#dc3545', // vermelho
+            default     => '#6c757d', // cinza fallback
+        };
+    }
+}

@@ -12,6 +12,12 @@
     </div>
 
     <div class="form-group">
+        <label for="crmv">Registro no MAPA</label>
+        <input type="text" name="registro_mapa" id="registro_mapa" class="form-control"
+            value="<?= old('registro_mapa', $veterinario['registro_mapa'] ?? '') ?>">
+    </div>
+
+    <div class="form-group">
         <label for="telefone">Telefone</label>
         <input type="text" name="telefone" id="telefone" class="form-control"
             value="<?= old('telefone', $veterinario['telefone'] ?? '') ?>">
@@ -23,3 +29,8 @@
             value="<?= old('email', $veterinario['email'] ?? '') ?>">
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('input[name="telefone"]').mask('(00) 00000-0000');
+    });
+</script>

@@ -13,10 +13,11 @@ class HistoricoMedicoModel extends Model
         'pet_id',
         'veterinario_id',
         'data_consulta',
-        'sintomas',
+        'anamnese',
+        'sinais_clinicos',
         'diagnostico',
-        'tratamento',
-        'veterinario',
+        'prescricao_medica',
+        'solicitacao_exame',
         'observacoes'
     ];
 

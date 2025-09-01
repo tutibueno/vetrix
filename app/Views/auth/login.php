@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 
-<?php if (session()->getFlashdata('error')): ?>
-    <div class="alert alert-danger">
-        <?= session()->getFlashdata('error') ?>
-    </div>
-<?php endif; ?>
+
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Login</title>
-    <link rel="stylesheet" href="<?= base_url('adminlte/plugins/fontawesome-free/css/all.min.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') ?>">
-    <link rel="stylesheet" href="<?= base_url('adminlte/dist/css/adminlte.min.css') ?>">
+    <link rel="icon" type="image/x-icon" href="<?= base_url('public/favicon.ico') ?>">
+    <link rel="stylesheet" href="<?= base_url('public/adminlte/plugins/fontawesome-free/css/all.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('public/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('public/adminlte/dist/css/adminlte.min.css') ?>">
 </head>
 
 <body class="hold-transition login-page">
+    <?= view('layouts/alerts') ?>
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="#" class="h1"><b>Meu</b>Sistema</a>
+                <a href="#" class="h1"><b>V</b>etrix</a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Faça login para iniciar</p>
@@ -48,9 +47,27 @@
         </div>
     </div>
 
-    <script src="<?= base_url('adminlte/plugins/jquery/jquery.min.js') ?>"></script>
-    <script src="<?= base_url('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
-    <script src="<?= base_url('adminlte/dist/js/adminlte.min.js') ?>"></script>
+    <script src="<?= base_url('public/adminlte/plugins/jquery/jquery.min.js') ?>"></script>
+    <script src="<?= base_url('public/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
+    <script src="<?= base_url('public/adminlte/dist/js/adminlte.min.js') ?>"></script>
 </body>
+
+<script>
+    const alertDurations = {
+        'success-alert': 3000,
+        'error-alert': 6000,
+        'warning-alert': 4500
+    };
+
+    Object.entries(alertDurations).forEach(([className, duration]) => {
+        const alert = document.querySelector(`.${className}`);
+        if (alert) {
+            setTimeout(() => {
+                alert.classList.remove('show'); // inicia o fade
+                setTimeout(() => alert.remove(), 500); // remove do DOM após fade
+            }, duration);
+        }
+    });
+</script>
 
 </html>

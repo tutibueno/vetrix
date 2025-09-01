@@ -9,8 +9,23 @@ class UserModel extends Model
     protected $table = 'users';
     protected $primaryKey = 'id';
 
-    protected $allowedFields = ['name', 'username', 'email', 'password'];
+    protected $allowedFields = ['name', 'username', 'email', 'password', 'perfil'];
     protected $useTimestamps = true;
+
+    // Perfis disponíveis no sistema
+    public const PERFIS = [
+        'admin'         => 'Administrador',
+        'veterinario'   => 'Veterinário',
+        'recepcionista' => 'Recepcionista',
+    ];
+
+    /**
+     * Retorna lista de perfis formatada para selects
+     */
+    public function getPerfis(): array
+    {
+        return self::PERFIS;
+    }
 
     public function getUserByEmail($email)
     {
@@ -21,4 +36,6 @@ class UserModel extends Model
     {
         return $this->where('username', $username)->first();
     }
+
+    
 }
