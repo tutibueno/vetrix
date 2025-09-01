@@ -59,8 +59,8 @@
                     <?php foreach ($consultas as $c): ?>
                         <div class="col-12 mb-3">
                             <div class="card shadow-sm">
-                                <div class="card-body d-flex justify-content-between align-items-center">
-                                    <div>
+                                <div class="card shadow-sm position-relative">
+                                    <div class="card-body">
                                         <h5 class="mb-1">
                                             <i class="fas fa-paw text-primary"></i> <?= esc($c['pet_nome']) ?>
                                         </h5>
@@ -68,8 +68,10 @@
                                         <p class="mb-1"><strong>Veterinário:</strong> <?= esc($c['vet_nome']) ?></p>
                                         <p class="mb-1"><strong>Data:</strong> <?= date('d/m/Y H:i', strtotime($c['data_consulta'])) ?></p>
                                         <p class="mb-1"><strong>Status:</strong> <?= ucfirst($c['status']) ?></p>
+                                        <p class="card-text mb-1 text-muted"><small><strong>Cadastrada em:</strong> <?= esc($c['created_at']) ?></small></p>
+                                        <p class="card-text mb-1 text-muted"><small><strong>Atualizada em:</strong> <?= esc($c['updated_at']) ?></small></p>
                                     </div>
-                                    <div class="d-flex gap-2">
+                                    <div class="card-footer d-flex justify-content-end">
                                         <button class="btn btn-sm btn-warning" onclick="editarConsulta(<?= $c['id'] ?>)">
                                             <i class="fas fa-edit"></i> Editar
                                         </button>
@@ -134,14 +136,13 @@
         abrirModalConsulta("<?= base_url('consultas/edit') ?>/" + id);
     }
 
-    // Inicializa o Select2 quando o modal for mostrado
-    $('#modalFormulario').on('shown.bs.modal', function() {
+    function initPetSelect(selectedId = null, selectedText = null) {
         // Inicializa o Select2 do campo pet
         $('#pet_id').select2({
+            dropdownParent: $('#modalFormulario'),
             theme: 'bootstrap4',
             placeholder: 'Selecione o pet',
             allowClear: true,
-            dropdownParent: $('#modalFormulario'),
             ajax: {
                 url: '<?= base_url('pet/search') ?>',
                 dataType: 'json',
@@ -171,6 +172,14 @@
             var option = new Option(selectedPetText, selectedPetId, true, true);
             $('#pet_id').append(option).trigger('change');
         }
+    }
+
+    // Sempre que o modal abrir, reinicializa o select2
+    $('#modalFormulario').on('shown.bs.modal', function() {
+        initPetSelect(
+            $('#pet_id').data('selected-id') || null,
+            $('#pet_id').data('selected-text') || null
+        );
     });
 </script>
 
@@ -265,6 +274,7 @@
         // Render inicial
         if (document.getElementById('calendario').classList.contains('show')) {
             calendar.render();
+            initPetSelect();
         }
 
         //Resize quando trocar de tabs
