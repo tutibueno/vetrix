@@ -32,7 +32,7 @@ class AddFieldsToPets extends Migration
             ],
             'peso' => [
                 'type' => 'DECIMAL',
-                'constraint' => '5,2', // exemplo 999.99 kg
+                'constraint' => '5,3', // exemplo 999.990 kg
                 'null' => true,
             ],
             'pelagem' => [
