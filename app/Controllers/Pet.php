@@ -205,22 +205,74 @@ class Pet extends BaseController
 
     }
 
-    public function search()
+    public function buscar()
     {
-        $term = $this->request->getVar('q');
+        $term = $this->request->getGet('term');
 
-        $petModel = new \App\Models\PetModel();
+        $petModel = $this->petModel;
 
-        $builder = $petModel->select('pets.id, pets.nome, clients.nome as tutor_nome')
-            ->join('clients', 'clients.id = pets.cliente_id');
+        // Busca pets + junta com cliente
+        $pets = $petModel
+            ->select("
+            pets.*,
+            clients.nome AS tutor_nome,
+            clients.telefone AS tutor_telefone,
+            CONCAT(
+                SUBSTRING(REPLACE(clients.cpf_cnpj, '.', ''), 1, 3),
+                '.***.***.',
+                SUBSTRING(REPLACE(clients.cpf_cnpj, '.', ''), 11, 2)
+            ) AS tutor_cpf
+        ")
+            ->join('clients', 'clients.id = pets.cliente_id', 'left')
+            ->groupStart()
+            ->like('pets.nome', $term)
+            ->orLike('pets.raca', $term)
+            ->orLike('clients.nome', $term)
+            ->groupEnd()
+            ->limit(10)
+            ->find();
 
-        if (!empty($term)) {
-            $builder->like('pets.nome', $term);
+        $result = [];
+
+        foreach ($pets as $pet) {
+            $result[] = [
+                'id'             => $pet['id'],
+                'nome'           => $pet['nome'],
+                'especie'        => $pet['especie'],
+                'raca'           => $pet['raca'],
+                'tutor_nome'     => $pet['tutor_nome'] ?? 'Sem tutor',
+                'tutor_cpf'      => $pet['tutor_cpf'] ?? '',
+                'tutor_telefone' => $pet['tutor_telefone'] ?? ''
+            ];
         }
 
-        $pets = $builder->findAll(10);
+        return $this->response->setJSON($result);
+    }
 
-        return $this->response->setJSON($pets);
+    public function detalhes($id)
+    {
+        $petModel = $this->petModel;
+
+        $pet = $petModel
+            ->select("
+            pets.*,
+            clients.nome AS tutor_nome,
+            clients.telefone AS tutor_telefone,
+            CONCAT(
+                SUBSTRING(REPLACE(clients.cpf_cnpj, '.', ''), 1, 3),
+                '.***.***.',
+                SUBSTRING(REPLACE(clients.cpf_cnpj, '.', ''), 11, 2)
+            ) AS tutor_cpf
+        ")
+            ->join('clients', 'clients.id = pets.cliente_id', 'left')
+            ->where('pets.id', $id)
+            ->first();
+
+        if (!$pet) {
+            return $this->response->setJSON(['error' => 'Pet não encontrado']);
+        }
+
+        return $this->response->setJSON($pet);
     }
 
 }

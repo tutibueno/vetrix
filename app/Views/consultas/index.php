@@ -1,18 +1,6 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<!-- Select2 -->
-<link rel="stylesheet" href="<?= base_url('public/adminlte/plugins/select2/css/select2.min.css') ?>">
-<link rel="stylesheet" href="<?= base_url('public/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') ?>">
-
-<script src="<?= base_url('public/adminlte/plugins/select2/js/select2.full.min.js') ?>"></script>
-
-<!-- fullCalendar 2.2.5 -->
-<!--  <script src="public/adminlte/plugins/fullcalendar/main.js"></script> -->
-
-<!-- fullCalendar -->
-<!-- <link rel="stylesheet" href="public/adminlte/plugins/fullcalendar/main.css"> -->
-
 <script src="<?= base_url('public/fullcalendar/dist/index.global.min.js') ?>"></script>
 
 <div class="container-fluid">
@@ -135,52 +123,6 @@
     function editarConsulta(id) {
         abrirModalConsulta("<?= base_url('consultas/edit') ?>/" + id);
     }
-
-    function initPetSelect(selectedId = null, selectedText = null) {
-        // Inicializa o Select2 do campo pet
-        $('#pet_id').select2({
-            dropdownParent: $('#modalFormulario'),
-            theme: 'bootstrap4',
-            placeholder: 'Selecione o pet',
-            allowClear: true,
-            ajax: {
-                url: '<?= base_url('pet/search') ?>',
-                dataType: 'json',
-                delay: 250,
-                data: function(params) {
-                    return {
-                        q: params.term
-                    };
-                },
-                processResults: function(data) {
-                    return {
-                        results: data.map(pet => ({
-                            id: pet.id,
-                            text: pet.nome + ' - Tutor: ' + pet.tutor_nome
-                        }))
-                    };
-                },
-                cache: true
-            },
-            width: '100%'
-        });
-
-        // Pré-seleciona o pet quando estamos editando
-        var selectedPetId = $('#pet_id').data('selected');
-        var selectedPetText = $('#pet_id').data('selected-text');
-        if (selectedPetId && selectedPetText) {
-            var option = new Option(selectedPetText, selectedPetId, true, true);
-            $('#pet_id').append(option).trigger('change');
-        }
-    }
-
-    // Sempre que o modal abrir, reinicializa o select2
-    $('#modalFormulario').on('shown.bs.modal', function() {
-        initPetSelect(
-            $('#pet_id').data('selected-id') || null,
-            $('#pet_id').data('selected-text') || null
-        );
-    });
 </script>
 
 <script>
@@ -190,7 +132,7 @@
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
             locale: 'pt-br',
-            timeZone: 'UTC-3',
+            timeZone: 'local',
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
@@ -220,16 +162,19 @@
                 editarConsulta(id);
             },
             dateClick: function(info) {
-                // Se já estiver na visão diária
                 if (calendar.view.type === 'timeGridDay' || calendar.view.type === 'timeGridWeek') {
-                    const clickedDate = info.date; // Objeto Date
-                    const formattedDate = clickedDate.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM (para input datetime-local)
+                    const clickedDate = info.date; // Objeto Date (UTC)
+
+                    // Ajusta para horário local
+                    const localDate = new Date(clickedDate.getTime() - clickedDate.getTimezoneOffset() * 60000);
+
+                    // Formata YYYY-MM-DDTHH:MM para datetime-local
+                    const formattedDate = localDate.toISOString().slice(0, 16);
+
                     novaConsulta(formattedDate);
                 } else {
-                    // Caso contrário, muda para a visão diária e foca na data clicada
                     calendar.changeView('timeGridDay', info.dateStr);
                 }
-
             },
             eventDidMount: function(info) {
                 if (window.matchMedia("(pointer: coarse)").matches) {
@@ -302,6 +247,11 @@
     .fc-timegrid-slot {
         /* células da visão week/day */
         cursor: pointer !important;
+    }
+
+    .tooltip {
+        z-index: 9999 !important;
+        /* maior que o popover do FullCalendar */
     }
 </style>
 

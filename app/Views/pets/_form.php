@@ -23,7 +23,7 @@ $pet = $pet ?? [];
             <input type="text" id="cliente_nome" class="form-control <?= isset($errors['cliente_id']) ? 'is-invalid' : '' ?>"
                 placeholder="Digite o nome do tutor" value="<?= old('cliente_nome', $cliente['nome'] ?? '') ?>" autocomplete="off">
             <div class="invalid-feedback"><?= $errors['cliente_id'] ?? '' ?></div>
-            <div class="suggestions" id="cliente_suggestions" style="display:none;"></div>
+            <div class="suggestions list-group" id="cliente_suggestions" style="display:none;"></div>
         </div>
 
         <!-- Nome do Pet -->
@@ -176,7 +176,12 @@ $pet = $pet ?? [];
             }, function(data) {
                 let html = '';
                 data.forEach(c => {
-                    html += `<div data-id="${c.id}">${c.nome} ${c.cpf_cnpj} ${c.telefone}</div>`;
+                    html += `
+                <a href="#" class="list-group-item list-group-item-action"
+                   data-id="${c.id}">
+                   <strong>${c.nome}</strong><br>
+                   <small>${c.cpf_cnpj} | ${c.telefone}</small>
+                </a>`;
                 });
                 if (html) {
                     $('#cliente_suggestions').html(html).show();
@@ -187,13 +192,15 @@ $pet = $pet ?? [];
         });
 
         // Selecionar tutor
-        $(document).on('click', '#cliente_suggestions div', function() {
-            let nome = $(this).text();
+        $(document).on('click', '#cliente_suggestions a', function(e) {
+            e.preventDefault();
+            let nome = $(this).find("strong").text();
             let id = $(this).data('id');
             $('#cliente_nome').val(nome);
             $('#cliente_id').val(id);
             $('#cliente_suggestions').hide();
         });
+
 
         // Fechar suggestions se clicar fora
         $(document).click(function(e) {
@@ -325,5 +332,12 @@ $pet = $pet ?? [];
 
     .suggestions div:hover {
         background: #f0f0f0;
+    }
+
+    #cliente_suggestions {
+        position: absolute;
+        width: 100%;
+        z-index: 1050;
+        /* acima do form */
     }
 </style>
