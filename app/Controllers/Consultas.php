@@ -115,6 +115,27 @@ class Consultas extends BaseController
         return $this->response->setJSON($events);
     }
 
+    public function eventos()
+    {
+
+        $consultas = $this->consultaModel
+            ->select("consultas.id, consultas.data_consulta, pets.nome AS pet_nome, veterinarios.nome AS vet_nome")
+            ->join("pets", "pets.id = consultas.pet_id", "left")
+            ->join("veterinarios", "veterinarios.id = consultas.veterinario_id", "left")
+            ->findAll();
+
+        $eventos = [];
+        foreach ($consultas as $c) {
+            $eventos[] = [
+                'id'    => $c['id'],
+                'title' => $c['pet_nome'] . ' - ' . $c['vet_nome'],
+                'start' => $c['data_consulta'],
+            ];
+        }
+
+        return $this->response->setJSON($eventos);
+    }
+
     // Helper dentro do controller ou método privado
     private function getStatusColor(string $status): string
     {
@@ -124,5 +145,22 @@ class Consultas extends BaseController
             'cancelada' => '#dc3545', // vermelho
             default     => '#6c757d', // cinza fallback
         };
+    }
+
+    public function detalhes($id)
+    {
+        $model = new \App\Models\BanhoTosaModel();
+
+        $agendamento = $model
+            ->select("banho_tosa.*, pets.nome AS pet_nome, clients.nome AS tutor_nome, clients.telefone AS tutor_telefone")
+            ->join("pets", "pets.id = banho_tosa.pet_id", "left")
+            ->join("clients", "clients.id = banho_tosa.cliente_id", "left")
+            ->find($id);
+
+        if (!$agendamento) {
+            return $this->response->setStatusCode(404)->setBody('Agendamento não encontrado');
+        }
+
+        return view('banho_tosa/modal_detalhes', ['agendamento' => $agendamento]);
     }
 }

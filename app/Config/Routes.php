@@ -5,7 +5,6 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/home', 'Home::index');
 
 $routes->get('/', 'Dashboard::index', ['filter' => 'auth']);
 
@@ -141,6 +140,7 @@ $routes->group('consultas', ['filter' => 'auth'], function ($routes) {
     // Agenda visual
     $routes->get('agenda', 'Consultas::agenda');           // Exibe o calendário
     $routes->get('agendaJson', 'Consultas::agendaJson');   // Retorna consultas em JSON para o FullCalendar
+    $routes->get('eventos', 'Consultas::eventos');
 
     // CRUD de consultas
     $routes->get('create', 'Consultas::create'); // Criar nova consulta
@@ -151,4 +151,22 @@ $routes->group('consultas', ['filter' => 'auth'], function ($routes) {
 
     // Consultas de um pet específico (para modal na ficha do pet)
     $routes->get('pet/(:num)', 'Consultas::consultasDoPet/$1'); // $1 = pet_id
+});
+
+// Banho & Tosa
+$routes->group('banhotosa', ['filter' => 'auth'], function ($routes) {
+    $routes->get('', 'BanhoTosa::index');
+    $routes->get('create', 'BanhoTosa::create');
+    $routes->post('store', 'BanhoTosa::store');
+    $routes->get('edit/(:num)', 'BanhoTosa::edit/$1');
+    $routes->get('delete/(:num)', 'BanhoTosa::delete/$1');
+});
+
+//Serviços
+$routes->group('servicos', ['filter' => 'userPermission:manage'], function ($routes) {
+    $routes->get('/', 'Servicos::index');
+    $routes->get('create', 'Servicos::create');
+    $routes->post('store', 'Servicos::store');
+    $routes->get('edit/(:num)', 'Servicos::edit/$1');
+    $routes->get('delete/(:num)', 'Servicos::delete/$1');
 });

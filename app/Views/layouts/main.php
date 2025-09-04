@@ -42,6 +42,11 @@
                 <!-- /.container-fluid -->
             </section>
         </div>
+        <div class="modal fade" id="modalGlobal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content"></div>
+            </div>
+        </div>
         <?= $this->include('layouts/footer') ?>
     </div>
 
@@ -61,6 +66,24 @@
                 }, duration);
             }
         });
+    </script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function showToast(type, message, title) {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: type === 'error' ? 'error' : (type === 'warning' ? 'warning' : (type === 'success' ? 'success' : 'info')),
+                title: title || message,
+                text: title ? message : null,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        }
     </script>
 
 </body>
