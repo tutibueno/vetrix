@@ -160,6 +160,7 @@ $routes->group('banhotosa', ['filter' => 'auth'], function ($routes) {
     $routes->post('store', 'BanhoTosa::store');
     $routes->get('edit/(:num)', 'BanhoTosa::edit/$1');
     $routes->get('delete/(:num)', 'BanhoTosa::delete/$1');
+    $routes->get('listar-json', 'BanhoTosa::listarJson');
 });
 
 //Serviços

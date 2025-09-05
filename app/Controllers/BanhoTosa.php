@@ -26,7 +26,7 @@ class BanhoTosa extends BaseController
             ->select("banho_tosa.*, pets.nome AS pet_nome, servicos.nome_servico")
             ->join("servicos", "servicos.id = banho_tosa.servico_id", "left")
             ->join("pets", "pets.id = banho_tosa.pet_id", "left")
-            ->orderBy('data_agendamento', 'DESC')
+            ->orderBy('data_hora_inicio', 'DESC')
             ->findAll();
 
         $petModel = new PetModel();
@@ -60,6 +60,10 @@ class BanhoTosa extends BaseController
             return $this->response->setStatusCode(404)->setBody('Agendamento não encontrado');
         }
 
+        $inicio = strtotime($banho['data_hora_inicio']);
+        $fim    = strtotime($banho['data_hora_fim']);
+        $banho['duracao_minutos'] = round(($fim - $inicio) / 60);
+
         $data['banho'] = $banho;
 
         $data['pets'] = $this->petModel
@@ -80,28 +84,64 @@ class BanhoTosa extends BaseController
 
         $id = $post['id'] ?? null;
 
+        // Monta os dados básicos
         $data = [
-            'pet_id' => $post['pet_id'],
-            'servico_id' => $post['servico_id'],
-            'data_agendamento' => $post['data_agendamento'],
-            'duracao_minutos' => $post['duracao_minutos'],
-            'status' => $post['status'],
-            'observacoes' => $post['observacoes']
+            'pet_id'          => $post['pet_id'],
+            'servico_id'      => $post['servico_id'],
+            'data_hora_inicio' => $post['data_hora_inicio'],
+            'status'          => $post['status'],
+            'observacoes'     => $post['observacoes']
         ];
 
+        // Calcula o fim com base na duração informada
+        if (!empty($post['duracao_minutos'])) {
+            $inicio = new \DateTime($post['data_hora_inicio']);
+            $fim    = (clone $inicio)->modify("+{$post['duracao_minutos']} minutes");
+            $data['data_hora_fim'] = $fim->format('Y-m-d H:i:s');
+        } else {
+            // se não veio duração, define fim igual ao início (opcional)
+            $data['data_hora_fim'] = $data['data_hora_inicio'];
+        }
+
+        // Inserir ou atualizar
         if ($id) {
             $this->banhoModel->update($id, $data);
-            return $this->response->setJSON(['success' => true, 'message' => 'Agendamento atualizado com sucesso']);
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Agendamento atualizado com sucesso'
+            ]);
         } else {
             $this->banhoModel->insert($data);
-            return $this->response->setJSON(['success' => true, 'message' => 'Agendamento criado com sucesso']);
+            return $this->response->setJSON([
+                'success' => true,
+                'message' => 'Agendamento criado com sucesso'
+            ]);
         }
     }
+
 
     // Delete via AJAX
     public function delete($id)
     {
         $this->banhoModel->delete($id);
         return $this->response->setJSON(['success' => true, 'message' => 'Agendamento removido com sucesso']);
+    }
+
+
+    public function listarJson()
+    {
+        $banhos = $this->banhoModel
+            ->select('banho_tosa.*, pets.nome as pet_nome, servicos.nome_servico as servico_nome')
+            ->join('pets', 'pets.id = banho_tosa.pet_id')
+            ->join('servicos', 'servicos.id = banho_tosa.servico_id')
+            ->findAll();
+
+        foreach ($banhos as &$b) {
+            $inicio = strtotime($b['data_hora_inicio']);
+            $fim    = strtotime($b['data_hora_fim']);
+            $b['duracao_minutos'] = round(($fim - $inicio) / 60);
+        }
+
+        return $this->response->setJSON($banhos);
     }
 }

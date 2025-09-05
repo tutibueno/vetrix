@@ -25,12 +25,11 @@ class CreateBanhoTosa extends Migration
                 'constraint' => 11,
                 'unsigned' => true,
             ],
-            'data_agendamento' => [
+            'data_hora_inicio' => [
                 'type' => 'DATETIME',
             ],
-            'duracao_minutos' => [
-                'type' => 'INT',
-                'null' => false,
+            'data_hora_fim' => [
+                'type' => 'DATETIME',
             ],
             'observacoes' => [
                 'type' => 'TEXT',

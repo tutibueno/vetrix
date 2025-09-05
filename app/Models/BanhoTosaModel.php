@@ -12,8 +12,8 @@ class BanhoTosaModel extends Model
     protected $allowedFields = [
         'pet_id',
         'servico_id',
-        'data_agendamento',
-        'duracao_minutos',
+        'data_hora_inicio',
+        'data_hora_fim',
         'observacoes',
         'status'
     ];
