@@ -95,6 +95,20 @@
 </div>
 
 <script>
+    $(document).on('submit', '#modalFormulario', function(e) {
+        let petId = $('#pet_id').val();
+        if (!petId) {
+            e.preventDefault(); // impede submissão
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Por favor, selecione um Pet válido da lista.'
+            });
+            $('#pet_nome').focus();
+            return false;
+        }
+    });
+
     function abrirModalConsulta(url, dataSelecionada = null) {
         $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
         $('#modalFormulario').modal('show');
@@ -116,6 +130,16 @@
 
     // Função para criar nova consulta
     function novaConsulta(dataSelecionada = null) {
+        if (!dataSelecionada) {
+
+            let agora = new Date();
+            // Ajusta para horário local
+            const localDate = new Date(agora.getTime() - agora.getTimezoneOffset() * 60000);
+            // Formata YYYY-MM-DDTHH:MM para datetime-local
+            const formattedDate = localDate.toISOString().slice(0, 16);
+            dataSelecionada = formattedDate;
+        }
+
         abrirModalConsulta("<?= base_url('consultas/create') ?>", dataSelecionada);
     }
 
@@ -148,6 +172,8 @@
                         start: '<?= $c['data_consulta'] ?>',
                         end: '<?= $c['data_consulta_fim'] ?>',
                         color: '<?= $c['cor_status'] ?>',
+                        borderColor: 'white',
+                        textColor: 'white',
                         extendedProps: {
                             status: '<?= ucfirst($c['status']) ?>',
                             pet: '<?= esc($c['pet_nome']) ?>',
@@ -176,6 +202,11 @@
                     calendar.changeView('timeGridDay', info.dateStr);
                 }
             },
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            },
             eventDidMount: function(info) {
                 if (window.matchMedia("(pointer: coarse)").matches) {
                     // Mobile ou tablet → não criar tooltip
@@ -187,6 +218,13 @@
                 if (info.event.extendedProps.status.toLowerCase() === 'agendada') statusColor = '#007bff';
                 else if (info.event.extendedProps.status.toLowerCase() === 'realizada') statusColor = '#ffc107';
                 else if (info.event.extendedProps.status.toLowerCase() === 'cancelada') statusColor = '#dc3545';
+
+                // força a cor de fundo também no "month"
+                if (info.event.backgroundColor) {
+                    info.el.style.backgroundColor = info.event.backgroundColor;
+                    info.el.style.borderColor = info.event.borderColor;
+                    info.el.style.color = info.event.textColor;
+                }
 
                 const tooltipContent = `
         <div style="color: #fff; background-color: ${statusColor}; padding: 5px 10px; border-radius: 4px;">
@@ -214,7 +252,6 @@
             },
 
 
-            dayMaxEventRows: 3
         });
 
         // Render inicial
@@ -232,10 +269,6 @@
 </script>
 
 <style>
-    .fc-event {
-        cursor: pointer !important;
-    }
-
     /* Eventos do calendário */
     .fc-event {
         cursor: pointer !important;

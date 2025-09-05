@@ -1,11 +1,11 @@
 <?php $errors = session('errors'); ?>
 <?php $banho = $banho ?? []; ?>
-
+<div class="modal-header bg-primary text-white">
+    <h5 class="modal-title"><?= isset($banho['id']) ? 'Editar Agendamento' : 'Novo Agendamento' ?></h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+</div>
 <form id="formBanhoTosa" action="<?= base_url('banhotosa/store') ?>" method="post">
-    <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title"><?= isset($banho['id']) ? 'Editar Agendamento' : 'Novo Agendamento' ?></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-    </div>
+
 
     <div class="modal-body">
 
@@ -71,7 +71,7 @@
         <!-- Data e Hora -->
         <div class="form-group">
             <label>Data e Hora</label>
-            <input type="datetime-local" name="data_hora_inicio" class="form-control <?= isset($errors['data_hora_inicio']) ? 'is-invalid' : '' ?>"
+            <input type="datetime-local" name="data_hora_inicio" id="data_hora_inicio" class="form-control <?= isset($errors['data_hora_inicio']) ? 'is-invalid' : '' ?>"
                 value="<?= isset($banho['data_hora_inicio']) ? date('Y-m-d\TH:i', strtotime($banho['data_hora_inicio'])) : '' ?>" required>
             <div class="invalid-feedback"><?= $errors['data_hora_inicio'] ?? '' ?></div>
         </div>
@@ -108,6 +108,12 @@
     <div class="modal-footer">
         <button type="submit" class="btn btn-primary"><?= isset($banho) ? 'Atualizar' : 'Salvar' ?></button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <?php if (!empty($banho['id'])): ?>
+            <button class="btn btn-sm btn-danger btnExcluir" data-id=<?= $banho['id'] ?>>
+                <i class="fas fa-trash"></i> Excluir
+            </button>
+        <?php endif; ?>
+
     </div>
 </form>
 
