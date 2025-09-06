@@ -42,21 +42,6 @@
     </div>
 </div>
 
-<!-- Scripts -->
-<script src="<?= base_url('public/fullcalendar/dist/index.global.min.js') ?>"></script>
-
-
-<!-- Modal -->
-<div class="modal fade" id="modalBanho" tabindex="-1" aria-labelledby="modalBanhoLabel" aria-hidden="true" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-body" id="modalContent">
-                <div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
     var calendar;
 
@@ -65,6 +50,7 @@
 
         calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
+            themeSystem: 'bootstrap5',
             locale: 'pt-br',
             headerToolbar: {
                 left: 'prev,next today',
@@ -437,6 +423,11 @@
     .tooltip {
         z-index: 9999 !important;
         /* maior que o popover do FullCalendar */
+    }
+
+    .fc-daygrid-event-dot,
+    .fc-list-event-dot {
+        display: none !important;
     }
 </style>
 

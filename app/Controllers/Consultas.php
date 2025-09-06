@@ -86,10 +86,12 @@ class Consultas extends BaseController
     {
         $consultas = $this->consultaModel->getWithRelations();
 
-
         $events = [];
 
         foreach ($consultas as $c) {
+            $c['data_consulta_fim'] = date('Y-m-d H:i:s', strtotime($c['data_consulta'] . ' +30 minutes'));
+            $c['cor_status'] = $this->getStatusColor($c['status']);
+            
             $status = strtolower($c['status'] ?? '');
 
             $map = [
@@ -101,14 +103,21 @@ class Consultas extends BaseController
 
             $events[] = [
                 'id'              => $c['id'],
-                'title'           => $c['pet_nome'] . ' - ' . $c['vet_nome'],
+                'title'           => ($c['flag_retorno'] == 'S' ? ' (R) ' : '') . $c['pet_nome'] . ' - ' . $c['vet_nome'],
                 'start'           => date('c', strtotime($c['data_consulta'])),
+                'end'             => date('c', strtotime($c['data_consulta_fim'])),
                 'allDay'          => false, // força a mostrar a hora
-                'url'             => site_url('consultas/edit/' . $c['id']),
-                'backgroundColor' => $cfg['bg'],
+                //'url'             => site_url('consultas/edit/' . $c['id']),
+                'backgroundColor' => $c['cor_status'],
+                'color'           => $c['cor_status'],
                 'borderColor'     => $cfg['border'],
                 'textColor'       => $cfg['text'],
                 'classNames'      => [$cfg['class']],
+                'extendedProps'   => ['status' => ucfirst($c['status']),
+                                        'pet' => $c['pet_nome'],
+                                        'vet' => $c['vet_nome'],
+                                        'retorno' => $c['flag_retorno']
+                                    ]
             ];
         }
 

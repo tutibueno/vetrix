@@ -1,8 +1,6 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<script src="<?= base_url('public/fullcalendar/dist/index.global.min.js') ?>"></script>
-
 <div class="card">
 
     <div class="card-header d-flex justify-content-between align-items-center">
@@ -159,6 +157,7 @@
         var calendarEl = document.getElementById('calendar');
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
+            themeSystem: 'bootstrap5',
             initialView: 'dayGridMonth',
             locale: 'pt-br',
             timeZone: 'local',
@@ -245,9 +244,7 @@
                         <strong>Data:</strong> ${info.event.start.toLocaleString('pt-BR', {
                             day: '2-digit', month: '2-digit', year: 'numeric',
                             hour: '2-digit', minute: '2-digit'
-                        })}<br>
-                        <strong>Fim:</strong> ${info.event.end.toLocaleString('pt-BR', {
-                            day: '2-digit', month: '2-digit', year: 'numeric',
+                        })} - ${info.event.end.toLocaleString('pt-BR', {
                             hour: '2-digit', minute: '2-digit'
                         })}
                     </div>
@@ -297,6 +294,11 @@
     .tooltip {
         z-index: 9999 !important;
         /* maior que o popover do FullCalendar */
+    }
+
+    .fc-daygrid-event-dot,
+    .fc-list-event-dot {
+        display: none !important;
     }
 </style>
 

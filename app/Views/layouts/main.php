@@ -6,24 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="<?= base_url('public/favicon.ico') ?>">
     <title><?= SYSTEM_NAME ?>/<?= $title ?? 'Admin' ?></title>
+
     <link rel="stylesheet" href="<?= base_url('public/adminlte/plugins/fontawesome-free/css/all.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('public/adminlte/dist/css/adminlte.min.css') ?>">
 
     <!-- JS Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
     <!-- Scripts -->
     <script src="<?= base_url('public/adminlte/plugins/jquery/jquery.min.js') ?>"></script>
-    <script src="<?= base_url('public/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= base_url('public/adminlte/dist/js/adminlte.min.js') ?>"></script>
-
-
 
     <!-- jQuery Mask Plugin -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- Full Calendar -->
+    <script src="<?= base_url('public/fullcalendar/dist/index.global.min.js') ?>"></script>
+    
+    <!-- Script Chart.js -->
+    <script src="<?= base_url('public/adminlte/plugins/chart.js/Chart.min.js') ?>"></script>
 
 </head>
 
@@ -68,9 +72,6 @@
         });
     </script>
 
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         function showToast(type, message, title) {
             Swal.fire({
@@ -82,6 +83,30 @@
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true
+            });
+        }
+
+        function showAlert(type, message, title) {
+            Swal.fire({
+                toast: false,
+                position: 'center',
+                icon: type === 'error' ? 'error' : (type === 'warning' ? 'warning' : (type === 'success' ? 'success' : 'info')),
+                title: title || message,
+                text: title ? message : null,
+                showConfirmButton: true
+
+            });
+        }
+
+        function showAlertHtml(type, message, title) {
+            Swal.fire({
+                toast: false,
+                position: 'center',
+                icon: type === 'error' ? 'error' : (type === 'warning' ? 'warning' : (type === 'success' ? 'success' : 'info')),
+                title: title || message,
+                showConfirmButton: true,
+                html: message
+
             });
         }
     </script>
