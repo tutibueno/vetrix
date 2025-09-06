@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="<?= base_url('public/favicon.ico') ?>">
-    <title><?= $title ?? 'Admin' ?></title>
+    <title><?= SYSTEM_NAME ?>/<?= $title ?? 'Admin' ?></title>
     <link rel="stylesheet" href="<?= base_url('public/adminlte/plugins/fontawesome-free/css/all.min.css') ?>">
     <link rel="stylesheet" href="<?= base_url('public/adminlte/dist/css/adminlte.min.css') ?>">
 

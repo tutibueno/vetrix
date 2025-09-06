@@ -1,8 +1,6 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-
-
 <!-- Content Wrapper. Contains page content -->
 
 <script src="<?= base_url('public/fullcalendar/dist/index.global.min.js') ?>"></script>
@@ -56,20 +54,46 @@
             </div>
         </div>
     </div>
+    <!-- Card Banhos Hoje -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3><?= $banhosHoje ?></h3>
+                <p>Banhos Hoje</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-bath"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Banhos Semana -->
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3><?= $banhosSemana ?></h3>
+                <p>Banhos na Semana</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-bath"></i>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Row: Gráfico + Próximas Consultas -->
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Consultas nos últimos 30 dias</h3>
+                <h3 class="card-title">Consultas e Banhos nos últimos 30 dias</h3>
             </div>
             <div class="card-body">
                 <canvas id="graficoConsultas" height="150"></canvas>
             </div>
         </div>
     </div>
+    
 </div>
 
 <div class="row">
@@ -123,7 +147,53 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <!-- Banhos de Hoje -->
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">🛁 Banhos de Hoje</h5>
+            </div>
+            <div class="card-body">
+                <?php if (!empty($banhosHojeLista)): ?>
+                    <ul class="list-group list-group-flush">
+                        <?php foreach ($banhosHojeLista as $banho): ?>
+                            <li class="list-group-item">
+                                <b><?= esc($banho['pet_nome']) ?></b> — Serviço: <?= esc($banho['servico_nome']) ?><br>
+                                <small class="text-muted"><?= date('H:i', strtotime($banho['data_hora_inicio'])) ?></small>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p class="text-muted mb-0">Nenhum banho agendado para hoje.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
 
+    <!-- Próximos Banhos -->
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">🛁 Próximos Banhos</h5>
+            </div>
+            <div class="card-body">
+                <?php if (!empty($proximosBanhos)): ?>
+                    <ul class="list-group list-group-flush">
+                        <?php foreach ($proximosBanhos as $banho): ?>
+                            <li class="list-group-item">
+                                <b><?= esc($banho['pet_nome']) ?></b> — Serviço: <?= esc($banho['servico_nome']) ?><br>
+                                <small class="text-muted"><?= date('d/m/Y H:i', strtotime($banho['data_hora_inicio'])) ?></small>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p class="text-muted mb-0">Nenhum banho futuro agendado.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row mt-3">
     <div class="col-12">
         <div class="card shadow-sm">
@@ -170,20 +240,41 @@
     var graficoConsultas = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: <?= json_encode($dias) ?>, // Ex: ['01/09', '02/09', ...]
+            labels: <?= json_encode($dias) ?>,
             datasets: [{
-                label: 'Consultas',
-                data: <?= json_encode($valores) ?>, // Ex: [2, 5, 3, ...]
-                borderColor: 'rgba(60,141,188,0.8)',
-                backgroundColor: 'rgba(60,141,188,0.4)',
-                fill: true
-            }]
+                    label: 'Consultas',
+                    data: <?= json_encode($valoresConsultas) ?>,
+                    borderColor: 'rgba(60,141,188,0.8)',
+                    backgroundColor: 'rgba(60,141,188,0.4)',
+                    fill: true,
+                    tension: 0.3
+                },
+                {
+                    label: 'Banhos & Tosa',
+                    data: <?= json_encode($valoresBanhos) ?>,
+                    borderColor: 'rgba(255,193,7,0.8)',
+                    backgroundColor: 'rgba(255,193,7,0.4)',
+                    fill: true,
+                    tension: 0.3
+                }
+            ]
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
-                    display: false
+                    display: true,
+                    position: 'top'
+                }
+            },
+            interaction: {
+                mode: 'index',
+                intersect: false
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    stepSize: 1
                 }
             }
         }
