@@ -70,6 +70,8 @@ class HistoricoMedico extends BaseController
             'solicitacao_exame'         => $this->request->getPost('solicitacao_exame'),
             'prescricao_medica'         => $this->request->getPost('prescricao_medica'),
             'observacoes'               => $this->request->getPost('observacoes'),
+            'flag_retorno'      => in_array($this->request->getPost('flag_retorno'), ['S', 'N'])
+                ? $this->request->getPost('flag_retorno') : 'N',
         ];
 
         if ($this->historicoModel->insert($data)) {
@@ -116,6 +118,8 @@ class HistoricoMedico extends BaseController
             'solicitacao_exame'         => $this->request->getPost('solicitacao_exame'),
             'prescricao_medica'         => $this->request->getPost('prescricao_medica'),
             'observacoes'               => $this->request->getPost('observacoes'),
+            'flag_retorno'              => in_array($this->request->getPost('flag_retorno'), ['S', 'N'])
+                ? $this->request->getPost('flag_retorno') : 'N',
         ];
 
         if ($this->historicoModel->update($id, $data)) {

@@ -3,88 +3,93 @@
 
 <script src="<?= base_url('public/fullcalendar/dist/index.global.min.js') ?>"></script>
 
-<div class="container-fluid">
-    <h1 class="mt-4">Consultas</h1>
+<div class="card">
 
-    <!-- Nav Tabs -->
-    <ul class="nav nav-tabs mb-3" id="consultasTab" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="calendario-tab" data-bs-toggle="tab" href="#calendario" role="tab" aria-controls="calendario" aria-selected="true">
-                <i class="fas fa-calendar-alt"></i> Calendário
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="lista-tab" data-bs-toggle="tab" href="#lista" role="tab" aria-controls="lista" aria-selected="false">
-                <i class="fas fa-list"></i> Lista de Consultas
-            </a>
-        </li>
-    </ul>
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="card-title">Agendamentos de Cosultas</h3>
+        <a onclick="novaConsulta()" class="btn btn-primary btn-sm">
+            <i class="fas fa-calendar-plus"></i> Nova Consulta
+        </a>
+    </div>
+    <div class="card-body">
 
-    <!-- Conteúdo Tabs -->
-    <div class="tab-content" id="consultasTabContent">
+        <!-- Nav Tabs -->
+        <ul class="nav nav-tabs mb-3" id="consultasTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="calendario-tab" data-bs-toggle="tab" href="#calendario" role="tab" aria-controls="calendario" aria-selected="true">
+                    <i class="fas fa-calendar-alt"></i> Calendário
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="lista-tab" data-bs-toggle="tab" href="#lista" role="tab" aria-controls="lista" aria-selected="false">
+                    <i class="fas fa-list"></i> Lista de Consultas
+                </a>
+            </li>
+        </ul>
 
-        <!-- CALENDÁRIO -->
-        <div class="tab-pane fade show active" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
-            <div class="card shadow rounded-2xl">
-                <div class="card-header">
-                    <h3 class="card-title"><i class="fas fa-calendar-alt"></i> Agenda de Consultas</h3>
-                </div>
-                <div class="card-body">
-                    <div id="calendar"></div>
+        <!-- Conteúdo Tabs -->
+        <div class="tab-content mt-3" id="consultasTabContent">
+
+            <!-- CALENDÁRIO -->
+            <div class="tab-pane fade show active" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
+                <div class="card shadow rounded-2xl">
+                    <div class="card-body">
+                        <div id="calendar"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- LISTA -->
-        <div class="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-            <a onclick="novaConsulta()" class="btn btn-primary mb-3">
-                <i class="fas fa-calendar-plus"></i> Nova Consulta
-            </a>
+            <!-- LISTA -->
+            <div class="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
+                <a onclick="novaConsulta()" class="btn btn-primary mb-3">
+                    <i class="fas fa-calendar-plus"></i> Nova Consulta
+                </a>
 
 
-            <div class="row">
-                <?php if (!empty($consultas)): ?>
-                    <?php foreach ($consultas as $c): ?>
-                        <div class="col-12 mb-3">
-                            <div class="card shadow-sm">
-                                <div class="card shadow-sm position-relative">
-                                    <div class="card-body">
-                                        <h5 class="mb-1">
-                                            <i class="fas fa-paw text-primary"></i> <?= esc($c['pet_nome']) ?>
-                                        </h5>
-                                        <p class="mb-1"><strong>Tutor:</strong> <?= esc($c['cliente_nome']) ?></p>
-                                        <p class="mb-1"><strong>Veterinário:</strong> <?= esc($c['vet_nome']) ?></p>
-                                        <p class="mb-1"><strong>Data:</strong> <?= date('d/m/Y H:i', strtotime($c['data_consulta'])) ?></p>
-                                        <p class="mb-1"><strong>Status:</strong> <?= ucfirst($c['status']) ?></p>
-                                        <p class="card-text mb-1 text-muted"><small><strong>Cadastrada em:</strong> <?= esc($c['created_at']) ?></small></p>
-                                        <p class="card-text mb-1 text-muted"><small><strong>Atualizada em:</strong> <?= esc($c['updated_at']) ?></small></p>
-                                    </div>
-                                    <div class="card-footer d-flex justify-content-end">
-                                        <button class="btn btn-sm btn-warning" onclick="editarConsulta(<?= $c['id'] ?>)">
-                                            <i class="fas fa-edit"></i> Editar
-                                        </button>
-                                        <a href="<?= site_url('consultas/delete/' . $c['id']) ?>" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Deseja cancelar esta consulta?')">
-                                            <i class="fas fa-trash"></i> Excluir
-                                        </a>
+                <div class="row">
+                    <?php if (!empty($consultas)): ?>
+                        <?php foreach ($consultas as $c): ?>
+                            <div class="col-12 mb-3">
+                                <div class="card shadow-sm">
+                                    <div class="card shadow-sm position-relative">
+                                        <div class="card-body">
+                                            <h5 class="mb-1">
+                                                <i class="fas fa-paw text-primary"></i> <?= esc($c['pet_nome']) ?>
+                                            </h5>
+                                            <p class="mb-1"><strong>Tutor:</strong> <?= esc($c['cliente_nome']) ?></p>
+                                            <p class="mb-1"><strong>Veterinário:</strong> <?= esc($c['vet_nome']) ?></p>
+                                            <p class="mb-1"><strong>Data:</strong> <?= date('d/m/Y H:i', strtotime($c['data_consulta'])) ?></p>
+                                            <p class="mb-1"><strong>Status:</strong> <?= ucfirst($c['status']) ?></p>
+                                            <p class="card-text mb-1 text-muted"><small><strong>Cadastrada em:</strong> <?= esc($c['created_at']) ?></small></p>
+                                            <p class="card-text mb-1 text-muted"><small><strong>Atualizada em:</strong> <?= esc($c['updated_at']) ?></small></p>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-end">
+                                            <button class="btn btn-sm btn-warning" onclick="editarConsulta(<?= $c['id'] ?>)">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                            <a href="<?= site_url('consultas/delete/' . $c['id']) ?>" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Deseja cancelar esta consulta?')">
+                                                <i class="fas fa-trash"></i> Excluir
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <div class="alert alert-info">Nenhuma consulta cadastrada.</div>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="col-12">
-                        <div class="alert alert-info">Nenhuma consulta cadastrada.</div>
-                    </div>
-                <?php endif; ?>
+                    <?php endif; ?>
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
 </div>
 
 <!-- Modal para criar consulta -->
-<div class="modal fade" id="modalFormulario" tabindex="-1" aria-labelledby="modalFormularioLabel" aria-hidden="true">
+<div class="modal fade" id="modalFormulario" tabindex="-1" aria-labelledby="modalFormularioLabel" aria-hidden="true" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-body" id="modalContent">
@@ -168,7 +173,7 @@
             events: [
                 <?php foreach ($consultas as $c): ?> {
                         id: '<?= esc($c['id']) ?>',
-                        title: '<?= esc($c['pet_nome']) ?> - <?= esc($c['vet_nome']) ?>',
+                        title: '<?= $c['flag_retorno'] === 'S' ? " (R)" : "" ?> <?= esc($c['pet_nome']) ?> - <?= esc($c['vet_nome']) ?>',
                         start: '<?= $c['data_consulta'] ?>',
                         end: '<?= $c['data_consulta_fim'] ?>',
                         color: '<?= $c['cor_status'] ?>',
@@ -177,7 +182,8 @@
                         extendedProps: {
                             status: '<?= ucfirst($c['status']) ?>',
                             pet: '<?= esc($c['pet_nome']) ?>',
-                            vet: '<?= esc($c['vet_nome']) ?>'
+                            vet: '<?= esc($c['vet_nome']) ?>',
+                            retorno: '<?= esc($c['flag_retorno']) ?>'
                         }
                     },
                 <?php endforeach; ?>
@@ -208,10 +214,6 @@
                 hour12: false
             },
             eventDidMount: function(info) {
-                if (window.matchMedia("(pointer: coarse)").matches) {
-                    // Mobile ou tablet → não criar tooltip
-                    return;
-                }
 
                 // Desktop → cria tooltip
                 let statusColor = '#007bff';
@@ -226,21 +228,31 @@
                     info.el.style.color = info.event.textColor;
                 }
 
+                if (window.matchMedia("(pointer: coarse)").matches) {
+                    // Mobile ou tablet → não criar tooltip
+                    return;
+                }
+
+                const petNome = info.event.extendedProps.retorno === 'S' ?
+                    info.event.extendedProps.pet + ' (Retorno)' :
+                    info.event.extendedProps.pet;
+
                 const tooltipContent = `
-        <div style="color: #fff; background-color: ${statusColor}; padding: 5px 10px; border-radius: 4px;">
-            <strong>Pet:</strong> ${info.event.extendedProps.pet}<br>
-            <strong>Veterinário:</strong> ${info.event.extendedProps.vet}<br>
-            <strong>Status:</strong> ${info.event.extendedProps.status}<br>
-            <strong>Data:</strong> ${info.event.start.toLocaleString('pt-BR', {
-                day: '2-digit', month: '2-digit', year: 'numeric',
-                hour: '2-digit', minute: '2-digit'
-            })}<br>
-            <strong>Fim:</strong> ${info.event.end.toLocaleString('pt-BR', {
-                day: '2-digit', month: '2-digit', year: 'numeric',
-                hour: '2-digit', minute: '2-digit'
-            })}
-        </div>
-    `;
+                    <div style="color: #fff; background-color: ${statusColor}; padding: 5px 10px; border-radius: 4px;">
+                        <strong>Pet:</strong> ${petNome}<br>
+                        <strong>Veterinário:</strong> ${info.event.extendedProps.vet}<br>
+                        <strong>Status:</strong> ${info.event.extendedProps.status}<br>
+                        <strong>Data:</strong> ${info.event.start.toLocaleString('pt-BR', {
+                            day: '2-digit', month: '2-digit', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit'
+                        })}<br>
+                        <strong>Fim:</strong> ${info.event.end.toLocaleString('pt-BR', {
+                            day: '2-digit', month: '2-digit', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit'
+                        })}
+                    </div>
+                `;
+
 
                 new bootstrap.Tooltip(info.el, {
                     title: tooltipContent,

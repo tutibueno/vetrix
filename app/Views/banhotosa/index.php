@@ -11,19 +11,22 @@
         <!-- Tabs -->
         <ul class="nav nav-tabs" id="banhoTosaTabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="tab-calendario" data-bs-toggle="tab" href="#calendario" role="tab">Calendário</a>
+                <a class="nav-link active" id="tab-calendario" data-bs-toggle="tab" href="#calendario" role="tab">
+                    <i class="fas fa-calendar-alt"></i> Calendário</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="tab-lista" data-bs-toggle="tab" href="#lista" role="tab">Lista</a>
+                <a class="nav-link" id="tab-lista" data-bs-toggle="tab" href="#lista" role="tab">
+                    <i class="fas fa-list"></i> Lista</a>
             </li>
         </ul>
 
         <div class="tab-content mt-3" id="banhoTosaTabContent">
             <!-- FullCalendar Tab -->
-            <div class="tab-pane fade show active" id="calendario" role="tabpanel">
-                <div id="fullCalendar"></div>
+            <div class="card shadow rounded-2xl">
+                <div class="tab-pane fade show active" id="calendario" role="tabpanel">
+                    <div id="fullCalendar"></div>
+                </div>
             </div>
-
             <!-- Lista Tab -->
             <div class="tab-pane fade" id="lista" role="tabpanel">
                 <div id="banhoTosaCards" class="row"></div>
@@ -44,9 +47,13 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="modalBanho" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" id="modalBanhoContent"></div>
+<div class="modal fade" id="modalBanho" tabindex="-1" aria-labelledby="modalBanhoLabel" aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="modalContent">
+                <div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -76,12 +83,11 @@
                     let min = String(dt.getMinutes()).padStart(2, '0');
 
                     let formatted = `${ano}-${mes}-${dia}T${hora}:${min}`;
-
+                    $('#modalBanhoContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
+                    $('#modalBanho').modal('show');
                     // abrir modal e preencher input
                     $.get('<?= base_url("banhotosa/create") ?>', function(html) {
                         $('#modalBanhoContent').html(html);
-                        $('#modalBanho').modal('show');
-
                         $('#data_hora_inicio').val(formatted);
                     });
                 } else {
@@ -129,6 +135,18 @@
                 });
             },
             eventDidMount: function(info) {
+
+                // força a cor de fundo também no "month"
+                if (info.event.backgroundColor) {
+                    info.el.style.backgroundColor = info.event.backgroundColor;
+                    info.el.style.borderColor = info.event.borderColor;
+                    info.el.style.color = info.event.textColor;
+                }
+
+                if (window.matchMedia("(pointer: coarse)").matches) {
+                    // Mobile ou tablet → não criar tooltip
+                    return;
+                }
                 // Tooltip usando Bootstrap 5
                 var tooltipText = info.event.extendedProps.observacoes ?
                     `Pet: ${info.event.extendedProps.pet}\nServiço: ${info.event.extendedProps.servico}\nStatus: ${info.event.extendedProps.status}\nDuração: ${info.event.extendedProps.duracao} min\nObservações: ${info.event.extendedProps.observacoes}` :
@@ -142,12 +160,7 @@
                     html: false
                 });
 
-                // força a cor de fundo também no "month"
-                if (info.event.backgroundColor) {
-                    info.el.style.backgroundColor = info.event.backgroundColor;
-                    info.el.style.borderColor = info.event.borderColor;
-                    info.el.style.color = info.event.textColor;
-                }
+
             },
             eventTimeFormat: {
                 hour: '2-digit',
@@ -156,9 +169,11 @@
             },
             eventClick: function(info) {
                 const id = info.event.id;
+
+                $('#modalBanhoContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
+                $('#modalBanho').modal('show');
                 $.get('<?= base_url("banhotosa/edit") ?>/' + id, function(html) {
                     $('#modalBanhoContent').html(html);
-                    $('#modalBanho').modal('show');
                 });
             }
         });
@@ -277,9 +292,10 @@
             // Formata YYYY-MM-DDTHH:MM para datetime-local
             const formattedDate = localDate.toISOString().slice(0, 16);
 
+            $('#modalBanhoContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
+            $('#modalBanho').modal('show');
             $.get('<?= base_url("banhotosa/create") ?>', function(html) {
                 $('#modalBanhoContent').html(html);
-                $('#modalBanho').modal('show');
                 $('#data_hora_inicio').val(formattedDate);
             }).fail(function() {
                 Swal.fire('Erro', 'Não foi possível abrir o formulário.', 'error');

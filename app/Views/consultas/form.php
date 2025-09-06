@@ -72,6 +72,29 @@
                 value="<?= $consulta ? date('Y-m-d\TH:i', strtotime($consulta['data_consulta'])) : '' ?>" required>
         </div>
 
+        <!-- Flag de Retorno -->
+        <div class="form-group mb-3 d-flex align-items-center">
+            <label class="me-3 mb-0">Retorno:&nbsp;&nbsp;</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input"
+                    type="radio"
+                    name="flag_retorno"
+                    id="retornoSim"
+                    value="S"
+                    <?= old('flag_retorno', $consulta['flag_retorno'] ?? 'N') === 'S' ? 'checked' : '' ?>>
+                <label class="form-check-label" for="retornoSim">Sim</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input"
+                    type="radio"
+                    name="flag_retorno"
+                    id="retornoNao"
+                    value="N"
+                    <?= old('flag_retorno', $consulta['flag_retorno'] ?? 'N') === 'N' ? 'checked' : '' ?>>
+                <label class="form-check-label" for="retornoNao">Não</label>
+            </div>
+        </div>
+
         <div class="form-group mb-3">
             <label for="motivo">Motivo</label>
             <textarea name="motivo" class="form-control"><?= $consulta['motivo'] ?? '' ?></textarea>
@@ -264,3 +287,16 @@
         }
     });
 </script>
+
+<style>
+    /* Radios maiores para mobile */
+    .form-check-input {
+        width: 1em;
+        height: 1em;
+    }
+
+    .form-check-label {
+        margin-left: 0.25rem;
+        font-size: 1.1em;
+    }
+</style>

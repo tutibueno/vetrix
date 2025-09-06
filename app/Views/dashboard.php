@@ -1,6 +1,6 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
-<h1>Bem-vindo!</h1>
+
 
 
 <!-- Content Wrapper. Contains page content -->

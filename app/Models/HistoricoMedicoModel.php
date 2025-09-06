@@ -18,7 +18,8 @@ class HistoricoMedicoModel extends Model
         'diagnostico',
         'prescricao_medica',
         'solicitacao_exame',
-        'observacoes'
+        'observacoes',
+        'flag_retorno'
     ];
 
     protected $useTimestamps = true;

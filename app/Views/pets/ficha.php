@@ -80,9 +80,10 @@
                         <div class="card-body">
                             <h5 class="card-title">
                                 <i class="fas fa-notes-medical"></i> Registro #<?= esc($h['id']) ?>&nbsp;
-                            </h5>
+                            </h5><br>
                             <p class="text-muted mb-2">
                                 <strong>Data:</strong> <?= date('d/m/Y', strtotime($h['data_consulta'])) ?><br>
+                                <strong>Retorno:</strong> <?= esc($h['flag_retorno']) == 'N' ? 'Não' : 'Sim' ?><br>
                                 <strong>Médico(a):</strong> <?= esc($h['veterinario_nome']) ?>
                             </p>
 
@@ -355,7 +356,7 @@
     $(document).ready(function() {
         $('#btnAdicionarAtendimento').on('click', function() {
             const petId = $(this).data('pet');
-            $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+            $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
             $('#modalFormulario').modal('show');
             $.get("<?= base_url('historico_medico/create') ?>/" + petId, function(data) {
                 $('#modalContent').html(data);
@@ -364,7 +365,7 @@
 
         $('#btnAdicionarVacina').on('click', function() {
             const petId = $(this).data('pet');
-            $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+            $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
             $('#modalFormulario').modal('show');
             $.get("<?= base_url('vacinas/nova') ?>/" + petId, function(data) {
                 $('#modalContent').html(data);
@@ -373,7 +374,7 @@
 
         $('#btnAdicionarPrescricao').on('click', function() {
             const petId = $(this).data('pet');
-            $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+            $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
             $('#modalFormulario').modal('show');
             $.get("<?= base_url('prescricoes/create') ?>/" + petId, function(data) {
                 $('#modalContent').html(data);
@@ -382,7 +383,7 @@
 
         $('#btnAdicionarExame').on('click', function() {
             const petId = $(this).data('pet');
-            $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+            $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
             $('#modalFormulario').modal('show');
             $.get("<?= base_url('exames/create') ?>/" + petId, function(data) {
                 $('#modalContent').html(data);
@@ -393,7 +394,7 @@
 
 <script>
     function editarVacina(id) {
-        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
         $('#modalFormulario').modal('show');
         $.get("<?= base_url('vacinas/editar') ?>/" + id, function(data) {
             $('#modalContent').html(data);
@@ -403,7 +404,7 @@
 
 <script>
     function editarAtendimento(id) {
-        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
         $('#modalFormulario').modal('show');
         $.get("<?= base_url('historico_medico/edit') ?>/" + id, function(data) {
             $('#modalContent').html(data);
@@ -413,7 +414,7 @@
 
 <script>
     function editarExame(id) {
-        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
         $('#modalFormulario').modal('show');
         $.get("<?= base_url('exames/edit') ?>/" + id, function(data) {
             $('#modalContent').html(data);
@@ -423,7 +424,7 @@
 
 <script>
     function editarPrescricao(id) {
-        $('#modalContent').html('<div class="text-center p-4">Carregando...</div>');
+        $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
         $('#modalFormulario').modal('show');
         $.get("<?= base_url('prescricoes/edit') ?>/" + id, function(data) {
             $('#modalContent').html(data);

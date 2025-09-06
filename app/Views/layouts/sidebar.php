@@ -27,10 +27,13 @@
 
                 <!-- Adicione mais itens conforme necessário -->
                 <?php if (session()->get('logged_in')): ?>
+
+                    <li class="nav-header">INÍCIO</li>
+
                     <li class="nav-item">
                         <a href="<?= base_url() ?>" class="nav-link <?= uri_string() === '' ? 'active' : '' ?>">
                             <i class="nav-icon fas fa-home"></i>
-                            <p>Início</p>
+                            <p>Painel</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -46,43 +49,21 @@
                         </a>
                     </li>
 
-                    <!-- Menu de Consultas -->
+                    <!-- Outros itens do menu -->
+
+                    <li class="nav-header">AGENDAMENTOS</li>
+
                     <li class="nav-item">
-                        <a href="<?= site_url('consultas') ?>" class="nav-link">
-                            <i class="nav-icon fas fa-calendar-alt"></i>
+                        <a href="<?= base_url('consultas') ?>" class="nav-link <?= service('uri')->getSegment(1) == 'consultas' ? 'active' : '' ?>">
+                            <i class="fas fa-stethoscope nav-icon"></i>
                             <p>Consultas</p>
                         </a>
                     </li>
-
-                    <!-- Outros itens do menu -->
-
-                    <?php
-                    $clincaActive = (service('uri')->getSegment(1) == 'consultas'
-                        || service('uri')->getSegment(1) == 'banhotosa');
-                    ?>
-
-                    <li class="nav-item has-treeview <?= $clincaActive ? 'menu-open' : '' ?>">
-                        <a href="#" class="nav-link <?= $clincaActive ? 'active' : '' ?>">
-                            <i class="nav-icon fas fa-clinic-medical"></i>
-                            <p>
-                                Clínica
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                    <li class="nav-item">
+                        <a href="<?= base_url('banhotosa') ?>" class="nav-link <?= service('uri')->getSegment(1) == 'banhotosa' ? 'active' : '' ?>">
+                            <i class="fas fa-dog nav-icon"></i>
+                            <p>Banho & Tosa</p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="<?= base_url('consultas') ?>" class="nav-link <?= service('uri')->getSegment(1) == 'consultas' ? 'active' : '' ?>">
-                                    <i class="fas fa-stethoscope nav-icon"></i>
-                                    <p>Consultas</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?= base_url('banhotosa') ?>" class="nav-link <?= service('uri')->getSegment(1) == 'banhotosa' ? 'active' : '' ?>">
-                                    <i class="fas fa-dog nav-icon"></i>
-                                    <p>Banho & Tosa</p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                 <?php endif; ?>
             </ul>

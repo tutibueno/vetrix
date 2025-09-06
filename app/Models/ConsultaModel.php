@@ -12,6 +12,7 @@ class ConsultaModel extends Model
         'pet_id',
         'veterinario_id',
         'data_consulta',
+        'flag_retorno',
         'motivo',
         'observacoes',
         'status'
