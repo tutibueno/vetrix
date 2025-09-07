@@ -5,16 +5,19 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\PetModel;
 use App\Models\ClientModel;
+use \App\Models\PesoModel;
 
 class Pet extends BaseController
 {
     protected $petModel;
     protected $clienteModel;
+    protected $pesoModel;
 
     public function __construct()
     {
         $this->petModel     = new PetModel();
         $this->clienteModel = new ClientModel();
+        $this->pesoModel    = new PesoModel();
     }
 
     public function index()
@@ -142,12 +145,9 @@ class Pet extends BaseController
                 ->findAll();
         }
 
-
-        //5 Solicitações de Exame
         $exameModel = new \App\Models\SolicitacaoExameModel();
         $exameItemModel = new \App\Models\SolicitacaoExameDetalheModel();
         $motivoModel = new \App\Models\SolicitacaoExameMotivoModel();
-
 
         $exames = $exameModel
             ->select('solicitacoes_exames.*, veterinarios.nome as veterinario_nome')
@@ -156,7 +156,7 @@ class Pet extends BaseController
             ->orderBy('data_solicitacao', 'DESC')
             ->findAll();
 
-        // 5.1️⃣ Para cada exame, buscar itens e motivos
+        //Para cada exame, buscar itens e motivos
         foreach ($exames as &$exame) {
             $exame['itens'] = $exameItemModel
                 ->where('solicitacao_id', $exame['id'])
@@ -169,7 +169,18 @@ class Pet extends BaseController
                 ->findAll();
         }
 
-        return view('pets/ficha', compact('pet', 'historico', 'vacinas', 'prescricoes','exames'));
+        // Buscar a pesagem mais recente
+        $pesoRecente = $this->pesoModel
+            ->where('pet_id', $id)
+            ->orderBy('data_registro', 'DESC')
+            ->first(); // retorna apenas o mais recente
+
+        $cirurgias = '';
+        $consultas = '';
+        $medicamentos = '';
+        $agendamentos = '';
+
+        return view('pets/ficha', compact('pet', 'pesoRecente', 'historico', 'vacinas', 'prescricoes','exames', 'cirurgias','consultas','medicamentos','agendamentos'));
     }
 
     public function processaFoto()
@@ -271,6 +282,14 @@ class Pet extends BaseController
         if (!$pet) {
             return $this->response->setJSON(['error' => 'Pet não encontrado']);
         }
+
+        // Buscar a pesagem mais recente
+        $pesoRecente = $this->pesoModel
+            ->where('pet_id', $id)
+            ->orderBy('data_registro', 'DESC')
+            ->first(); // retorna apenas o mais recente
+
+        $pet['peso'] = $pesoRecente ? $pesoRecente['peso_kg'] : 0;
 
         return $this->response->setJSON($pet);
     }

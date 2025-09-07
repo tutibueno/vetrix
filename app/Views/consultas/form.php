@@ -49,6 +49,11 @@
                         <p><strong>Sexo:</strong> <span id="pet_sexo_card"></span></p>
                         <p><strong>Peso (Kg):</strong> <span id="pet_peso_card"></span></p>
                     </div>
+                    <div class="card-footer text-end">
+                        <a href="#" id="linkFichaPet" class="btn btn-sm btn-primary">
+                            <i class="fas fa-file-alt"></i> Ver ficha do Pet
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -233,6 +238,7 @@
             $('#pet_raca_card').text(data.raca);
             $('#pet_sexo_card').text(data.sexo);
             $('#pet_peso_card').text(data.peso);
+            $('#linkFichaPet').attr('href', '<?= base_url("pet/ficha/") ?>' + data.id);
             $('#card_pet').show();
         } else {
             $('#card_pet').hide();

@@ -30,20 +30,14 @@
 
             <!-- CALENDÁRIO -->
             <div class="tab-pane fade show active" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
-                <div class="card shadow rounded-2xl">
-                    <div class="card-body">
-                        <div id="calendar"></div>
-                    </div>
+                <div class="card-body">
+                    <div id="calendar"></div>
                 </div>
             </div>
 
             <!-- LISTA -->
             <div class="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-                <a onclick="novaConsulta()" class="btn btn-primary mb-3">
-                    <i class="fas fa-calendar-plus"></i> Nova Consulta
-                </a>
-
-
+                
                 <div class="row">
                     <?php if (!empty($consultas)): ?>
                         <?php foreach ($consultas as $c): ?>

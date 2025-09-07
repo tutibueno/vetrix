@@ -171,3 +171,12 @@ $routes->group('servicos', ['filter' => 'userPermission:manage'], function ($rou
     $routes->get('edit/(:num)', 'Servicos::edit/$1');
     $routes->get('delete/(:num)', 'Servicos::delete/$1');
 });
+
+$routes->group('pesos', ['filter' => 'auth'], function ($routes) {
+    $routes->get('create/(:num)', 'PesoController::create/$1');
+    $routes->post('store', 'PesoController::store');
+    $routes->get('edit/(:num)', 'PesoController::edit/$1');
+    $routes->post('update/(:num)', 'PesoController::update/$1');
+    $routes->get('delete/(:num)', 'PesoController::delete/$1');
+    $routes->get('list/(:num)', 'PesoController::listByPet/$1');
+});

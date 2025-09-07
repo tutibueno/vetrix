@@ -51,6 +51,11 @@
                             <p><strong>Sexo:</strong> <span id="pet_sexo_card"></span></p>
                             <p><strong>Peso (Kg):</strong> <span id="pet_peso_card"></span></p>
                         </div>
+                        <div class="card-footer text-end">
+                            <a href="#" id="linkFichaPet" class="btn btn-sm btn-primary">
+                                <i class="fas fa-file-alt"></i> Ver ficha do Pet
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -191,6 +196,7 @@
                     $('#tutor_nome').val(data.tutor_nome);
                     $('#tutor_telefone').val(data.tutor_telefone);
                     $('#tutor_cpf').val(data.tutor_cpf);
+                    $('#linkFichaPet').attr('href', '<?= base_url("pet/ficha/") ?>' + data.id);
                 }
             });
         }

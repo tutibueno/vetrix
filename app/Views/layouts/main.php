@@ -25,7 +25,7 @@
 
     <!-- Full Calendar -->
     <script src="<?= base_url('public/fullcalendar/dist/index.global.min.js') ?>"></script>
-    
+
     <!-- Script Chart.js -->
     <script src="<?= base_url('public/adminlte/plugins/chart.js/Chart.min.js') ?>"></script>
 
@@ -46,11 +46,13 @@
                 <!-- /.container-fluid -->
             </section>
         </div>
+
         <div class="modal fade" id="modalGlobal" tabindex="-1">
             <div class="modal-dialog modal-lg">
-                <div class="modal-content"></div>
+                <div class="modal-content" id="modalGlobalContent"></div>
             </div>
         </div>
+
         <?= $this->include('layouts/footer') ?>
     </div>
 

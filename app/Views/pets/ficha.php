@@ -1,323 +1,176 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<style>
-    /* seta gira ao abrir */
-    .card-header .fa-chevron-down {
-        transition: transform 0.3s ease;
-    }
-
-    .card-header button[aria-expanded="true"] .fa-chevron-down {
-        transform: rotate(180deg);
-    }
-</style>
 
 <div class="card shadow rounded-2xl mb-4">
     <div class="card-header">
-        <button class="btn btn-link w-100 text-start d-flex justify-content-between align-items-center"
-            type="button" data-bs-toggle="collapse" data-bs-target="#fichaPet" aria-expanded="true">
-            <h3 class="card-title mb-0">Ficha de <?= esc($pet['nome']) ?></h3>
-            <i class="fas fa-chevron-down"></i>
-        </button>
+        <h3 class="card-title mb-0">
+            Ficha de <?= esc($pet['nome']) ?>
+        </h3>
     </div>
-    <div id="fichaPet" class="collapse show">
-        <div class="card-body">
-            <?php if ($pet['foto']): ?>
-                <div class="mb-3 text-center">
-                    <img src="<?= base_url('public/uploads/pets/' . $pet['foto']) ?>" alt="Foto do pet" class="img-thumbnail" style="max-height: 300px;">
-                </div>
-            <?php endif; ?>
-
-            <p><strong>Está Vivo:</strong>
-                <?= $pet['esta_vivo'] === 'sim' ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-danger">Não</span>' ?>
-            </p>
-            <p><strong>Espécie:</strong> <?= esc($pet['especie']) ?></p>
-            <p><strong>Raça:</strong> <?= esc($pet['raca']) ?></p>
-            <p><strong>Sexo:</strong> <?= esc($pet['sexo']) ?></p>
-            <p><strong>Data de Nascimento:</strong> <?= esc(date('d/m/Y', strtotime($pet['data_nascimento']))) ?></p>
-            <p><strong>Idade:</strong> <span id="idade_pet"></span></p>
-            <p><strong>Tutor:</strong> <?= esc($pet['nome_tutor']) ?> - <?= esc($pet['telefone']) ?></p>
-            <p><strong>Observações:</strong> <?= esc($pet['observacoes']) ?></p>
-            <p><strong>Castrado:</strong> <?= ucfirst($pet['castrado']) ?></p>
-            <p><strong>Peso:</strong> <?= $pet['peso'] ? number_format($pet['peso'], 3, ',', '.') . ' kg' : 'Não informado' ?></p>
-            <p><strong>Pelagem:</strong> <?= $pet['pelagem'] ?: 'Não informada' ?></p>
-            <p><strong>Número de Identificação:</strong> <?= $pet['numero_identificacao'] ?: 'Não informado' ?></p>
-            <p><strong>Alergias:</strong> <?= $pet['alergias'] ?: 'Nenhuma' ?></p>
-
-            <div class="mb-1">
-                <button class="btn btn-primary" id="btnAdicionarAtendimento" data-pet="<?= $pet['id'] ?>">
-                    <i class="fas fa-notes-medical"></i>&nbsp;&nbsp;<i class="fas fa-plus"></i>&nbsp;Atendimento
-                </button>
-                <button class="btn btn-primary" id="btnAdicionarVacina" data-pet="<?= $pet['id'] ?>">
-                    <i class="fas fa-syringe"></i>&nbsp;&nbsp;<i class="fas fa-plus"></i>&nbsp;Vacinação
-                </button>
-                <button class="btn btn-primary" id="btnAdicionarPrescricao" data-pet="<?= $pet['id'] ?>">
-                    <i class="fas fa-file-medical"></i>&nbsp;&nbsp;<i class="fas fa-plus"></i>&nbsp;Prescrição
-                </button>
-                <button class="btn btn-primary" id="btnAdicionarExame" data-pet="<?= $pet['id'] ?>">
-                    <i class="fas fa-vials"></i>&nbsp;&nbsp;<i class="fas fa-plus"></i>&nbsp;Exame
-                </button>
+    <div class="card-body">
+        <!-- Container das Tabs com scroll e setinhas -->
+        <div class="nav-tabs-wrapper position-relative mb-3">
+            <button class="scroll-btn scroll-left d-none">&lt;</button>
+            <div class="nav-tabs-container overflow-auto">
+                <ul class="nav nav-tabs flex-nowrap" id="petTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="ficha-tab" data-bs-toggle="tab" data-bs-target="#ficha" type="button" role="tab">
+                            Ficha
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pesos-tab" data-bs-toggle="tab" data-bs-target="#pesos" type="button" role="tab">
+                            Pesos
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="historico-tab" data-bs-toggle="tab" data-bs-target="#historico" type="button" role="tab">
+                            Atendimentos
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="vacinas-tab" data-bs-toggle="tab" data-bs-target="#vacinas" type="button" role="tab">
+                            Vacinas
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="prescricoes-tab" data-bs-toggle="tab" data-bs-target="#prescricoes" type="button" role="tab">
+                            Prescricoes
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="exames-tab" data-bs-toggle="tab" data-bs-target="#exames" type="button" role="tab">
+                            Exames
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="medicamentos-tab" data-bs-toggle="tab" data-bs-target="#medicamentos" type="button" role="tab">
+                            Medicamentos
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="cirurgias-tab" data-bs-toggle="tab" data-bs-target="#cirurgias" type="button" role="tab">
+                            Cirurgias
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="agendamentos-tab" data-bs-toggle="tab" data-bs-target="#agendamentos" type="button" role="tab">
+                            Agendamentos
+                        </button>
+                    </li>
+                </ul>
             </div>
+            <button class="scroll-btn scroll-right d-none">&gt;</button>
         </div>
-    </div>
-</div>
-
-<!-- Histórico Médico -->
-<div class="card shadow rounded-2xl mt-4">
-    <div class="card-header">
-        <button class="btn btn-link w-100 text-start d-flex justify-content-between align-items-center"
-            type="button" data-bs-toggle="collapse" data-bs-target="#historico" aria-expanded="true">
-            <h3 class="card-title mb-0"><i class="fas fa-notes-medical"></i>&nbsp;Histórico Médico</h3>
-            <i class="fas fa-chevron-down"></i>
-        </button>
-    </div>
-    <div id="historico" class="collapse show">
-        <div class="card-body">
-            <!-- conteúdo histórico -->
-            <?php if (!empty($historico)): ?>
-                <?php foreach ($historico as $h): ?>
-                    <div class="card mb-4 border border-secondary shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <i class="fas fa-notes-medical"></i> Registro #<?= esc($h['id']) ?>&nbsp;
-                            </h5><br>
-                            <p class="text-muted mb-2">
-                                <strong>Data:</strong> <?= date('d/m/Y', strtotime($h['data_consulta'])) ?><br>
-                                <strong>Retorno:</strong> <?= esc($h['flag_retorno']) == 'N' ? 'Não' : 'Sim' ?><br>
-                                <strong>Médico(a):</strong> <?= esc($h['veterinario_nome']) ?>
-                            </p>
-
-                            <br><strong>Anamnese:</strong></br>
-                            <p><?= nl2br(esc($h['anamnese'])) ?></p>
 
 
-                            <br><strong>Sinais Clínicos:</strong></br>
-                            <p><?= nl2br(esc($h['sinais_clinicos'])) ?></p>
+        <!-- Conteúdo das Tabs -->
+        <div class="tab-content mt-3" id="petTabsContent">
 
-
-
-                            <br><strong>Diagnóstico:</strong></br>
-                            <p><?= nl2br(esc($h['diagnostico'])) ?></p>
-
-
-
-                            <br><strong>Observações:</strong></br>
-                            <p><?= nl2br(esc($h['observacoes'])) ?></p>
-
-                        </div>
-
-                        <!-- Rodapé do card com ações -->
-                        <div class="card-footer d-flex justify-content-end gap-2">
-                            <a onclick="editarAtendimento(<?= $h['id'] ?>)" class="btn btn-sm btn-warning">
-                                <i class="fas fa-edit"></i> Editar
-                            </a>
-                            <a href="<?= site_url('historico_medico/delete/' . $h['id']) ?>"
-                                class="btn btn-sm btn-danger"
-                                onclick="return confirm('Tem certeza que deseja excluir este registro?')">
-                                <i class="fas fa-trash"></i> Excluir
-                            </a>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="alert alert-info">
-                    Nenhum registro de histórico médico cadastrado para este pet.
-                </div>
-            <?php endif; ?>
-        </div>
-    </div>
-</div>
-
-<!-- Vacinas -->
-<div class="card shadow rounded-2xl mt-4">
-    <div class="card-header">
-        <button class="btn btn-link w-100 text-start d-flex justify-content-between align-items-center"
-            type="button" data-bs-toggle="collapse" data-bs-target="#vacinas" aria-expanded="true">
-            <h3 class="card-title mb-0"><i class="fas fa-syringe"></i>&nbsp;Vacinas</h3>
-            <i class="fas fa-chevron-down"></i>
-        </button>
-    </div>
-    <div id="vacinas" class="collapse show">
-        <div class="card-body">
-            <!-- conteúdo vacinas -->
-            <?php if (!empty($vacinas)): ?>
+            <!-- Aba Ficha -->
+            <div class="tab-pane fade show active" id="ficha" role="tabpanel">
                 <div class="row">
-                    <?php foreach ($vacinas as $v): ?>
-                        <div class="col-12">
-                            <div class="card bg-light shadow-sm mb-3">
-                                <div class="card-body">
-                                    <h6 class="card-subtitle mb-2 text-success">
-                                        <i class="fas fa-syringe"></i> <?= esc($v['nome_vacina']) ?>
-                                    </h6>
-                                    <p class="mb-1"><strong>Data:</strong> <?= date('d/m/Y', strtotime($v['data_aplicacao'])) ?></p>
-                                    <p class="mb-1"><strong>Data Reforço:</strong> <?= !empty($v['data_reforco']) ? date('d/m/Y', strtotime($v['data_reforco'])) : '-' ?></p>
-                                    <p class="mb-1"><strong>Observações:</strong> <?= $v['observacoes'] ?></p>
-                                </div>
-                                <!-- Rodapé do card com ações -->
-                                <div class="card-footer d-flex justify-content-end gap-2">
-                                    <a class="btn btn-sm btn-warning" onclick="editarVacina(<?= $v['id'] ?>)">
-                                        <i class="fas fa-edit"></i> Editar
-                                    </a>
-                                    <a href="<?= base_url('vacinas/delete/' . $v['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Remover vacina?')">
-                                        <i class="fas fa-trash"></i> Excluir
-                                    </a>
-                                </div>
+                    <!-- Foto do Pet -->
+                    <div class="col-md-4 text-center mb-3">
+                        <?php if ($pet['foto']): ?>
+                            <img src="<?= base_url('public/uploads/pets/' . $pet['foto']) ?>"
+                                alt="Foto do pet"
+                                class="img-thumbnail rounded shadow"
+                                style="max-height: 250px; object-fit: cover;">
+                        <?php else: ?>
+                            <div class="border rounded p-4 bg-light text-muted">
+                                <i class="fas fa-paw fa-5x"></i><br>
+                                Sem foto
                             </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php else: ?>
-                <div class="alert alert-info">Nenhuma vacina cadastrada para este pet.</div>
-            <?php endif; ?>
-
-        </div>
-    </div>
-</div>
-
-<!-- Prescrições -->
-<div class="card shadow rounded-2xl mt-4">
-    <div class="card-header">
-        <button class="btn btn-link w-100 text-start d-flex justify-content-between align-items-center"
-            type="button" data-bs-toggle="collapse" data-bs-target="#prescricoes" aria-expanded="true">
-            <h3 class="card-title mb-0"><i class="fas fa-file-medical"></i>&nbsp;Prescrições</h3>
-            <i class="fas fa-chevron-down"></i>
-        </button>
-    </div>
-    <div id="prescricoes" class="collapse show">
-        <div class="card-body">
-            <!-- conteúdo prescrições -->
-            <?php if (!empty($prescricoes)): ?>
-                <?php foreach ($prescricoes as $p): ?>
-                    <div class="card mb-4 border border-secondary shadow-sm">
-                        <div class="card-body">
-
-
-                            <p class="text-muted mb-2">
-                                <strong>Data:</strong> <?= date('d/m/Y', strtotime($p['data_prescricao'])) ?>
-                                <br>
-                                <strong>Médico Responsável:</strong> <?= esc($p['veterinario_nome']) ?>
-                                <br>
-                                <strong>Tipo de Receita:</strong> <?= esc($p['tipo_prescricao']) ?>
-                            </p>
-
-                            <div class="row">
-                                <?php foreach ($p['medicamentos'] as $item): ?>
-                                    <div class="col-md-6">
-                                        <div class="card bg-light border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="card-subtitle mb-2 text-primary">
-                                                    <i class="fas fa-pills"></i> <?= esc($item['nome_medicamento']) ?>
-                                                </h6>
-                                                <p class="mb-1"><strong>Posologia:</strong> <?= esc($item['posologia']) ?></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-
-                            <div class="card-footer d-flex justify-content-end gap-2">
-                                <a href="<?= base_url('prescricoes/imprimir/' . $p['id']) ?>"
-                                    class="btn btn-primary btn-sm" target="_blank">
-                                    <i class="fas fa-print"></i> Imprimir
-                                </a>
-                                <button class="btn btn-sm btn-warning" onclick="editarPrescricao(<?= $p['id'] ?>)">
-                                    <i class="fas fa-edit"></i>Editar</button>
-                                <button class="btn btn-sm btn-danger" onclick="excluirPrescricao(<?= $p['id'] ?>)">
-                                    <i class="fas fa-trash"></i>Excluir</button>
-
-                            </div>
-
-                        </div>
+                        <?php endif; ?>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="alert alert-info">
-                    Nenhuma prescrição cadastrada para este pet.
-                </div>
-            <?php endif; ?>
-        </div>
-    </div>
-</div>
 
-<!-- Exames -->
-<div class="card shadow rounded-2xl mt-4">
-    <div class="card-header">
-        <button class="btn btn-link w-100 text-start d-flex justify-content-between align-items-center"
-            type="button" data-bs-toggle="collapse" data-bs-target="#exames" aria-expanded="true">
-            <h3 class="card-title mb-0"><i class="fas fa-vials"></i>&nbsp;Exames</h3>
-            <i class="fas fa-chevron-down"></i>
-        </button>
-    </div>
-    <div id="exames" class="collapse show">
-        <div class="card-body">
-            <!-- conteúdo exames -->
-            <?php if (!empty($exames)): ?>
-                <?php foreach ($exames as $e): ?>
-                    <div class="card mb-4 border border-secondary shadow-sm">
-                        <div class="card-body">
-
-                            <p class="text-muted mb-2">
-                                <strong>Data da Solicitação:</strong> <?= date('d/m/Y', strtotime($e['data_solicitacao'])) ?><br>
-                                <strong>Médico Responsável:</strong> <?= esc($e['veterinario_nome']) ?><br>
-                                <strong>Observações:</strong> <?= esc($e['observacoes']) ?>
-                            </p>
-
-                            <!-- Itens de exames -->
-                            <div class="row">
-                                <?php if (!empty($e['itens'])): ?>
-                                    <?php foreach ($e['itens'] as $item): ?>
-                                        <div class="col-md-6">
-                                            <div class="card bg-light border-0 shadow-sm mb-3">
-                                                <div class="card-body">
-                                                    <h6 class="card-subtitle mb-2 text-primary">
-                                                        <i class="fas fa-vial"></i> <?= esc($item['nome_exame']) ?>
-                                                    </h6>
-                                                    <?php if (!empty($item['observacoes'])): ?>
-                                                        <p class="mb-1"><strong>Obs.:</strong> <?= esc($item['observacoes']) ?></p>
-                                                    <?php endif; ?>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <div class="col-12">
-                                        <span class="badge bg-warning">Nenhum exame detalhado informado.</span>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-
-                            <!-- Motivos -->
-                            <?php if (!empty($e['motivos'])): ?>
-                                <h6 class="mt-3"><i class="fas fa-notes-medical"></i> Motivos / Suspeitas</h6>
-                                <ul>
-                                    <?php foreach ($e['motivos'] as $motivo): ?>
-                                        <li><?= esc($motivo['motivo_suspeita']) ?></li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            <?php endif; ?>
-
-                            <!-- Botões -->
-                            <div class="card-footer d-flex justify-content-end gap-2">
-                                <a href="<?= base_url('exames/imprimir/' . $e['id']) ?>"
-                                    class="btn btn-primary btn-sm" target="_blank">
-                                    <i class="fas fa-print"></i> Imprimir
-                                </a>
-                                <button class="btn btn-sm btn-warning" onclick="editarExame(<?= $e['id'] ?>)">
-                                    <i class="fas fa-edit"></i> Editar
-                                </button>
-                                <button class="btn btn-sm btn-danger" onclick="excluirExame(<?= $e['id'] ?>)">
-                                    <i class="fas fa-trash"></i> Excluir
-                                </button>
-                            </div>
-
-                        </div>
+                    <!-- Informações -->
+                    <div class="col-md-8">
+                        <p><strong>Está Vivo:</strong>
+                            <?= $pet['esta_vivo'] === 'sim' ? '<span class="badge bg-success">Sim</span>' : '<span class="badge bg-danger">Não</span>' ?>
+                        </p>
+                        <p><strong>Espécie:</strong> <?= esc($pet['especie']) ?></p>
+                        <p><strong>Raça:</strong> <?= esc($pet['raca']) ?></p>
+                        <p><strong>Sexo:</strong> <?= esc($pet['sexo']) ?></p>
+                        <p><strong>Data de Nascimento:</strong> <?= esc(date('d/m/Y', strtotime($pet['data_nascimento']))) ?></p>
+                        <p><strong>Idade:</strong> <span id="idade_pet"></span></p>
+                        <p><strong>Tutor:</strong> <?= esc($pet['nome_tutor']) ?> - <?= esc($pet['telefone']) ?></p>
+                        <p><strong>Observações:</strong> <?= esc($pet['observacoes']) ?></p>
+                        <p><strong>Castrado:</strong> <?= ucfirst($pet['castrado']) ?></p>
+                        <p><strong>Peso:</strong> <?= $pesoRecente ? number_format($pesoRecente['peso_kg'], 3, ',', '.') . ' kg (último informado)' : 'Não informado' ?></p>
+                        <p><strong>Pelagem:</strong> <?= $pet['pelagem'] ?: 'Não informada' ?></p>
+                        <p><strong>Número de Identificação:</strong> <?= $pet['numero_identificacao'] ?: 'Não informado' ?></p>
+                        <p><strong>Alergias:</strong> <?= $pet['alergias'] ?: 'Nenhuma' ?></p>
                     </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="alert alert-info">
-                    Nenhuma solicitação de exame cadastrada para este pet.
                 </div>
-            <?php endif; ?>
+            </div>
+
+            <!-- Aba Pesos -->
+            <div class="tab-pane fade" id="pesos" role="tabpanel" aria-labelledby="peso-tab">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>Acompanhamento de Peso</h5>
+                    <button class="btn btn-primary btn-sm" id="btnNovoPeso" data-pet-id="<?= esc($pet['id']) ?>">
+                        <i class="fas fa-plus"></i> Novo Registro
+                    </button>
+                </div>
+                <?= view('pets/_pesos') ?>
+            </div>
+
+            <!-- Aba Histórico -->
+            <div class="tab-pane fade" id="historico" role="tabpanel">
+                <button class="btn btn-primary mb-3" id="btnAdicionarAtendimento" data-pet="<?= $pet['id'] ?>">
+                    <i class="fas fa-plus"></i> Atendimento
+                </button>
+                <?= view('pets/_historico', ['historico' => $historico]) ?>
+            </div>
+
+            <!-- Aba Vacinas -->
+            <div class="tab-pane fade" id="vacinas" role="tabpanel">
+                <?= view('pets/_vacinas', ['vacinas' => $vacinas]) ?>
+            </div>
+
+            <!-- Aba Prescrições -->
+            <div class="tab-pane fade" id="prescricoes" role="tabpanel">
+                <button class="btn btn-primary mb-3" id="btnAdicionarPrescricao" data-pet="<?= $pet['id'] ?>">
+                    <i class="fas fa-plus"></i> Prescrição
+                </button>
+                <?= view('pets/_prescricoes', ['prescricoes' => $prescricoes]) ?>
+            </div>
+
+            <!-- Aba Exames -->
+            <div class="tab-pane fade" id="exames" role="tabpanel">
+                <button class="btn btn-primary mb-3" id="btnAdicionarExame" data-pet="<?= $pet['id'] ?>">
+                    <i class="fas fa-plus"></i> Exame
+                </button>
+                <?= view('pets/_exames', ['exames' => $exames]) ?>
+            </div>
+
+            <!-- Aba Medicamentos -->
+            <div class="tab-pane fade" id="medicamentos" role="tabpanel">
+                <button class="btn btn-primary mb-3" id="btnAdicionarMedicamento" data-pet="<?= $pet['id'] ?>">
+                    <i class="fas fa-plus"></i> Medicamento
+                </button>
+                <?= view('pets/_medicamentos', ['medicamentos' => $medicamentos]) ?>
+            </div>
+
+            <!-- Aba Cirurgias -->
+            <div class="tab-pane fade" id="cirurgias" role="tabpanel">
+                <button class="btn btn-primary mb-3" id="btnAdicionarMedicamento" data-pet="<?= $pet['id'] ?>">
+                    <i class="fas fa-plus"></i> Cirurgia
+                </button>
+                <?= view('pets/_medicamentos', ['medicamentos' => $medicamentos]) ?>
+            </div>
+
+            <!-- Aba Agendamentos -->
+            <div class="tab-pane fade" id="agendamentos" role="tabpanel">
+                <button class="btn btn-primary mb-3" id="btnAdicionarMedicamento" data-pet="<?= $pet['id'] ?>">
+                    <i class="fas fa-plus"></i> Agendamento
+                </button>
+                <?= view('pets/_agendamentos', ['agendamentos' => $agendamentos]) ?>
+            </div>
+
         </div>
     </div>
 </div>
@@ -354,118 +207,10 @@
 
 <script>
     $(document).ready(function() {
-        $('#btnAdicionarAtendimento').on('click', function() {
-            const petId = $(this).data('pet');
-            $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-            $('#modalFormulario').modal('show');
-            $.get("<?= base_url('historico_medico/create') ?>/" + petId, function(data) {
-                $('#modalContent').html(data);
-            });
-        });
+        
 
-        $('#btnAdicionarVacina').on('click', function() {
-            const petId = $(this).data('pet');
-            $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-            $('#modalFormulario').modal('show');
-            $.get("<?= base_url('vacinas/nova') ?>/" + petId, function(data) {
-                $('#modalContent').html(data);
-            });
-        });
-
-        $('#btnAdicionarPrescricao').on('click', function() {
-            const petId = $(this).data('pet');
-            $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-            $('#modalFormulario').modal('show');
-            $.get("<?= base_url('prescricoes/create') ?>/" + petId, function(data) {
-                $('#modalContent').html(data);
-            });
-        });
-
-        $('#btnAdicionarExame').on('click', function() {
-            const petId = $(this).data('pet');
-            $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-            $('#modalFormulario').modal('show');
-            $.get("<?= base_url('exames/create') ?>/" + petId, function(data) {
-                $('#modalContent').html(data);
-            });
-        });
+        
     });
-</script>
-
-<script>
-    function editarVacina(id) {
-        $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-        $('#modalFormulario').modal('show');
-        $.get("<?= base_url('vacinas/editar') ?>/" + id, function(data) {
-            $('#modalContent').html(data);
-        });
-    }
-</script>
-
-<script>
-    function editarAtendimento(id) {
-        $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-        $('#modalFormulario').modal('show');
-        $.get("<?= base_url('historico_medico/edit') ?>/" + id, function(data) {
-            $('#modalContent').html(data);
-        });
-    }
-</script>
-
-<script>
-    function editarExame(id) {
-        $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-        $('#modalFormulario').modal('show');
-        $.get("<?= base_url('exames/edit') ?>/" + id, function(data) {
-            $('#modalContent').html(data);
-        });
-    }
-</script>
-
-<script>
-    function editarPrescricao(id) {
-        $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-        $('#modalFormulario').modal('show');
-        $.get("<?= base_url('prescricoes/edit') ?>/" + id, function(data) {
-            $('#modalContent').html(data);
-        });
-    }
-
-    function excluirPrescricao(id) {
-        if (confirm('Tem certeza que deseja excluir esta prescrição?')) {
-            $.get(`/prescricoes/delete/${id}`, {
-                _method: 'GET'
-            }, function() {
-                location.reload();
-            });
-        }
-    }
-
-    function excluirExame(id) {
-        if (confirm('Tem certeza que deseja excluir este exame?')) {
-            $.get(`/exames/delete/${id}`, {
-                _method: 'GET'
-            }, function() {
-                location.reload();
-            });
-        }
-    }
-
-    function VisualizarImpressao(id) {
-
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
-        if (!isMobile) {
-            document.getElementById("previewContent").innerHTML =
-                `<iframe src="<?= site_url('prescricoes/imprimir/') ?>${id}" style="width:100%; height:70vh; border:none;"></iframe>`;
-        } else {
-            document.getElementById("previewContent").innerHTML =
-                `<iframe src="<?= site_url('prescricoes/imprimir/') ?>${id}" style="width:100%; height:70vh; border:none;"></iframe>`;
-        }
-        var modal = new bootstrap.Modal(document.getElementById('previewModal'));
-        modal.show();
-
-    }
 </script>
 
 <script>
@@ -506,5 +251,86 @@
     });
 </script>
 
+<style>
+    .nav-tabs-wrapper {
+        position: relative;
+    }
+
+    .nav-tabs .nav-item {
+        flex: 0 0 auto;
+    }
+
+    /* Botões de scroll */
+    .scroll-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        background-color: rgba(255, 255, 255, 0.8);
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 0.25rem 0.75rem;
+        border-radius: 50%;
+    }
+
+    .scroll-left {
+        left: 0;
+    }
+
+    .scroll-right {
+        right: 0;
+    }
+
+    .nav-tabs-container {
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        scroll-behavior: smooth;
+
+        /* esconder a barra de scroll */
+        -ms-overflow-style: none;
+        /* IE e Edge */
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .nav-tabs-container::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari e Opera */
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.querySelector('.nav-tabs-container');
+        const btnLeft = document.querySelector('.scroll-left');
+        const btnRight = document.querySelector('.scroll-right');
+
+        function updateButtons() {
+            btnLeft.classList.toggle('d-none', container.scrollLeft === 0);
+            btnRight.classList.toggle('d-none', container.scrollWidth === container.clientWidth + container.scrollLeft);
+        }
+
+        btnLeft.addEventListener('click', () => {
+            container.scrollBy({
+                left: -150,
+                behavior: 'smooth'
+            });
+        });
+
+        btnRight.addEventListener('click', () => {
+            container.scrollBy({
+                left: 150,
+                behavior: 'smooth'
+            });
+        });
+
+        container.addEventListener('scroll', updateButtons);
+        window.addEventListener('resize', updateButtons);
+
+        updateButtons(); // inicializa
+    });
+</script>
 
 <?= $this->endSection() ?>

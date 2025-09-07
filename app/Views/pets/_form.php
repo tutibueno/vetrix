@@ -62,18 +62,6 @@ $pet = $pet ?? [];
             </select>
         </div>
 
-        <!-- Peso -->
-        <div class="form-group">
-            <label>Peso (Kg)</label>
-            <input type="number"
-                step="0.001"
-                inputmode="decimal"
-                name="peso"
-                id="peso"
-                class="form-control"
-                value="<?= old('peso', $pet['peso'] ?? '') ?>">
-        </div>
-
         <!-- Castrado -->
         <div class="form-group">
             <label for="castrado">Castrado</label>

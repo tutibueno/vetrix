@@ -22,16 +22,16 @@
 
         <div class="tab-content mt-3" id="banhoTosaTabContent">
             <!-- FullCalendar Tab -->
-            <div class="card shadow rounded-2xl">
-                <div class="tab-pane fade show active" id="calendario" role="tabpanel">
-                    <div id="fullCalendar"></div>
-                </div>
+            <div class="tab-pane fade show active" id="calendario" role="tabpanel">
+                <div id="fullCalendar"></div>
             </div>
+
             <!-- Lista Tab -->
             <div class="tab-pane fade" id="lista" role="tabpanel">
                 <div id="banhoTosaCards" class="row"></div>
             </div>
         </div>
+
     </div>
 </div>
 
