@@ -3,7 +3,7 @@
 
 <div class="container-fluid">
     <h1 class="mt-4">Novo Cliente</h1>
-    <form action="<?= site_url('client/store') ?>" method="post">
+    <form action="<?= site_url('client/store') ?>" method="post" autocomplete="off">
         <?= csrf_field() ?>
 
         <?= view('clients/_form') ?>

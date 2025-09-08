@@ -3,7 +3,7 @@
         <h3 class="card-title"><?= $title ?? '' ?></h3>
     </div>
 
-    <form action="<?= $action ?>" method="post" id="userForm">
+    <form autocomplete="off" action="<?= $action ?>" method="post" id="userForm">
         <?= csrf_field() ?>
         <div class="card-body">
 
@@ -17,7 +17,7 @@
             <div class="form-group">
                 <label>Nome</label>
                 <input type="text" name="name" class="form-control"
-                    value="<?= old('nome', $user['nome'] ?? '') ?>" required>
+                    value="<?= old('name', $user['name'] ?? '') ?>" required>
             </div>
 
             <div class="form-group">

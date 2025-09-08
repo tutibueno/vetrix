@@ -58,6 +58,11 @@ class Pet extends BaseController
         if($foto != '')
             $post['foto'] = $foto;
 
+        // Se a data nascimento vazia, transforma em NULL
+        if (empty(trim($post['data_nascimento'] ?? ''))) {
+            $post['data_nascimento'] = null;
+        }
+
         $this->petModel->insert($post);
         return redirect()->to('/pet')->with('success', 'Pet cadastrado com sucesso!');
     }
@@ -86,6 +91,11 @@ class Pet extends BaseController
         $foto = $this->processaFoto();
         if ($foto != '')
             $post['foto'] = $foto;
+
+        // Se a data nascimento vazia, transforma em NULL
+        if (empty(trim($post['data_nascimento'] ?? ''))) {
+            $post['data_nascimento'] = null;
+        }
 
         $this->petModel->update($id, $post);
         return redirect()->to('/pet')->with('success', 'Pet atualizado com sucesso!');

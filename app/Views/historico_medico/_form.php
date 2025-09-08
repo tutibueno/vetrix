@@ -1,4 +1,4 @@
-<form action="<?= esc($action) ?>" method="post">
+<form action="<?= esc($action) ?>" method="post" autocomplete="off">
     <?= csrf_field() ?>
 
     <!-- Cabeçalho com título -->
