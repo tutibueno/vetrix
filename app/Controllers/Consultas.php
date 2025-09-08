@@ -86,10 +86,12 @@ class Consultas extends BaseController
     {
         $consultas = $this->consultaModel->getWithRelations();
 
-
         $events = [];
 
         foreach ($consultas as $c) {
+            $c['data_consulta_fim'] = date('Y-m-d H:i:s', strtotime($c['data_consulta'] . ' +30 minutes'));
+            $c['cor_status'] = $this->getStatusColor($c['status']);
+            
             $status = strtolower($c['status'] ?? '');
 
             $map = [
@@ -101,28 +103,74 @@ class Consultas extends BaseController
 
             $events[] = [
                 'id'              => $c['id'],
-                'title'           => $c['pet_nome'] . ' - ' . $c['vet_nome'],
+                'title'           => ($c['flag_retorno'] == 'S' ? ' (R) ' : '') . $c['pet_nome'] . ' - ' . $c['vet_nome'],
                 'start'           => date('c', strtotime($c['data_consulta'])),
+                'end'             => date('c', strtotime($c['data_consulta_fim'])),
                 'allDay'          => false, // força a mostrar a hora
-                'url'             => site_url('consultas/edit/' . $c['id']),
-                'backgroundColor' => $cfg['bg'],
+                //'url'             => site_url('consultas/edit/' . $c['id']),
+                'backgroundColor' => $c['cor_status'],
+                'color'           => $c['cor_status'],
                 'borderColor'     => $cfg['border'],
                 'textColor'       => $cfg['text'],
                 'classNames'      => [$cfg['class']],
+                'extendedProps'   => ['status' => ucfirst($c['status']),
+                                        'pet' => $c['pet_nome'],
+                                        'vet' => $c['vet_nome'],
+                                        'retorno' => $c['flag_retorno']
+                                    ]
             ];
         }
 
         return $this->response->setJSON($events);
     }
 
+    public function eventos()
+    {
+
+        $consultas = $this->consultaModel
+            ->select("consultas.id, consultas.data_consulta, pets.nome AS pet_nome, veterinarios.nome AS vet_nome")
+            ->join("pets", "pets.id = consultas.pet_id", "left")
+            ->join("veterinarios", "veterinarios.id = consultas.veterinario_id", "left")
+            ->findAll();
+
+        $eventos = [];
+        foreach ($consultas as $c) {
+            $eventos[] = [
+                'id'    => $c['id'],
+                'title' => $c['pet_nome'] . ' - ' . $c['vet_nome'],
+                'start' => $c['data_consulta'],
+            ];
+        }
+
+        return $this->response->setJSON($eventos);
+    }
+
     // Helper dentro do controller ou método privado
     private function getStatusColor(string $status): string
     {
         return match (strtolower($status)) {
-            'agendada'  => '#007bff', // azul
+            'agendada'   => '#ffc30b', //amarelo
+            'confirmada'  => '#007bff', // azul
             'realizada' => '#28a745', // verde
             'cancelada' => '#dc3545', // vermelho
             default     => '#6c757d', // cinza fallback
         };
+    }
+
+    public function detalhes($id)
+    {
+        $model = new \App\Models\BanhoTosaModel();
+
+        $agendamento = $model
+            ->select("banho_tosa.*, pets.nome AS pet_nome, clients.nome AS tutor_nome, clients.telefone AS tutor_telefone")
+            ->join("pets", "pets.id = banho_tosa.pet_id", "left")
+            ->join("clients", "clients.id = banho_tosa.cliente_id", "left")
+            ->find($id);
+
+        if (!$agendamento) {
+            return $this->response->setStatusCode(404)->setBody('Agendamento não encontrado');
+        }
+
+        return view('banho_tosa/modal_detalhes', ['agendamento' => $agendamento]);
     }
 }

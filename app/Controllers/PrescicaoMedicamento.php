@@ -32,7 +32,6 @@ class PrescricaoMedicamento extends Controller
                 $this->medicamentoModel->insert([
                     'prescricao_id'    => $prescricao_id,
                     'nome_medicamento' => $med['nome_medicamento'] ?? '',
-                    'tipo_receita'     => $med['tipo_receita'] ?? '',
                     'tipo_farmacia'    => $med['tipo_farmacia'] ?? '',
                     'via'              => $med['via'] ?? '',
                     'posologia'        => $med['posologia'] ?? '',

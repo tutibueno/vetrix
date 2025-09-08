@@ -19,6 +19,28 @@
                 value="<?= old('data_consulta', $prescricao['data_consulta'] ?? date('Y-m-d')) ?>" required>
         </div>
 
+        <div class="form-group d-flex align-items-center">
+            <label class="me-3 mb-0">Retorno:&nbsp;&nbsp;</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input"
+                    type="radio"
+                    name="flag_retorno"
+                    id="retornoSim"
+                    value="S"
+                    <?= old('flag_retorno', $historico['flag_retorno'] ?? 'N') === 'S' ? 'checked' : '' ?>>
+                <label class="form-check-label" for="retornoSim">Sim</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input"
+                    type="radio"
+                    name="flag_retorno"
+                    id="retornoNao"
+                    value="N"
+                    <?= old('flag_retorno', $historico['flag_retorno'] ?? 'N') === 'N' ? 'checked' : '' ?>>
+                <label class="form-check-label" for="retornoNao">Não</label>
+            </div>
+        </div>
+
         <div class="form-group">
             <label for="veterinario_id">Veterinário Responsável</label>
             <select name="veterinario_id" id="veterinario_id" class="form-control" required>
@@ -121,5 +143,30 @@
     textarea {
         min-height: 200px;
         /* Adjust as needed */
+    }
+    
+    /* Radio maior para mobile */
+    .custom-radio-lg {
+        width: 1.5em;
+        height: 1.5em;
+        transform: scale(1.3);
+        /* aumenta o círculo */
+    }
+
+    /* Aumenta a área de clique */
+    .form-check-label {
+        font-size: 1.1em;
+        cursor: pointer;
+        margin-left: 0.3rem;
+    }
+
+    @media (max-width: 576px) {
+        .custom-radio-lg {
+            transform: scale(1.5);
+        }
+
+        .form-check-label {
+            font-size: 1.2em;
+        }
     }
 </style>

@@ -5,7 +5,6 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/home', 'Home::index');
 
 $routes->get('/', 'Dashboard::index', ['filter' => 'auth']);
 
@@ -86,9 +85,6 @@ $routes->group('veterinarios', ['filter' => 'auth'], function ($routes) {
     $routes->get('delete/(:num)', 'Veterinarios::delete/$1');
 });
 
-//$routes->get('prescricoes/(:num)/medicamentos/create', 'PrescricaoMedicamentoController::create/$1');
-//$routes->post('prescricoes/(:num)/medicamentos/store', 'PrescricaoMedicamentoController::store/$1');
-
 // Rotas para Prescricoes CRUD
 $routes->group('prescricoes', ['filter' => 'auth'], function ($routes) {
     $routes->get('', 'Prescricoes::index');                // Listagem de prescrições
@@ -135,12 +131,12 @@ $routes->group('clinica', ['filter' => 'auth'], function ($routes) {
 // Rotas de Consultas
 $routes->group('consultas', ['filter' => 'auth'], function ($routes) {
 
-
     $routes->get('/', 'Consultas::index');
 
     // Agenda visual
     $routes->get('agenda', 'Consultas::agenda');           // Exibe o calendário
     $routes->get('agendaJson', 'Consultas::agendaJson');   // Retorna consultas em JSON para o FullCalendar
+    $routes->get('eventos', 'Consultas::eventos');
 
     // CRUD de consultas
     $routes->get('create', 'Consultas::create'); // Criar nova consulta
@@ -151,4 +147,40 @@ $routes->group('consultas', ['filter' => 'auth'], function ($routes) {
 
     // Consultas de um pet específico (para modal na ficha do pet)
     $routes->get('pet/(:num)', 'Consultas::consultasDoPet/$1'); // $1 = pet_id
+});
+
+// Banho & Tosa
+$routes->group('banhotosa', ['filter' => 'auth'], function ($routes) {
+    $routes->get('', 'BanhoTosa::index');
+    $routes->get('create', 'BanhoTosa::create');
+    $routes->post('store', 'BanhoTosa::store');
+    $routes->get('edit/(:num)', 'BanhoTosa::edit/$1');
+    $routes->get('delete/(:num)', 'BanhoTosa::delete/$1');
+    $routes->get('listar-json', 'BanhoTosa::listarJson');
+});
+
+//Serviços
+$routes->group('servicos', ['filter' => 'userPermission:manage'], function ($routes) {
+    $routes->get('/', 'Servicos::index');
+    $routes->get('create', 'Servicos::create');
+    $routes->post('store', 'Servicos::store');
+    $routes->get('edit/(:num)', 'Servicos::edit/$1');
+    $routes->get('delete/(:num)', 'Servicos::delete/$1');
+});
+
+$routes->group('pesos', ['filter' => 'auth'], function ($routes) {
+    $routes->get('create/(:num)', 'PesoController::create/$1');
+    $routes->post('store', 'PesoController::store');
+    $routes->get('edit/(:num)', 'PesoController::edit/$1');
+    $routes->post('update/(:num)', 'PesoController::update/$1');
+    $routes->get('delete/(:num)', 'PesoController::delete/$1');
+    $routes->get('list/(:num)', 'PesoController::listByPet/$1');
+});
+
+$routes->group('medicamentos', ['filter' => 'auth'], function ($routes) {
+    $routes->get('search', 'Medicamentos::search');
+    $routes->get('/', 'Medicamentos::index');
+    $routes->get('downloadCsv', 'Medicamentos::downloadCsv');
+    $routes->post('uploadCsv', 'Medicamentos::uploadCsv');
+
 });

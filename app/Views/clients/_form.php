@@ -12,25 +12,25 @@ $client = $client ?? [];
         </div>
 
         <div class="form-group">
-            <label>CPF / CNPJ</label>
+            <label>CPF / CNPJ<small> (opcional)</small></label>
             <input type="text" name="cpf_cnpj" value="<?= old('cpf_cnpj', $client['cpf_cnpj'] ?? '') ?>" class="form-control <?= isset($errors['cpf_cnpj']) ? 'is-invalid' : '' ?>">
             <div class="invalid-feedback"><?= $errors['cpf_cnpj'] ?? '' ?></div>
         </div>
 
         <div class="form-group">
-            <label>Telefone</label>
+            <label>Telefone<small> (opcional)</small></label>
             <input type="text" name="telefone" value="<?= old('telefone', $client['telefone'] ?? '') ?>" class="form-control <?= isset($errors['telefone']) ? 'is-invalid' : '' ?>">
             <div class="invalid-feedback"><?= $errors['telefone'] ?? '' ?></div>
         </div>
 
         <div class="form-group">
-            <label>Email</label>
+            <label>Email<small> (opcional)</small></label>
             <input type="email" name="email" value="<?= old('email', $client['email'] ?? '') ?>" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>">
             <div class="invalid-feedback"><?= $errors['email'] ?? '' ?></div>
         </div>
 
         <div class="form-group">
-            <label>Data de Nascimento</label>
+            <label>Data de Nascimento<small> (opcional)</small></label>
             <input type="date" name="data_nascimento" value="<?= old('data_nascimento', $client['data_nascimento'] ?? '') ?>" class="form-control <?= isset($errors['data_nascimento']) ? 'is-invalid' : '' ?>">
             <div class="invalid-feedback"><?= $errors['data_nascimento'] ?? '' ?></div>
         </div>
@@ -38,37 +38,37 @@ $client = $client ?? [];
 
     <div class="col-md-6">
         <div class="form-group">
-            <label>CEP</label>
+            <label>CEP<small> (opcional)</small></label>
             <input type="text" name="cep" value="<?= old('cep', $client['cep'] ?? '') ?>" class="form-control">
         </div>
 
         <div class="form-group">
-            <label>Rua</label>
+            <label>Rua<small> (opcional)</small></label>
             <input type="text" name="rua" value="<?= old('rua', $client['rua'] ?? '') ?>" class="form-control">
         </div>
 
         <div class="form-group">
-            <label>Número</label>
+            <label>Número<small> (opcional)</small></label>
             <input type="text" name="numero" value="<?= old('numero', $client['numero'] ?? '') ?>" class="form-control">
         </div>
 
         <div class="form-group">
-            <label>Bairro</label>
+            <label>Bairro<small> (opcional)</small></label>
             <input type="text" name="bairro" value="<?= old('bairro', $client['bairro'] ?? '') ?>" class="form-control">
         </div>
 
         <div class="form-group">
-            <label>Cidade</label>
+            <label>Cidade<small> (opcional)</small></label>
             <input type="text" name="cidade" value="<?= old('cidade', $client['cidade'] ?? '') ?>" class="form-control">
         </div>
 
         <div class="form-group">
-            <label>Estado</label>
+            <label>Estado<small> (opcional)</small></label>
             <input type="text" name="estado" maxlength="2" value="<?= old('estado', $client['estado'] ?? '') ?>" class="form-control">
         </div>
 
         <div class="form-group">
-            <label>Observações</label>
+            <label>Observações<small> (opcional)</small></label>
             <textarea name="observacoes" class="form-control" rows="3"><?= old('observacoes', $client['observacoes'] ?? '') ?></textarea>
         </div>
     </div>

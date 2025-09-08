@@ -49,6 +49,11 @@
                         <p><strong>Sexo:</strong> <span id="pet_sexo_card"></span></p>
                         <p><strong>Peso (Kg):</strong> <span id="pet_peso_card"></span></p>
                     </div>
+                    <div class="card-footer text-end">
+                        <a href="#" id="linkFichaPet" class="btn btn-sm btn-primary">
+                            <i class="fas fa-file-alt"></i> Ver ficha do Pet
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -72,6 +77,29 @@
                 value="<?= $consulta ? date('Y-m-d\TH:i', strtotime($consulta['data_consulta'])) : '' ?>" required>
         </div>
 
+        <!-- Flag de Retorno -->
+        <div class="form-group mb-3 d-flex align-items-center">
+            <label class="me-3 mb-0">Retorno:&nbsp;&nbsp;</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input"
+                    type="radio"
+                    name="flag_retorno"
+                    id="retornoSim"
+                    value="S"
+                    <?= old('flag_retorno', $consulta['flag_retorno'] ?? 'N') === 'S' ? 'checked' : '' ?>>
+                <label class="form-check-label" for="retornoSim">Sim</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input"
+                    type="radio"
+                    name="flag_retorno"
+                    id="retornoNao"
+                    value="N"
+                    <?= old('flag_retorno', $consulta['flag_retorno'] ?? 'N') === 'N' ? 'checked' : '' ?>>
+                <label class="form-check-label" for="retornoNao">Não</label>
+            </div>
+        </div>
+
         <div class="form-group mb-3">
             <label for="motivo">Motivo</label>
             <textarea name="motivo" class="form-control"><?= $consulta['motivo'] ?? '' ?></textarea>
@@ -86,20 +114,23 @@
             <label for="status">Status</label>
             <select name="status" class="form-control">
                 <option value="agendada" <?= $consulta && $consulta['status'] == 'agendada' ? 'selected' : '' ?>>Agendada</option>
+                <option value="confirmada" <?= $consulta && $consulta['status'] == 'confirmada' ? 'selected' : '' ?>>Confirmada</option>
                 <option value="realizada" <?= $consulta && $consulta['status'] == 'realizada' ? 'selected' : '' ?>>Realizada</option>
                 <option value="cancelada" <?= $consulta && $consulta['status'] == 'cancelada' ? 'selected' : '' ?>>Cancelada</option>
             </select>
         </div>
 
-        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Fechar">Cancelar</button>
-        <?php if (!empty($consulta['id'])): ?>
-            <a href="<?= site_url('consultas/delete/' . $consulta['id']) ?>"
-                class="btn btn-danger"
-                onclick="return confirm('Deseja realmente excluir esta consulta?');">
-                <i class="fas fa-trash"></i> Excluir
-            </a>
-        <?php endif; ?>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Fechar">Cancelar</button>
+            <?php if (!empty($consulta['id'])): ?>
+                <a href="<?= site_url('consultas/delete/' . $consulta['id']) ?>"
+                    class="btn btn-danger"
+                    onclick="return confirm('Deseja realmente excluir esta consulta?');">
+                    <i class="fas fa-trash"></i> Excluir
+                </a>
+            <?php endif; ?>
+        </div>
     </form>
 </div>
 
@@ -210,6 +241,7 @@
             $('#pet_raca_card').text(data.raca);
             $('#pet_sexo_card').text(data.sexo);
             $('#pet_peso_card').text(data.peso);
+            $('#linkFichaPet').attr('href', '<?= base_url("pet/ficha/") ?>' + data.id);
             $('#card_pet').show();
         } else {
             $('#card_pet').hide();
@@ -264,3 +296,16 @@
         }
     });
 </script>
+
+<style>
+    /* Radios maiores para mobile */
+    .form-check-input {
+        width: 1em;
+        height: 1em;
+    }
+
+    .form-check-label {
+        margin-left: 0.25rem;
+        font-size: 1.1em;
+    }
+</style>

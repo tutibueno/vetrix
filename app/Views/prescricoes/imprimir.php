@@ -168,9 +168,6 @@
         <?= view('prescricoes/animal_tutor_simples') ?>
     <?php endif; ?>
 
-
-
-
     <!-- Medicamentos -->
     <?php foreach ($medicamentosPorVia as $via => $meds): ?>
         <table class="med-table2">
@@ -215,15 +212,6 @@
         <?php endif; ?>
         <button id="btn-imprimir" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
     </div>
-
-
-
-
-
-
-
-
-
 
 </body>
 

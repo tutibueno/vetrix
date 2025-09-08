@@ -9,7 +9,7 @@ class UserModel extends Model
     protected $table = 'users';
     protected $primaryKey = 'id';
 
-    protected $allowedFields = ['name', 'username', 'email', 'password', 'perfil'];
+    protected $allowedFields = ['nome', 'username', 'email', 'password', 'perfil'];
     protected $useTimestamps = true;
 
     // Perfis disponíveis no sistema

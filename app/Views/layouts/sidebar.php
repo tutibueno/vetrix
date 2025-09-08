@@ -27,10 +27,13 @@
 
                 <!-- Adicione mais itens conforme necessário -->
                 <?php if (session()->get('logged_in')): ?>
+
+                    <li class="nav-header">INÍCIO</li>
+
                     <li class="nav-item">
                         <a href="<?= base_url() ?>" class="nav-link <?= uri_string() === '' ? 'active' : '' ?>">
                             <i class="nav-icon fas fa-home"></i>
-                            <p>Início</p>
+                            <p>Painel</p>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -46,51 +49,22 @@
                         </a>
                     </li>
 
-                    <!-- Menu de Consultas -->
+                    <!-- Outros itens do menu -->
+
+                    <li class="nav-header">AGENDAMENTOS</li>
+
                     <li class="nav-item">
-                        <a href="<?= site_url('consultas') ?>" class="nav-link">
-                            <i class="nav-icon fas fa-calendar-check"></i>
+                        <a href="<?= base_url('consultas') ?>" class="nav-link <?= service('uri')->getSegment(1) == 'consultas' ? 'active' : '' ?>">
+                            <i class="fas fa-stethoscope nav-icon"></i>
                             <p>Consultas</p>
                         </a>
                     </li>
-
-                    <!-- Outros itens do menu -->
-
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-cog"></i>
-                            <p>
-                                Configurações
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                    <li class="nav-item">
+                        <a href="<?= base_url('banhotosa') ?>" class="nav-link <?= service('uri')->getSegment(1) == 'banhotosa' ? 'active' : '' ?>">
+                            <i class="fas fa-dog nav-icon"></i>
+                            <p>Banho & Tosa</p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="<?= base_url('clinica') ?>" class="nav-link">
-                                    <i class="fas fa-clinic-medical mr-2"></i>
-                                    <p>Clínica</p>
-                                    <span class="right badge badge-info">Clínica</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?= base_url('users') ?>" class="nav-link">
-                                    <i class="nav-icon fas fa-users"></i>
-                                    <p>Usuários</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?= base_url('veterinarios') ?>" class="nav-link">
-                                    <i class="nav-icon fas fa-user-md"></i>
-                                    <p>
-                                        Veterinários
-                                    </p>
-                                </a>
-                            </li>
-
-                        </ul>
                     </li>
-
-
                 <?php endif; ?>
             </ul>
         </nav>

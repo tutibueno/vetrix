@@ -17,7 +17,7 @@
             <div class="form-group">
                 <label>Nome</label>
                 <input type="text" name="name" class="form-control"
-                    value="<?= old('name', $user['name'] ?? '') ?>" required>
+                    value="<?= old('nome', $user['nome'] ?? '') ?>" required>
             </div>
 
             <div class="form-group">
