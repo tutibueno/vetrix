@@ -170,7 +170,7 @@
                         start: '<?= $c['data_consulta'] ?>',
                         end: '<?= $c['data_consulta_fim'] ?>',
                         color: '<?= $c['cor_status'] ?>',
-                        borderColor: 'white',
+                        borderColor: 'gray',
                         textColor: 'white',
                         extendedProps: {
                             status: '<?= ucfirst($c['status']) ?>',

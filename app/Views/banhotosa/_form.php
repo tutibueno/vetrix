@@ -97,7 +97,7 @@
                 <select name="status" class="form-control <?= isset($errors['status']) ? 'is-invalid' : '' ?>" required>
                     <option value="agendado" <?= (isset($banho['status']) && $banho['status'] == 'agendado') ? 'selected' : '' ?>>Agendado</option>
                     <option value="confirmado" <?= (isset($banho['status']) && $banho['status'] == 'confirmado') ? 'selected' : '' ?>>Confirmado</option>
-                    <option value="em andamento" <?= (isset($banho['status']) && $banho['status'] == 'em andamento') ? 'selected' : '' ?>>Em Andamento</option>
+                    <option value="em_andamento" <?= (isset($banho['status']) && $banho['status'] == 'em_andamento') ? 'selected' : '' ?>>Em Andamento</option>
                     <option value="concluido" <?= (isset($banho['status']) && $banho['status'] == 'concluido') ? 'selected' : '' ?>>Concluído</option>
                     <option value="cancelado" <?= (isset($banho['status']) && $banho['status'] == 'cancelado') ? 'selected' : '' ?>>Cancelado</option>
                 </select>
@@ -113,10 +113,10 @@
         </div>
 
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary"><?= isset($banho) ? 'Atualizar' : 'Salvar' ?></button>
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i><?= isset($banho) ? ' Atualizar' : ' Salvar' ?></button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <?php if (!empty($banho['id'])): ?>
-                <button class="btn btn-sm btn-danger btnExcluir" data-id=<?= $banho['id'] ?>>
+                <button class="btn btn-danger btnExcluir" data-id=<?= $banho['id'] ?>>
                     <i class="fas fa-trash"></i> Excluir
                 </button>
             <?php endif; ?>

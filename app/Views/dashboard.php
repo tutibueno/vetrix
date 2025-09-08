@@ -434,9 +434,12 @@
                         let duracaoMinutos = Math.round((new Date(b.data_hora_fim) - new Date(b.data_hora_inicio)) / 60000);
 
                         // Definir cores conforme o status
-                        let corFundo = '#3788d8'; // azul padrão
+                        let corFundo = '#3788d8'; // azul
                         let corBorda = '#276ba0';
-                        if (b.status === 'cancelado') {
+                        if (b.status === 'agendado') {
+                            corFundo = '#ffc30b'; // amarelo
+                            corBorda = '#DEAA0D';
+                        } else if (b.status === 'cancelado') {
                             corFundo = '#f44336'; // vermelho
                             corBorda = '#d32f2f';
                         } else if (b.status === 'concluido') {

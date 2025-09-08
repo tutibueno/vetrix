@@ -120,15 +120,17 @@
             </select>
         </div>
 
-        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Fechar">Cancelar</button>
-        <?php if (!empty($consulta['id'])): ?>
-            <a href="<?= site_url('consultas/delete/' . $consulta['id']) ?>"
-                class="btn btn-danger"
-                onclick="return confirm('Deseja realmente excluir esta consulta?');">
-                <i class="fas fa-trash"></i> Excluir
-            </a>
-        <?php endif; ?>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Fechar">Cancelar</button>
+            <?php if (!empty($consulta['id'])): ?>
+                <a href="<?= site_url('consultas/delete/' . $consulta['id']) ?>"
+                    class="btn btn-danger"
+                    onclick="return confirm('Deseja realmente excluir esta consulta?');">
+                    <i class="fas fa-trash"></i> Excluir
+                </a>
+            <?php endif; ?>
+        </div>
     </form>
 </div>
 

@@ -149,7 +149,8 @@ class Consultas extends BaseController
     private function getStatusColor(string $status): string
     {
         return match (strtolower($status)) {
-            'agendada'  => '#007bff', // azul
+            'agendada'   => '#ffc30b', //amarelo
+            'confirmada'  => '#007bff', // azul
             'realizada' => '#28a745', // verde
             'cancelada' => '#dc3545', // vermelho
             default     => '#6c757d', // cinza fallback
