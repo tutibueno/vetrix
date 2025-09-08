@@ -43,6 +43,11 @@ class Client extends BaseController
     {
         $data = $this->request->getPost();
 
+        // Se o campo cpf_cnpj vier vazio, transforma em NULL
+        if (empty(trim($data['cpf_cnpj'] ?? ''))) {
+            $data['cpf_cnpj'] = null;
+        }
+
         if (!$this->clientModel->save($data)) {
             return redirect()->back()
                 ->withInput()
@@ -62,6 +67,11 @@ class Client extends BaseController
     {
         $data = $this->request->getPost();
         $data['id'] = $id;
+
+        // Se o campo cpf_cnpj vier vazio, transforma em NULL
+        if (empty(trim($data['cpf_cnpj'] ?? ''))) {
+            $data['cpf_cnpj'] = null;
+        }
 
         if (!$this->clientModel->save($data)) {
             return redirect()->back()
