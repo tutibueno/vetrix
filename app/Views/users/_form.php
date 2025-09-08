@@ -3,26 +3,26 @@
         <h3 class="card-title"><?= $title ?? '' ?></h3>
     </div>
 
-    <form autocomplete="off" action="<?= $action ?>" method="post" id="userForm">
+    <form autocomplete="new-password" action="<?= $action ?>" method="post" id="userForm">
         <?= csrf_field() ?>
         <div class="card-body">
 
             <div class="form-group">
                 <label>Usuário (username)</label>
-                <input type="text" name="username" class="form-control"
+                <input type="text" name="username" class="form-control" autocomplete="new-password"
                     value="<?= old('username', $user['username'] ?? '') ?>"
                     <?= isset($isEdit) && $isEdit ? 'readonly' : 'required' ?>>
             </div>
 
             <div class="form-group">
                 <label>Nome</label>
-                <input type="text" name="name" class="form-control"
+                <input type="text" name="name" class="form-control" autocomplete="new-password"
                     value="<?= old('name', $user['name'] ?? '') ?>" required>
             </div>
 
             <div class="form-group">
                 <label>E-mail</label>
-                <input type="email" name="email" class="form-control"
+                <input type="email" name="email" class="form-control" autocomplete="new-password"
                     value="<?= old('email', $user['email'] ?? '') ?>" required>
             </div>
 
@@ -30,7 +30,7 @@
                 <!-- Admin pode alterar perfil -->
                 <div class="form-group">
                     <label>Perfil</label>
-                    <select name="perfil" class="form-control">
+                    <select name="perfil" class="form-control" autocomplete="new-password">
                         <?php foreach ($perfis as $key => $label): ?>
                             <option value="<?= $key ?>" <?= set_select('perfil', $key, ($user['perfil'] ?? '') === $key) ?>>
                                 <?= $label ?>
@@ -46,12 +46,12 @@
                 <div class="form-group">
                     <label>Nova senha</label>
                     <input type="password" name="password" id="password" class="form-control"
-                        placeholder="Digite a nova senha">
+                        placeholder="Digite a nova senha" autocomplete="new-password">
                 </div>
                 <div class="form-group">
                     <label>Confirmar nova senha</label>
                     <input type="password" name="password_confirm" id="password_confirm" class="form-control"
-                        placeholder="Confirme a nova senha">
+                        placeholder="Confirme a nova senha" autocomplete="new-password">
                     <small id="passwordHelp" class="form-text text-danger" style="display:none;">
                         As senhas não conferem.
                     </small>
@@ -59,11 +59,11 @@
             <?php else: ?>
                 <div class="form-group">
                     <label>Senha</label>
-                    <input type="password" name="password" id="password" class="form-control" required>
+                    <input type="password" name="password" id="password" class="form-control" autocomplete="new-password" required>
                 </div>
                 <div class="form-group">
                     <label>Confirmar senha</label>
-                    <input type="password" name="password_confirm" id="password_confirm" class="form-control" required>
+                    <input type="password" name="password_confirm" id="password_confirm" autocomplete="new-password" class="form-control" required>
                     <small id="passwordHelp" class="form-text text-danger" style="display:none;">
                         As senhas não conferem.
                     </small>

@@ -20,12 +20,14 @@ Link para a versão do sistema funcionando: https://rnbtecnologia.com.br/vetrix
 - Controle de prescrições com impressão das prescrições
 - Controle de solicitação de exames com impressão das solicitaçoes
 - Agendamento de consultas
+- Controle de serviços como banho e tosa.
 - Sistema multi-usuários
 
 Roadmap:
 
-- Controle de serviços como banho e tosa.
-- Controle financeiro
+- Controle financeiro da clínica
+- Prescrição digital com QR Code
+- Sistema de envio de mensagens e marketing para os clientes
 
 
 
