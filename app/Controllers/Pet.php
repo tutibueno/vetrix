@@ -63,8 +63,8 @@ class Pet extends BaseController
             $post['data_nascimento'] = null;
         }
 
-        $this->petModel->insert($post);
-        return redirect()->to('/pet')->with('success', 'Pet cadastrado com sucesso!');
+        $id = $this->petModel->insert($post);
+        return redirect()->to('/pet/ficha/' . $id)->with('success', 'Pet cadastrado com sucesso!');
     }
 
     public function edit($id)
@@ -98,7 +98,7 @@ class Pet extends BaseController
         }
 
         $this->petModel->update($id, $post);
-        return redirect()->to('/pet')->with('success', 'Pet atualizado com sucesso!');
+        return redirect()->to('/pet/ficha/' . $id)->with('success', 'Pet atualizado com sucesso!');
     }
 
     public function delete($id)

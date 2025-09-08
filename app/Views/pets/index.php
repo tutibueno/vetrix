@@ -76,7 +76,7 @@
 </div>
 
 <div class="mt-3">
-  <?= $pager->links() ?>
+  <?= $pager->links('default', 'custom') ?>>
 </div>
 
 <style>

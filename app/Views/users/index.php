@@ -7,7 +7,7 @@
         <i class="fas fa-user-plus"></i> Novo Usuário
     </a>
 
-    <form method="get" class="mb-3">
+    <form method="get" class="mb-3" autocomplete="off">
         <div class="input-group">
             <input type="text" name="q" class="form-control" placeholder="Buscar usuário por nome, email ou username" value="<?= esc($search ?? '') ?>">
             <div class="input-group-append">

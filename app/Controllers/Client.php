@@ -4,33 +4,47 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\ClientModel;
+use App\Models\PetModel;
 
 class Client extends BaseController
 {
     protected $clientModel;
+    protected $petModel;
 
     public function __construct()
     {
         $this->clientModel = new ClientModel();
+        $this->petModel = new PetModel();
     }
 
     public function index()
     {
         $search = $this->request->getGet('q');
-        $model = new ClientModel();
 
-        $query = $model;
-        if ($search) {
-            $query = $query->like('nome', $search)->orLike('cpf_cnpj', $search);
+        $builder = $this->clientModel;
+
+        if (!empty($search)) {
+            $builder = $builder->like('nome', $search)
+                ->orLike('cpf_cnpj', $search);
         }
 
-        $query = $query->orderBy('created_at', 'DESC');
+        // Paginação
+        $clients = $builder->paginate(10);
+        $pager   = $this->clientModel->pager;
 
-        $data['clients'] = $query->paginate(10);
-        $data['pager'] = $query->pager;
-        $data['search'] = $search;
+        // Buscar pets de todos os clientes encontrados
+        foreach ($clients as &$client) {
+            $pets = $this->petModel
+                ->where('cliente_id', $client['id'])
+                ->findAll();
+            $client['pets'] = $pets;
+        }
 
-        return view('clients/index', $data);
+        return view('clients/index', [
+            'clients' => $clients,
+            'pager'   => $pager,
+            'search'  => $search,
+        ]);
     }
 
 
