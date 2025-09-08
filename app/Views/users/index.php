@@ -28,7 +28,7 @@
                 <div class="card shadow-sm position-relative">
                     <div class="card-body">
                         <h5 class="card-title mb-1">
-                            <i class="fas fa-user text-primary"></i> <?= esc($user['name']) ?>
+                            <i class="fas fa-user text-primary"></i> <?= esc($user['nome']) ?>
                         </h5>
                         <p class="card-text mb-1"><strong>Username:</strong> <?= esc($user['username']) ?></p>
                         <p class="card-text mb-1"><strong>Email:</strong> <?= esc($user['email']) ?></p>

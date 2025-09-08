@@ -22,9 +22,9 @@ class Servicos extends Migration
 
         // Inserir alguns serviços padrão
         $this->db->table('servicos')->insertBatch([
-            ['nome' => 'Banho Simples', 'duracao_padrao' => 60, 'preco' => 50.00],
-            ['nome' => 'Banho & Tosa Completa', 'duracao_padrao' => 120, 'preco' => 120.00],
-            ['nome' => 'Tosa Higiênica', 'duracao_padrao' => 90, 'preco' => 80.00],
+            ['nome_servico' => 'Banho Simples', 'duracao_padrao' => 60, 'preco' => 50.00],
+            ['nome_servico' => 'Banho & Tosa Completa', 'duracao_padrao' => 120, 'preco' => 120.00],
+            ['nome_servico' => 'Tosa Higiênica', 'duracao_padrao' => 90, 'preco' => 80.00],
         ]);
     }
 
