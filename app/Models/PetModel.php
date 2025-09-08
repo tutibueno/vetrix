@@ -33,7 +33,7 @@ class PetModel extends Model
         'nome'                   => 'required|min_length[2]',
         'especie'                => 'required',
         'raca'                   => 'permit_empty',
-        'sexo'                   => 'permit_empty|in_list[M,F]',
+        'sexo'                   => 'permit_empty|in_list[M,F,I]',
         'cor'                    => 'permit_empty',
         'data_nascimento'        => 'permit_empty|valid_date',
         'observacoes'            => 'permit_empty',
@@ -41,7 +41,7 @@ class PetModel extends Model
         'esta_vivo'              => 'permit_empty',
         'alergias'               => 'permit_empty',
         'numero_identificacao'   => 'permit_empty',
-        'castrado'               => 'permit_empty',
+        'castrado'               => 'permit_empty|in_list[sim,nao,indefinido]',
         'peso'                   => 'permit_empty',
         'pelagem'                => 'permit_empty',
     ];

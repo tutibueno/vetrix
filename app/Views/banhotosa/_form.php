@@ -5,7 +5,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
 </div>
 <div class="container-fluid">
-    <form id="formBanhoTosa" action="<?= base_url('banhotosa/store') ?>" method="post">
+    <form id="formBanhoTosa" action="<?= base_url('banhotosa/store') ?>" method="post" autocomplete="off">
 
 
         <div class="modal-body">

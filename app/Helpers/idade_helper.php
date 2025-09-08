@@ -3,11 +3,11 @@
 use CodeIgniter\I18n\Time;
 
 if (!function_exists('calcular_idade')) {
-    function calcular_idade(string $dataNascimento, $dataReferencia = null): string
+    function calcular_idade($dataNascimento, $dataReferencia = null): string
     {
 
-        if(!$dataNascimento)
-            return '';
+        if($dataNascimento == null)
+            return '0 anos';
 
         $dataNascimento = new \DateTime($dataNascimento);
         $hoje = new \DateTime();

@@ -3,7 +3,7 @@
 
 <div class="container-fluid">
     <h1 class="mt-4">Editar Cliente</h1>
-    <form action="<?= site_url('client/update/' . $client['id']) ?>" method="post">
+    <form action="<?= site_url('client/update/' . $client['id']) ?>" method="post" autocomplete="off">
         <?= csrf_field() ?>
 
         <?= view('clients/_form', ['client' => $client]) ?>

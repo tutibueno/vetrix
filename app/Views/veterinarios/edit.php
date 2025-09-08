@@ -6,7 +6,7 @@
         <h3 class="card-title">Editar Veterinário</h3>
     </div>
 
-    <form action="<?= base_url('veterinarios/update/' . $veterinario['id']) ?>" method="post">
+    <form action="<?= base_url('veterinarios/update/' . $veterinario['id']) ?>" method="post" autocomplete="off">
         <?= csrf_field() ?>
         <?= $this->include('veterinarios/_form') ?>
 

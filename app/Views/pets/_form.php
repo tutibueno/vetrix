@@ -18,7 +18,7 @@ $pet = $pet ?? [];
     <div class="col-md-6">
         <!-- ===== Tutor ===== -->
         <div class="form-group position-relative">
-            <label>Tutor (Cliente)</label>
+            <label>Tutor</label>
             <input type="hidden" name="cliente_id" id="cliente_id" value="<?= old('cliente_id', $pet['cliente_id'] ?? '') ?>">
             <input type="text" id="cliente_nome" class="form-control <?= isset($errors['cliente_id']) ? 'is-invalid' : '' ?>"
                 placeholder="Digite o nome do tutor" value="<?= old('cliente_nome', $cliente['nome'] ?? '') ?>" autocomplete="off">
@@ -29,13 +29,13 @@ $pet = $pet ?? [];
         <!-- Nome do Pet -->
         <div class="form-group">
             <label>Nome do Pet</label>
-            <input type="text" name="nome" class="form-control <?= isset($errors['nome']) ? 'is-invalid' : '' ?>" value="<?= old('nome', $pet['nome'] ?? '') ?>">
+            <input type="text" autocomplete="off" name="nome" class="form-control <?= isset($errors['nome']) ? 'is-invalid' : '' ?>" value="<?= old('nome', $pet['nome'] ?? '') ?>">
             <div class="invalid-feedback"><?= $errors['nome'] ?? '' ?></div>
         </div>
 
         <div class="form-group">
             <label for="especie">Espécie</label>
-            <select name="especie" id="especie" class="form-control" required>
+            <select name="especie" id="especie" class="form-control" autocomplete="off" required>
                 <option value="">Selecione ou digite...</option>
                 <option value="Canino" <?= old('especie', $pet['especie'] ?? '') === 'Canino' ? 'selected' : '' ?>>Canino</option>
                 <option value="Felino" <?= old('especie', $pet['especie'] ?? '') === 'Felino' ? 'selected' : '' ?>>Felino</option>
@@ -48,37 +48,39 @@ $pet = $pet ?? [];
 
         <!-- Raça -->
         <div class="form-group">
-            <label>Raça</label>
-            <input type="text" name="raca" class="form-control" value="<?= old('raca', $pet['raca'] ?? '') ?>">
+            <label>Raça<small> (opcional)</small></label>
+            <input type="text" name="raca" class="form-control" autocomplete="off" value="<?= old('raca', $pet['raca'] ?? '') ?>">
         </div>
 
         <!-- Sexo -->
         <div class="form-group">
-            <label for="sexo">Sexo</label>
+            <label for="sexo">Sexo </label>
             <select name="sexo" id="sexo" class="form-control" required>
                 <option value="">Selecione ou digite...</option>
                 <option value="M" <?= old('sexo', $pet['sexo'] ?? 'M') === 'M' ? 'selected' : '' ?>>Macho</option>
                 <option value="F" <?= old('sexo', $pet['sexo'] ?? 'F') === 'F' ? 'selected' : '' ?>>Fêmea</option>
+                <option value="I" <?= old('sexo', $pet['sexo'] ?? 'I') === 'I' ? 'selected' : '' ?>>Indefinido</option>
             </select>
         </div>
 
         <!-- Castrado -->
         <div class="form-group">
-            <label for="castrado">Castrado</label>
+            <label for="castrado">Castrado </label>
             <select name="castrado" id="castrado" class="form-control" required>
                 <option value="">Selecione ou digite...</option>
-                <option value="sim" <?= old('castrado', $pet['castrado'] ?? 'nao') === 'sim' ? 'selected' : '' ?>>Sim</option>
+                <option value="sim" <?= old('castrado', $pet['castrado'] ?? 'sim') === 'sim' ? 'selected' : '' ?>>Sim</option>
                 <option value="nao" <?= old('castrado', $pet['castrado'] ?? 'nao') === 'nao' ? 'selected' : '' ?>>Não</option>
+                <option value="indefinido" <?= old('castrado', $pet['castrado'] ?? 'indefinido') === 'indefinido' ? 'selected' : '' ?>>Indefinido</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label>Alergias</label>
+            <label>Alergias <small> (opcional)</small></label>
             <textarea name="alergias" class="form-control"><?= isset($pet['alergias']) ? esc($pet['alergias']) : '' ?></textarea>
         </div>
 
         <div class="form-group">
-            <label>Número de Identificação (Microchip)</label>
+            <label>Número de Identificação (Microchip) <small> (opcional)</small></label>
             <input type="text" name="numero_identificacao" value="<?= isset($pet['numero_identificacao']) ? esc($pet['numero_identificacao']) : '' ?>" class="form-control">
         </div>
     </div>
@@ -87,13 +89,13 @@ $pet = $pet ?? [];
 
 
         <div class="form-group">
-            <label>Pelagem</label>
+            <label>Pelagem<small> (opcional)</small></label>
             <input type="text" name="pelagem" class="form-control" value="<?= old('pelagem', $pet['pelagem'] ?? '') ?>">
         </div>
 
         <!-- Data de Nascimento -->
         <div class="form-group">
-            <label for="data_nascimento">Data de Nascimento</label>
+            <label for="data_nascimento">Data de Nascimento<small> (opcional)</small></label>
             <input type="text" name="data_nascimento" id="data_nascimento" class="form-control"
                 value="<?= old('data_nascimento', isset($pet['data_nascimento']) ? date('d/m/Y', strtotime($pet['data_nascimento'])) : '') ?>"
                 autocomplete="off" placeholder="dd/mm/aaaa">
@@ -116,13 +118,13 @@ $pet = $pet ?? [];
         </div>
 
         <div class="form-group">
-            <label>Observações</label>
+            <label>Observações<small> (opcional)</small></label>
             <textarea name="observacoes" class="form-control"><?= old('observacoes', $pet['observacoes'] ?? '') ?></textarea>
         </div>
 
         <!-- Foto do Pet -->
         <div class="form-group">
-            <label>Foto do Pet</label><br>
+            <label>Foto do Pet<small> (opcional)</small></label><br>
 
             <!-- Botão para galeria -->
             <div class="custom-file mb-2">

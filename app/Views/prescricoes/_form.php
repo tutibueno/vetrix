@@ -4,7 +4,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 </div>
 
-<form action="<?= esc($action) ?>" method="post" id="formPrescricao">
+<form autocomplete="off" action="<?= esc($action) ?>" method="post" id="formPrescricao">
     <?= csrf_field() ?>
 
     <div class="modal-body">

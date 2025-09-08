@@ -6,7 +6,7 @@
         <h3 class="card-title">Cadastrar Veterinário</h3>
     </div>
 
-    <form action="<?= base_url('veterinarios/store') ?>" method="post">
+    <form action="<?= base_url('veterinarios/store') ?>" method="post" autocomplete="off">
         <?= $this->include('veterinarios/_form') ?>
         
         <div class="card-footer">

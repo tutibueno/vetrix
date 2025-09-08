@@ -84,6 +84,10 @@
                                 Sem foto
                             </div>
                         <?php endif; ?>
+                        <br>
+                        <a href="<?= site_url('pet/edit/' . $pet['id']) ?>" class="btn btn-warning" data-bs-toggle="tooltip" title="Editar Pet">
+                            <i class="fas fa-edit"></i> Editar Pet
+                        </a>
                     </div>
 
                     <!-- Informações -->
@@ -94,7 +98,11 @@
                         <p><strong>Espécie:</strong> <?= esc($pet['especie']) ?></p>
                         <p><strong>Raça:</strong> <?= esc($pet['raca']) ?></p>
                         <p><strong>Sexo:</strong> <?= esc($pet['sexo']) ?></p>
-                        <p><strong>Data de Nascimento:</strong> <?= esc(date('d/m/Y', strtotime($pet['data_nascimento']))) ?></p>
+                        <p><strong>Data de Nascimento:</strong> <?php if (empty($pet['data_nascimento'])): ?>
+                                Não Informado
+                            <?php else: ?>
+                                <?= date('d/m/Y', strtotime($pet['data_nascimento'])) ?>
+                            <?php endif; ?></p>
                         <p><strong>Idade:</strong> <span id="idade_pet"></span></p>
                         <p><strong>Tutor:</strong> <?= esc($pet['nome_tutor']) ?> - <?= esc($pet['telefone']) ?></p>
                         <p><strong>Observações:</strong> <?= esc($pet['observacoes']) ?></p>

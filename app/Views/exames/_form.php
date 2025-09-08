@@ -1,4 +1,4 @@
-<form id="formSolicitacaoExame"
+<form id="formSolicitacaoExame" autocomplete="off"
     action="<?= isset($exame)
                 ? base_url('exames/update/' . $exame['id'])
                 : base_url('exames/store/' . $pet['id']) ?>"

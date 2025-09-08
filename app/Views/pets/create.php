@@ -3,7 +3,7 @@
 
 <h1 class="mt-4">Cadastrar Pet / Paciente</h1>
 
-<form action="<?= site_url('pet/store') ?>" method="post" enctype="multipart/form-data" id="formPet">
+<form autocomplete="off" action="<?= site_url('pet/store') ?>" method="post" enctype="multipart/form-data" id="formPet">
     <?= csrf_field() ?>
     <?= view('pets/_form') ?>
     <button type=" submit" class="btn btn-success">Salvar</button>
