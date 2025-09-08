@@ -49,7 +49,7 @@
                         <div class="col-12">
                             <div class="card shadow-sm mb-3">
                                 <div class="card-body">
-                                    <p class="card-text mb-1"><b>Data:</b> ${dtFmt}</p>
+                                    <p class="card-text mb-1"><b>Data:</b> ${dtFmt} (com ${p.idade} de idade)</p>
                                     <p class="card-text mb-1"><b>Peso:</b> ${parseFloat(p.peso_kg).toFixed(3)} kg</p>
                                     ${eccDesc ? `<p class="card-text mb-1"><b>Escala Condição Corporal:</b> ${eccDesc}</p>` : ''}
                                     ${p.observacoes ? `<p class="card-text mb-1"><b>Observações:</b> ${p.observacoes}</p>` : ''}

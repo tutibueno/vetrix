@@ -7,14 +7,30 @@
     <link rel="icon" type="image/x-icon" href="<?= base_url('public/favicon.ico') ?>">
     <title><?= SYSTEM_NAME ?>/<?= $title ?? 'Admin' ?></title>
 
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="<?= base_url('public/adminlte/plugins/fontawesome-free/css/all.min.css') ?>">
+
+    <!-- Theme style -->
     <link rel="stylesheet" href="<?= base_url('public/adminlte/dist/css/adminlte.min.css') ?>">
+
+
+</head>
+
+<body class="hold-transition sidebar-mini">
+
+    <!-- jQuery -->
+    <script src="<?= base_url('public/adminlte/plugins/jquery/jquery.min.js') ?>"></script>
+
+    <!-- JS Bootstrap -->
+    <script src="<?= base_url('public/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
 
     <!-- JS Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Scripts -->
-    <script src="<?= base_url('public/adminlte/plugins/jquery/jquery.min.js') ?>"></script>
+    <!-- jQuery UI -->
+    <script src="<?= base_url('public/adminlte/plugins/jquery-ui/jquery-ui.min.js') ?>"></script>
+
+    <!-- AdminLTE App -->
     <script src="<?= base_url('public/adminlte/dist/js/adminlte.min.js') ?>"></script>
 
     <!-- jQuery Mask Plugin -->
@@ -29,9 +45,7 @@
     <!-- Script Chart.js -->
     <script src="<?= base_url('public/adminlte/plugins/chart.js/Chart.min.js') ?>"></script>
 
-</head>
 
-<body class="hold-transition sidebar-mini">
     <div class="wrapper">
 
         <?= $this->include('layouts/navbar') ?>

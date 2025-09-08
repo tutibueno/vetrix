@@ -96,6 +96,7 @@
                 <label>Status</label>
                 <select name="status" class="form-control <?= isset($errors['status']) ? 'is-invalid' : '' ?>" required>
                     <option value="agendado" <?= (isset($banho['status']) && $banho['status'] == 'agendado') ? 'selected' : '' ?>>Agendado</option>
+                    <option value="confirmado" <?= (isset($banho['status']) && $banho['status'] == 'confirmado') ? 'selected' : '' ?>>Confirmado</option>
                     <option value="em andamento" <?= (isset($banho['status']) && $banho['status'] == 'em andamento') ? 'selected' : '' ?>>Em Andamento</option>
                     <option value="concluido" <?= (isset($banho['status']) && $banho['status'] == 'concluido') ? 'selected' : '' ?>>Concluído</option>
                     <option value="cancelado" <?= (isset($banho['status']) && $banho['status'] == 'cancelado') ? 'selected' : '' ?>>Cancelado</option>

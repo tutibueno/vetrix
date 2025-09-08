@@ -85,9 +85,6 @@ $routes->group('veterinarios', ['filter' => 'auth'], function ($routes) {
     $routes->get('delete/(:num)', 'Veterinarios::delete/$1');
 });
 
-//$routes->get('prescricoes/(:num)/medicamentos/create', 'PrescricaoMedicamentoController::create/$1');
-//$routes->post('prescricoes/(:num)/medicamentos/store', 'PrescricaoMedicamentoController::store/$1');
-
 // Rotas para Prescricoes CRUD
 $routes->group('prescricoes', ['filter' => 'auth'], function ($routes) {
     $routes->get('', 'Prescricoes::index');                // Listagem de prescrições
@@ -134,7 +131,6 @@ $routes->group('clinica', ['filter' => 'auth'], function ($routes) {
 // Rotas de Consultas
 $routes->group('consultas', ['filter' => 'auth'], function ($routes) {
 
-
     $routes->get('/', 'Consultas::index');
 
     // Agenda visual
@@ -179,4 +175,12 @@ $routes->group('pesos', ['filter' => 'auth'], function ($routes) {
     $routes->post('update/(:num)', 'PesoController::update/$1');
     $routes->get('delete/(:num)', 'PesoController::delete/$1');
     $routes->get('list/(:num)', 'PesoController::listByPet/$1');
+});
+
+$routes->group('medicamentos', ['filter' => 'auth'], function ($routes) {
+    $routes->get('search', 'Medicamentos::search');
+    $routes->get('/', 'Medicamentos::index');
+    $routes->get('downloadCsv', 'Medicamentos::downloadCsv');
+    $routes->post('uploadCsv', 'Medicamentos::uploadCsv');
+
 });

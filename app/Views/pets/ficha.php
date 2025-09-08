@@ -206,14 +206,6 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-        
-
-        
-    });
-</script>
-
-<script>
     function calcularIdade(dataNascimento) {
         if (!dataNascimento) return "";
 

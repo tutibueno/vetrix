@@ -94,22 +94,17 @@ class Prescricoes extends Controller
             $medModel->insert([
                 'prescricao_id'     => $prescricaoId,
                 'nome_medicamento'  => $med['nome_medicamento'],
-                'tipo_receita'      => $med['tipo_receita'],
                 'tipo_farmacia'     => $med['tipo_farmacia'],
                 'via'               => $med['via'],
                 'posologia'         => $med['posologia'],
                 'quantidade'        => $med['quantidade'],
-                'observacoes'       => $med['observacoes'] ?? null,
-                'created_at'        => date('Y-m-d H:i:s'),
-                'updated_at'        => date('Y-m-d H:i:s'),
+                'observacoes'       => $med['observacoes'] ?? null
             ]);
         }
 
         $db->transComplete();
 
         if ($db->transStatus() === false) {
-            var_dump("erro: " . $db->transStatus());
-            exit();
             return redirect()->back()->withInput()->with('error', 'Erro ao salvar prescrição.');
         }
 
@@ -124,16 +119,6 @@ class Prescricoes extends Controller
         }
 
         $medicamentos = $this->medicamentoModel->where('prescricao_id', $id)->findAll();
-
-        $data = [
-            'action' => site_url('prescricoes/update/' . $id),
-            'prescricao' => $prescricao,
-            'medicamentos' => $medicamentos,
-            'pets' => $this->getPetById($prescricao['pet_id']),
-            'veterinarios' => $this->getVeterinarios(),
-        ];
-
-        //echo view('prescricoes/_form', $data);
 
         return view('prescricoes/_form', [
             'action' => site_url('prescricoes/update/' . $id),
@@ -179,7 +164,7 @@ class Prescricoes extends Controller
             return redirect()->back()->with('error', 'Erro na transação ao atualizar dados')->withInput();
         }
 
-        return redirect()->to(site_url('pet/ficha/' . $post['pet_id']),null,'refresh');
+        return redirect()->to(site_url('pet/ficha/' . $post['pet_id']),null,'refresh')-> with('success', 'Prescição atualizada com sucesso');
     }
 
     public function index()

@@ -114,6 +114,7 @@
             <label for="status">Status</label>
             <select name="status" class="form-control">
                 <option value="agendada" <?= $consulta && $consulta['status'] == 'agendada' ? 'selected' : '' ?>>Agendada</option>
+                <option value="confirmada" <?= $consulta && $consulta['status'] == 'confirmada' ? 'selected' : '' ?>>Confirmada</option>
                 <option value="realizada" <?= $consulta && $consulta['status'] == 'realizada' ? 'selected' : '' ?>>Realizada</option>
                 <option value="cancelada" <?= $consulta && $consulta['status'] == 'cancelada' ? 'selected' : '' ?>>Cancelada</option>
             </select>

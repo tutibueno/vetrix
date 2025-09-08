@@ -29,10 +29,17 @@
                 <a href="<?= base_url('veterinarios') ?>" class="dropdown-item">
                     <i class="fas fa-user-md mr-2"></i> Veterinários
                 </a>
+
                 <div class="dropdown-divider"></div>
                 <a href="<?= base_url('servicos') ?>" class="dropdown-item">
                     <i class="fas fa-cut nav-icon"></i> Serviços Banho & Tosa
                 </a>
+
+                <div class="dropdown-divider"></div>
+                <a href="<?= base_url('medicamentos') ?>" class="dropdown-item">
+                    <i class="fas fa-pills"></i> Gerenciar Medicamentos
+                </a>
+
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item disabled" href="#">
                     <i class="fas fa-database mr-2"></i> Backup
