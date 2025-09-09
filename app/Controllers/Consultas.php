@@ -23,10 +23,12 @@ class Consultas extends BaseController
     {
         $consultas = $this->consultaModel->getWithRelations();
 
+        helper('cor_consulta');
+
         // Calcula data_consulta_fim (30 min depois)
         foreach ($consultas as &$c) {
             $c['data_consulta_fim'] = date('Y-m-d H:i:s', strtotime($c['data_consulta'] . ' +30 minutes'));
-            $c['cor_status'] = $this->getStatusColor($c['status']);
+            $c['cor_status'] = get_consulta_status_color($c['status']);
         }
         unset($c); // evita referência residual
 
@@ -39,7 +41,7 @@ class Consultas extends BaseController
     {
         $pets = $this->petModel->findAll();
         $veterinarios = $this->vetModel->findAll();
-        return view('consultas/form', [
+        return view('consultas/_form', [
             'pets' => $pets,
             'veterinarios' => $veterinarios,
             'consulta' => null
@@ -49,7 +51,10 @@ class Consultas extends BaseController
     public function store()
     {
         $this->consultaModel->save($this->request->getPost());
-        return redirect()->to('/consultas')->with('success', 'Consulta agendada com sucesso!');
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Consulta criada com sucesso'
+        ]);
     }
 
     public function edit($id)
@@ -59,7 +64,7 @@ class Consultas extends BaseController
             ->where('consultas.id', $id)
             ->first();
         $veterinarios = $this->vetModel->findAll();
-        return view('consultas/form', [
+        return view('consultas/_form', [
             'consulta' => $consulta,
             'veterinarios' => $veterinarios
         ]);
@@ -68,18 +73,13 @@ class Consultas extends BaseController
     public function update($id)
     {
         $this->consultaModel->update($id, $this->request->getPost());
-        return redirect()->to('/consultas')->with('success', 'Consulta atualizada com sucesso!');
+        return $this->response->setJSON(['success' => true, 'message' => 'Consulta atualizada com sucesso']);
     }
 
     public function delete($id)
     {
         $this->consultaModel->delete($id);
-        return redirect()->to('/consultas')->with('success', 'Consulta excluída!');
-    }
-
-    public function agenda()
-    {
-        return view('consultas/agenda');
+        return $this->response->setJSON(['success' => true, 'message' => 'Consulta removida com sucesso']);
     }
 
     public function agendaJson()
@@ -88,9 +88,11 @@ class Consultas extends BaseController
 
         $events = [];
 
+        helper('cor_consulta');
+
         foreach ($consultas as $c) {
             $c['data_consulta_fim'] = date('Y-m-d H:i:s', strtotime($c['data_consulta'] . ' +30 minutes'));
-            $c['cor_status'] = $this->getStatusColor($c['status']);
+            $c['cor_status'] = get_consulta_status_color($c['status']);
             
             $status = strtolower($c['status'] ?? '');
 
@@ -143,18 +145,6 @@ class Consultas extends BaseController
         }
 
         return $this->response->setJSON($eventos);
-    }
-
-    // Helper dentro do controller ou método privado
-    private function getStatusColor(string $status): string
-    {
-        return match (strtolower($status)) {
-            'agendada'   => '#ffc30b', //amarelo
-            'confirmada'  => '#007bff', // azul
-            'realizada' => '#28a745', // verde
-            'cancelada' => '#dc3545', // vermelho
-            default     => '#6c757d', // cinza fallback
-        };
     }
 
     public function detalhes($id)

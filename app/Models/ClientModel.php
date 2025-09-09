@@ -12,6 +12,7 @@ class ClientModel extends Model
     protected $useSoftDeletes = true;
 
     protected $allowedFields = [
+        'id',
         'nome',
         'cpf_cnpj',
         'telefone',
@@ -33,6 +34,7 @@ class ClientModel extends Model
     protected $useTimestamps = true;
 
     protected $validationRules = [
+        'id'              => 'permit_empty|is_natural_no_zero',
         'nome'            => 'required|min_length[3]|max_length[100]',
         'cpf_cnpj'        => 'permit_empty|max_length[20]|is_unique[clients.cpf_cnpj,id,{id}]',
         'telefone'        => 'permit_empty|max_length[20]',

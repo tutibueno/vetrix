@@ -127,6 +127,17 @@
         }
     </script>
 
+    <style>
+        .fc .fc-button-primary {
+            background-color: #3485FF !important;
+            /* Desired background color */
+            color: #FFFFFF !important;
+            /* Desired text color */
+            border-color: #3485FF !important;
+            /* Desired border color */
+        }
+    </style>
+
 </body>
 
 </html>

@@ -5,9 +5,12 @@ $client = $client ?? [];
 
 <div class="row">
     <div class="col-md-6">
+
+        <input type="hidden" name="id" id="id" value="<?= old('id', $client['id'] ?? '') ?>">
+
         <div class="form-group">
             <label>Nome</label>
-            <input type="text" name="nome" value="<?= old('nome', $client['nome'] ?? '') ?>" class="form-control <?= isset($errors['nome']) ? 'is-invalid' : '' ?>">
+            <input type="text" name="nome" value="<?= old('nome', $client['nome'] ?? '') ?>" class="form-control <?= isset($errors['nome']) ? 'is-invalid' : '' ?>" autocomplete="new-password">
             <div class="invalid-feedback"><?= $errors['nome'] ?? '' ?></div>
         </div>
 
@@ -50,6 +53,11 @@ $client = $client ?? [];
         <div class="form-group">
             <label>Número<small> (opcional)</small></label>
             <input type="text" name="numero" value="<?= old('numero', $client['numero'] ?? '') ?>" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label>Complemento<small> (opcional)</small></label>
+            <input type="text" name="complemento" value="<?= old('complemento', $client['complemento'] ?? '') ?>" class="form-control">
         </div>
 
         <div class="form-group">

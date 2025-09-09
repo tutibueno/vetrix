@@ -114,7 +114,7 @@ class BanhoTosa extends BaseController
             $this->banhoModel->insert($data);
             return $this->response->setJSON([
                 'success' => true,
-                'message' => 'Agendamento criado com sucesso'
+                'message' => 'Agendamento salvo com sucesso'
             ]);
         }
     }
