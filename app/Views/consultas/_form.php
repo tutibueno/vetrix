@@ -121,7 +121,7 @@
         </div>
 
         <div class="form-group mb-3">
-            <input disabled="true" name="token" id="token" class="form-control" value="<?= $consulta['token'] ?? '' ?>"></input>
+            <input hidden="true" disabled="true" name="token" id="token" class="form-control" value="<?= $consulta['token'] ?? '' ?>"></input>
         </div>
 
         <div class="form-group mb-3">
@@ -269,7 +269,6 @@
                     let veterinario = $('select[name="veterinario_id"] option:selected').text().trim();
                     let token = $('#token').val();
 
-                    alert(token);
                     // Pega a data/hora do agendamento e formata
                     let dataAgendamento = $('#data_consulta').val();
                     let dataFormatada = '';
