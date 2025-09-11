@@ -121,6 +121,10 @@
         </div>
 
         <div class="form-group mb-3">
+            <input disabled="true" name="token" id="token" class="form-control" value="<?= $consulta['token'] ?? '' ?>"></input>
+        </div>
+
+        <div class="form-group mb-3">
             <label for="status">Status</label>
             <select name="status" class="form-control">
                 <option value="agendada" <?= $consulta && $consulta['status'] == 'agendada' ? 'selected' : '' ?>>Agendada</option>
@@ -263,7 +267,9 @@
                     // Pega o paciente e veterinario
                     let paciente = $('#pet_nome').val();
                     let veterinario = $('select[name="veterinario_id"] option:selected').text().trim();
+                    let token = $('#token').val();
 
+                    alert(token);
                     // Pega a data/hora do agendamento e formata
                     let dataAgendamento = $('#data_consulta').val();
                     let dataFormatada = '';
@@ -299,7 +305,7 @@
                             mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para consulta do(a) paciente ${paciente} com ${veterinario} para o dia ${dataFormatada} às ${horaFormatada}. `;
                         }
 
-                        mensagem += `Confirme aqui: <?= site_url('confirma/') ?>${data.token}`;
+                        mensagem += `Confirme aqui: <?= site_url('confirma/') ?>${token}`;
 
                     }
 

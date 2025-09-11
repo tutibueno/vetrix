@@ -263,6 +263,7 @@
                 $('#pet_raca_card').text(data.raca);
                 $('#pet_sexo_card').text(data.sexo);
                 $('#pet_peso_card').text(data.peso);
+                $('#linkFichaPet').attr('href', '<?= base_url("pet/ficha/") ?>' + data.id);
                 $('#card_pet').show();
             } else {
                 $('#card_pet').hide();

@@ -7,7 +7,7 @@ use App\Models\PetModel;
 use App\Models\ClientModel;
 use App\Models\VeterinarioModel;
 
-class Confirma extends BaseController
+class Confirma extends PublicBaseController
 {
     protected $consultaModel;
     protected $petModel;
@@ -28,7 +28,7 @@ class Confirma extends BaseController
         $consulta = $this->consultaModel->where('token', $token)->first();
 
         if (!$consulta) {
-            return view('confirma/erro_token');
+            return $this->render('confirma/erro_token');
         }
 
         $pet = $this->petModel->find($consulta['pet_id']);
@@ -39,20 +39,20 @@ class Confirma extends BaseController
         $consulta['pet_nome'] = $pet['nome'];
         $consulta['veterinario_nome'] = $veterinario['nome'];
 
-        return view('confirma/index', ['consulta' => $consulta]);
+        return $this->render('confirma/index', ['consulta' => $consulta]);
     }
 
     // Confirmar consulta
     public function confirmar($token)
     {
         $this->consultaModel->where('token', $token)->set(['status' => 'confirmada'])->update();
-        return view('confirma/sucesso', ['mensagem' => 'Consulta confirmada com sucesso!']);
+        return $this->render('confirma/sucesso', ['mensagem' => 'Consulta confirmada com sucesso!']);
     }
 
     // Cancelar consulta
     public function cancelar($token)
     {
         $this->consultaModel->where('token', $token)->set(['status' => 'cancelada'])->update();
-        return view('confirma/sucesso', ['mensagem' => 'Consulta cancelada com sucesso!']);
+        return $this->render('confirma/sucesso', ['mensagem' => 'Consulta cancelada com sucesso!']);
     }
 }
