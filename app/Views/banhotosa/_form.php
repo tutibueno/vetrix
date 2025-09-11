@@ -137,121 +137,9 @@
     </form>
 </div>
 <script>
-    // Autocomplete Pet (Consulta)
-    $('#pet_nome').on('input', function() {
-        let term = $(this).val();
-        if (term.length < 1) {
-            $('#pet_suggestions').hide();
-            return;
-        }
-
-        $.getJSON('<?= site_url("pet/buscar") ?>', {
-            term: term
-        }, function(data) {
-            let html = '';
-            data.forEach(p => {
-                html += `
-                <a href="#" class="list-group-item list-group-item-action"
-                   data-id="${p.id}">
-                   <strong>${p.nome}</strong> 
-                   <small class="text-muted">(${p.especie} - ${p.raca})</small><br>
-                   <small><i class="fas fa-user"></i> Tutor: ${p.tutor_nome}</small>
-                   <small> | Tel: ${p.tutor_telefone}</small>
-                   <small> | CPF: ${p.tutor_cpf}</small>
-                </a>`;
-            });
-
-            if (html) {
-                $('#pet_suggestions').html(html).show();
-            } else {
-                $('#pet_suggestions').hide();
-            }
-        });
-    });
-
-    // Selecionar Pet
-    $(document).on('click', '#pet_suggestions a', function(e) {
-        e.preventDefault();
-        let nome = $(this).find("strong").text();
-        let id = $(this).data('id');
-
-        $('#pet_nome').val(nome);
-        $('#pet_id').val(id);
-        $('#pet_suggestions').hide();
-
-        // Buscar detalhes do pet selecionado
-        $.getJSON('<?= site_url("pet/detalhes") ?>/' + id, function(data) {
-            if (data.error) {
-                console.error(data.error);
-                return;
-            }
-
-            // Exemplo: preencher campos da consulta automaticamente
-            $('#especie').val(data.especie);
-            $('#raca').val(data.raca);
-            $('#sexo').val(data.sexo);
-            $('#peso').val(data.peso);
-            $('#tutor_info').text(data.tutor_nome + ' - ' + (data.tutor_telefone ?? '') + ' - ' + data.tutor_cpf);
-        });
-    });
-
-    $(document).ready(function() {
-        let petId = $('#pet_id').val();
-
-        if (petId) {
-            $.getJSON('<?= site_url("pet/detalhes") ?>/' + petId, function(data) {
-                if (data && !data.error) {
-                    $('#pet_nome').val(data.nome);
-                    $('#especie').val(data.especie);
-                    $('#raca').val(data.raca);
-                    $('#sexo').val(data.sexo);
-                    $('#peso').val(data.peso);
-                    $('#tutor_nome').val(data.tutor_nome);
-                    $('#tutor_telefone').val(data.tutor_telefone);
-                    $('#tutor_cpf').val(data.tutor_cpf);
-                    $('#linkFichaPet').attr('href', '<?= base_url("pet/ficha/") ?>' + data.id);
-                }
-            });
-        }
-    });
-
-    // Fechar lista ao clicar fora
-    $(document).click(function(e) {
-        if (!$(e.target).closest('#pet_nome, #pet_suggestions').length) {
-            $('#pet_suggestions').hide();
-        }
-    });
-</script>
-
-<script>
-    // Quando o usuário seleciona um pet no autocomplete
-    $(document).on('click', '#pet_suggestions a', function(e) {
-        e.preventDefault();
-        let id = $(this).data('id');
-        $('#pet_id').val(id);
-
-        $.getJSON('<?= site_url("pet/detalhes") ?>/' + id, function(data) {
-            if (data && !data.error) {
-                // Preenche campos editáveis
-                $('#pet_nome').val(data.nome);
-                $('#especie').val(data.especie);
-                $('#raca').val(data.raca);
-                $('#sexo').val(data.sexo);
-                $('#peso').val(data.peso);
-                $('#tutor_nome').val(data.tutor_nome);
-                $('#tutor_telefone').val(data.tutor_telefone);
-                $('#tutor_cpf').val(data.tutor_cpf);
-
-                // Atualiza os cards
-                atualizarCards(data);
-            }
-        });
-
-        $('#pet_suggestions').hide();
-    });
-
     // Ao abrir o formulário de edição
     $(document).ready(function() {
+
         let petId = $('#pet_id').val();
         if (petId) {
             $.getJSON('<?= site_url("pet/detalhes") ?>/' + petId, function(data) {
@@ -270,6 +158,34 @@
                 }
             });
         }
+
+        // Quando o usuário seleciona um pet no autocomplete
+        $(document).on('click', '#pet_suggestions a', function(e) {
+            e.preventDefault();
+            let id = $(this).data('id');
+            $('#pet_id').val(id);
+
+            $.getJSON('<?= site_url("pet/detalhes") ?>/' + id, function(data) {
+                if (data && !data.error) {
+                    // Preenche campos editáveis
+                    $('#pet_nome').val(data.nome);
+                    $('#especie').val(data.especie);
+                    $('#raca').val(data.raca);
+                    $('#sexo').val(data.sexo);
+                    $('#peso').val(data.peso);
+                    $('#tutor_nome').val(data.tutor_nome);
+                    $('#tutor_telefone').val(data.tutor_telefone);
+                    $('#tutor_cpf').val(data.tutor_cpf);
+
+                    // Atualiza os cards
+                    atualizarCards(data);
+                }
+            });
+
+            $('#pet_suggestions').hide();
+
+
+        });
 
         function atualizarCards(data) {
             if (!data) return;
@@ -351,6 +267,73 @@
             } else {
                 $('#card_pet').hide();
             }
+        }
+
+        // Selecionar Pet
+        $(document).on('click', '#pet_suggestions a', function(e) {
+            e.preventDefault();
+            let nome = $(this).find("strong").text();
+            let id = $(this).data('id');
+
+            $('#pet_nome').val(nome);
+            $('#pet_id').val(id);
+            $('#pet_suggestions').hide();
+
+            // Buscar detalhes do pet selecionado
+            $.getJSON('<?= site_url("pet/detalhes") ?>/' + id, function(data) {
+                if (data.error) {
+                    console.error(data.error);
+                    return;
+                }
+
+                // Exemplo: preencher campos da consulta automaticamente
+                $('#especie').val(data.especie);
+                $('#raca').val(data.raca);
+                $('#sexo').val(data.sexo);
+                $('#peso').val(data.peso);
+                $('#tutor_info').text(data.tutor_nome + ' - ' + (data.tutor_telefone ?? '') + ' - ' + data.tutor_cpf);
+            });
+        });
+    });
+
+
+
+    // Autocomplete Pet (Consulta)
+    $('#pet_nome').on('input', function() {
+        let term = $(this).val();
+        if (term.length < 1) {
+            $('#pet_suggestions').hide();
+            return;
+        }
+
+        $.getJSON('<?= site_url("pet/buscar") ?>', {
+            term: term
+        }, function(data) {
+            let html = '';
+            data.forEach(p => {
+                html += `
+                <a href="#" class="list-group-item list-group-item-action"
+                   data-id="${p.id}">
+                   <strong>${p.nome}</strong> 
+                   <small class="text-muted">(${p.especie} - ${p.raca})</small><br>
+                   <small><i class="fas fa-user"></i> Tutor: ${p.tutor_nome}</small>
+                   <small> | Tel: ${p.tutor_telefone}</small>
+                   <small> | CPF: ${p.tutor_cpf}</small>
+                </a>`;
+            });
+
+            if (html) {
+                $('#pet_suggestions').html(html).show();
+            } else {
+                $('#pet_suggestions').hide();
+            }
+        });
+    });
+
+    // Fechar lista ao clicar fora
+    $(document).click(function(e) {
+        if (!$(e.target).closest('#pet_nome, #pet_suggestions').length) {
+            $('#pet_suggestions').hide();
         }
     });
 </script>

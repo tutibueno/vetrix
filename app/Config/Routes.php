@@ -184,3 +184,13 @@ $routes->group('medicamentos', ['filter' => 'auth'], function ($routes) {
     $routes->post('uploadCsv', 'Medicamentos::uploadCsv');
 
 });
+
+// Rotas públicas de confirmação de consulta/banho&tosa
+$routes->get('confirma/(:segment)', 'Confirma::index/$1');
+$routes->get('confirma/confirmar/(:segment)', 'Confirma::confirmar/$1');
+$routes->get('confirma/cancelar/(:segment)', 'Confirma::cancelar/$1');
+
+// Confirmação de Banho & Tosa
+$routes->get('confirma/servico/(:segment)', 'ConfirmaServico::index/$1');
+$routes->get('confirma/servico/confirmar/(:segment)', 'ConfirmaServico::confirmar/$1');
+$routes->get('confirma/servico/cancelar/(:segment)', 'ConfirmaServico::cancelar/$1');

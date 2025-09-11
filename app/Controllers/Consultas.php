@@ -50,7 +50,13 @@ class Consultas extends BaseController
 
     public function store()
     {
-        $this->consultaModel->save($this->request->getPost());
+        $data = $this->request->getPost();
+
+        // Gerar token único
+        $data['token'] = bin2hex(random_bytes(16));
+
+        $this->consultaModel->save($data);
+        
         return $this->response->setJSON([
             'success' => true,
             'message' => 'Consulta criada com sucesso'
@@ -162,5 +168,34 @@ class Consultas extends BaseController
         }
 
         return view('banho_tosa/modal_detalhes', ['agendamento' => $agendamento]);
+    }
+
+    function enviarWhatsapp($telefone, $mensagem)
+    {
+        $token = 'SEU_ACCESS_TOKEN';
+        $whatsapp_number_id = 'SEU_WHATSAPP_NUMBER_ID';
+
+        $url = "https://graph.facebook.com/v16.0/$whatsapp_number_id/messages";
+
+        $data = [
+            "messaging_product" => "whatsapp",
+            "to" => $telefone,
+            "type" => "text",
+            "text" => ["body" => $mensagem]
+        ];
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            "Authorization: Bearer $token",
+            "Content-Type: application/json"
+        ]);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($result, true);
     }
 }

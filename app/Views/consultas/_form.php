@@ -229,32 +229,6 @@
 </script>
 
 <script>
-    // Quando o usuário seleciona um pet no autocomplete
-    $(document).on('click', '#pet_suggestions a', function(e) {
-        e.preventDefault();
-        let id = $(this).data('id');
-        $('#pet_id').val(id);
-
-        $.getJSON('<?= site_url("pet/detalhes") ?>/' + id, function(data) {
-            if (data && !data.error) {
-                // Preenche campos editáveis
-                $('#pet_nome').val(data.nome);
-                $('#especie').val(data.especie);
-                $('#raca').val(data.raca);
-                $('#sexo').val(data.sexo);
-                $('#peso').val(data.peso);
-                $('#tutor_nome').val(data.tutor_nome);
-                $('#tutor_telefone').val(data.tutor_telefone);
-                $('#tutor_cpf').val(data.tutor_cpf);
-
-                // Atualiza os cards
-                atualizarCards(data);
-            }
-        });
-
-        $('#pet_suggestions').hide();
-    });
-
     // Ao abrir o formulário de edição
     $(document).ready(function() {
         let petId = $('#pet_id').val();
@@ -320,10 +294,13 @@
 
                         // Se for hoje, muda o texto
                         if (dataFormatada === hojeFormatada) {
-                            mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para consulta do(a) paciente ${paciente} com ${veterinario} para hoje (${dataFormatada}) às ${horaFormatada}. Obrigado!`;
+                            mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para consulta do(a) paciente ${paciente} com ${veterinario} para hoje (${dataFormatada}) às ${horaFormatada}. `;
                         } else {
-                            mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para consulta do(a) paciente ${paciente} com ${veterinario} para o dia ${dataFormatada} às ${horaFormatada}. Obrigado!`;
+                            mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para consulta do(a) paciente ${paciente} com ${veterinario} para o dia ${dataFormatada} às ${horaFormatada}. `;
                         }
+
+                        mensagem += `Confirme aqui: <?= site_url('confirma/') ?>${data.token}`;
+
                     }
 
                     // Remove caracteres não numéricos
@@ -361,6 +338,32 @@
                 $('#card_pet').hide();
             }
         }
+
+        // Quando o usuário seleciona um pet no autocomplete
+        $(document).on('click', '#pet_suggestions a', function(e) {
+            e.preventDefault();
+            let id = $(this).data('id');
+            $('#pet_id').val(id);
+
+            $.getJSON('<?= site_url("pet/detalhes") ?>/' + id, function(data) {
+                if (data && !data.error) {
+                    // Preenche campos editáveis
+                    $('#pet_nome').val(data.nome);
+                    $('#especie').val(data.especie);
+                    $('#raca').val(data.raca);
+                    $('#sexo').val(data.sexo);
+                    $('#peso').val(data.peso);
+                    $('#tutor_nome').val(data.tutor_nome);
+                    $('#tutor_telefone').val(data.tutor_telefone);
+                    $('#tutor_cpf').val(data.tutor_cpf);
+
+                    // Atualiza os cards
+                    atualizarCards(data);
+                }
+            });
+
+            $('#pet_suggestions').hide();
+        });
     });
 </script>
 

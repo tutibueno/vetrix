@@ -111,6 +111,10 @@ class BanhoTosa extends BaseController
                 'message' => 'Agendamento atualizado com sucesso'
             ]);
         } else {
+
+            //Gera o token
+            $data['token'] = bin2hex(random_bytes(16));
+
             $this->banhoModel->insert($data);
             return $this->response->setJSON([
                 'success' => true,
