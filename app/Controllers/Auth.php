@@ -8,8 +8,16 @@ use CodeIgniter\Controller;
 
 class Auth extends Controller
 {
+
     public function login()
     {
+        $session = session();
+
+        // Verifica se já existe sessão ativa
+        if ($session->has('user_id')) {
+            return redirect()->to(base_url('/'));
+        }
+
         return view('auth/login', ['title' => 'Login']);
     }
 
