@@ -122,10 +122,14 @@
                 <textarea name="observacoes" class="form-control"><?= $banho['observacoes'] ?? '' ?></textarea>
             </div>
 
+            <div class="form-group">
+                <input hidden name="token" id="token" class="form-control" value="<?= $banho['token'] ?? '' ?>"></input>
+            </div>
+
         </div>
 
         <div class="modal-footer">
-            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i><?= isset($banho) ? ' Atualizar' : ' Salvar' ?></button>
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i><?= isset($banho['id']) ? ' Atualizar' : ' Salvar' ?></button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <?php if (!empty($banho['id'])): ?>
                 <button class="btn btn-danger btnExcluir" data-id=<?= $banho['id'] ?>>
@@ -205,6 +209,7 @@
                     let dataFormatada = '';
                     let horaFormatada = '';
                     let mensagem = '';
+                    let token = $('#token').val();
 
                     if (dataAgendamento) {
                         let d = new Date(dataAgendamento);
@@ -230,10 +235,12 @@
 
                         // Se for hoje, muda o texto
                         if (dataFormatada === hojeFormatada) {
-                            mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para o serviço "${servico}" para hoje (${dataFormatada}) às ${horaFormatada}. Obrigado!`;
+                            mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para o serviço "${servico}" para hoje (${dataFormatada}) às ${horaFormatada}. `;
                         } else {
-                            mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para o serviço "${servico}" para o dia ${dataFormatada} às ${horaFormatada}. Obrigado!`;
+                            mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para o serviço "${servico}" para o dia ${dataFormatada} às ${horaFormatada}. `;
                         }
+
+                        mensagem += `Confirme aqui: <?= site_url('confirma/servico/') ?>${token}`;
                     }
                     // Remove caracteres não numéricos
                     let numeroLimpo = data.tutor_telefone.replace(/\D/g, '');

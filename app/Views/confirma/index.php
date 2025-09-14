@@ -21,7 +21,7 @@
 
                 <div class="d-flex justify-content-center gap-3">
                     <a href="<?= site_url('confirma/confirmar/' . $consulta['token']) ?>" class="btn btn-success btn-lg px-4">
-                        ✅ Confirmar
+                        ✔️ Confirmar
                     </a>
                     <a href="<?= site_url('confirma/cancelar/' . $consulta['token']) ?>" class="btn btn-danger btn-lg px-4">
                         ❌ Cancelar

@@ -35,7 +35,7 @@
 
         <!-- Observações gerais -->
         <div class="mb-3">
-            <label class="form-label">Observações</label>
+            <label class="form-label">Observações <small>(opcional)</small></label>
             <textarea name="observacoes" class="form-control" rows="2"></textarea>
         </div>
 
@@ -133,8 +133,8 @@
             div.className = 'exame-item mb-2 border p-2 rounded d-flex flex-column flex-sm-row align-items-sm-center justify-content-between';
             div.innerHTML = `
         <div class="flex-grow-1 me-sm-2">
-            <input type="text" name="exames[${exameIndex}][nome_exame]" class="form-control mb-1" placeholder="Nome do Exame" required>
-            <input type="text" name="exames[${exameIndex}][observacoes]" class="form-control" placeholder="Observações">
+            <input type="text" name="exames[${exameIndex}][nome_exame]" class="form-control mb-1" placeholder="Nome do Exame" autocomplete="off" required>
+            <input type="text" name="exames[${exameIndex}][observacoes]" class="form-control" autocomplete="off" placeholder="Observações (opcional)">
         </div>
         <button type="button" class="btn btn-danger btn-sm mt-2 mt-sm-0 remove-exame"><i class="fas fa-trash"></i></button>
     `;
@@ -146,7 +146,7 @@
             const div = document.createElement('div');
             div.className = 'input-group mb-2 motivo-item';
             div.innerHTML = `
-            <input type="text" name="motivos[${motivoIndex}][motivo_suspeita]" class="form-control" placeholder="Motivo/Suspeita">
+            <input type="text" name="motivos[${motivoIndex}][motivo_suspeita]" class="form-control" placeholder="Motivo/Suspeita (opcional)">
             <button type="button" class="btn btn-danger remove-motivo"><i class="fas fa-trash"></i></button>
         `;
             motivosList.appendChild(div);

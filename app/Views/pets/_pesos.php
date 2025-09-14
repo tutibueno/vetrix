@@ -91,6 +91,8 @@
                     },
                     options: {
                         responsive: true,
+                        maintainAspectRatio: false,
+                        aspectRatio: 1.2,
                         plugins: {
                             legend: {
                                 display: true
@@ -104,11 +106,7 @@
                             }
                         },
                         scales: {
-                            ticks: {
-                                min: 0
-                            },
                             y: {
-                                min: 0, // Set the minimum value for the Y-axis
                                 beginAtZero: true // Ensure it doesn't force a 0 start
                             }
                         }

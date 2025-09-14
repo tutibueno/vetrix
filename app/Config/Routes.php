@@ -185,7 +185,7 @@ $routes->group('medicamentos', ['filter' => 'auth'], function ($routes) {
 
 });
 
-// Rotas públicas de confirmação de consulta/banho&tosa
+// Confirmação de consulta
 $routes->get('confirma/(:segment)', 'Confirma::index/$1');
 $routes->get('confirma/confirmar/(:segment)', 'Confirma::confirmar/$1');
 $routes->get('confirma/cancelar/(:segment)', 'Confirma::cancelar/$1');

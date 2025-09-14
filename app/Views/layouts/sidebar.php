@@ -51,7 +51,7 @@
 
                     <!-- Outros itens do menu -->
 
-                    <li class="nav-header">AGENDAMENTOS</li>
+                    <li class="nav-header">AGENDAMENTOS&nbsp;&nbsp;<i class="fas fa-calendar-alt"></i></li>
 
                     <li class="nav-item">
                         <a href="<?= base_url('consultas') ?>" class="nav-link <?= service('uri')->getSegment(1) == 'consultas' ? 'active' : '' ?>">
@@ -61,7 +61,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="<?= base_url('banhotosa') ?>" class="nav-link <?= service('uri')->getSegment(1) == 'banhotosa' ? 'active' : '' ?>">
-                            <i class="fas fa-dog nav-icon"></i>
+                            <i class="fas fa-shower nav-icon"></i>
                             <p>Banho & Tosa</p>
                         </a>
                     </li>

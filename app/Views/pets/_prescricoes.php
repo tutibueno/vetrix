@@ -29,7 +29,7 @@
                         <?php endforeach; ?>
                     </div>
 
-                    <div class="card-footer d-flex justify-content-end gap-2">
+                    <div class="card-footer d-flex justify-content-end gap-1">
                         <a href="<?= base_url('prescricoes/imprimir/' . $p['id']) ?>"
                             class="btn btn-primary btn-sm" target="_blank">
                             <i class="fas fa-print"></i> Imprimir

@@ -12,14 +12,14 @@ $pager->setSurroundCount(5);
     <ul class="pagination justify-content-center">
         <?php if ($pager->hasPreviousPage()) : ?>
             <li class="page-item">
-                <a class="page-link" href="<?= $pager->getPreviousPage() ?>" aria-label="<?= lang('Pager.previous') ?>">
-                    <span aria-hidden="true"><?= lang('Pager.previous') ?></span>
+                <a class="page-link" href="<?= $pager->getPreviousPage() ?>" aria-label="Anterior">
+                    <span aria-hidden="true">Anterior</span>
                 </a>
             </li>
         <?php else: ?>
             <li class="page-item">
                 <a class="page-link disabled">
-                    <span aria-hidden="true"><?= lang('Pager.previous') ?></span>
+                    <span aria-hidden="true">Anterior</span>
                 </a>
             </li>
         <?php endif ?>
@@ -34,14 +34,14 @@ $pager->setSurroundCount(5);
 
         <?php if ($pager->hasNextPage()) : ?>
             <li class="page-item">
-                <a class="page-link" href="<?= $pager->getNextPage() ?>" aria-label="<?= lang('Pager.next') ?>">
-                    <span aria-hidden="true"><?= lang('Pager.next') ?></span>
+                <a class="page-link" href="<?= $pager->getNextPage() ?>" aria-label="Proxima">
+                    <span aria-hidden="true">Próxima</span>
                 </a>
             </li>
         <?php else: ?>
             <li class="page-item">
                 <a class="page-link disabled">
-                    <span aria-hidden="true"><?= lang('Pager.next') ?></span>
+                    <span aria-hidden="true">Próxima</span>
                 </a>
             </li>
         <?php endif ?>

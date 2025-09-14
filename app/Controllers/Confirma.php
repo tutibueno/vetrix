@@ -31,6 +31,9 @@ class Confirma extends PublicBaseController
             return $this->render('confirma/erro_token');
         }
 
+        if($consulta['status'] != 'agendada')
+            return $this->render('confirma/sucesso', ['mensagem' => 'Status da Consula: ' . $consulta['status']]);
+
         $pet = $this->petModel->find($consulta['pet_id']);
         $cliente = $this->clientModel->find($pet['cliente_id']);
         $veterinario = $this->vetModel->find($consulta['veterinario_id']);
@@ -45,6 +48,15 @@ class Confirma extends PublicBaseController
     // Confirmar consulta
     public function confirmar($token)
     {
+        $consulta = $this->consultaModel->where('token', $token)->first();
+
+        if (!$consulta) {
+            return $this->render('confirma/erro_token');
+        }
+
+        if ($consulta['status'] != 'agendada')
+            return $this->render('confirma/sucesso', ['mensagem' => 'Status da Consula: ' . $consulta['status']]);
+
         $this->consultaModel->where('token', $token)->set(['status' => 'confirmada'])->update();
         return $this->render('confirma/sucesso', ['mensagem' => 'Consulta confirmada com sucesso!']);
     }
@@ -52,6 +64,15 @@ class Confirma extends PublicBaseController
     // Cancelar consulta
     public function cancelar($token)
     {
+        $consulta = $this->consultaModel->where('token', $token)->first();
+
+        if (!$consulta) {
+            return $this->render('confirma/erro_token');
+        }
+
+        if ($consulta['status'] != 'agendada')
+            return $this->render('confirma/sucesso', ['mensagem' => 'Status da Consula: ' . $consulta['status']]);
+
         $this->consultaModel->where('token', $token)->set(['status' => 'cancelada'])->update();
         return $this->render('confirma/sucesso', ['mensagem' => 'Consulta cancelada com sucesso!']);
     }

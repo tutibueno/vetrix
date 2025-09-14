@@ -19,7 +19,7 @@ $escala = [
     <div class="mb-3">
         <label for="data_registro" class="form-label">Data do registro</label>
         <input type="date" name="data_registro" id="data_registro" class="form-control"
-            value="<?= esc($peso['data_registro'] ?? '') ?>" required>
+            value="<?= esc($peso['data_registro'] ?? date('Y-m-d')) ?>" required>
     </div>
 
     <div class="mb-3">

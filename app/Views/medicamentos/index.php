@@ -38,6 +38,8 @@
                             <th>Princípio Ativo</th>
                             <th>Forma</th>
                             <th>Categoria</th>
+                            <th>Classe Terapêutica</th>
+                            <th>Espécie Destino</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,6 +49,8 @@
                                 <td><?= esc($med['principio_ativo']) ?></td>
                                 <td><?= esc($med['forma']) ?></td>
                                 <td><?= esc($med['categoria']) ?></td>
+                                <td><?= esc($med['classe_terapeutica']) ?></td>
+                                <td><?= esc($med['especie_destino']) ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

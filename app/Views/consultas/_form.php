@@ -121,7 +121,7 @@
         </div>
 
         <div class="form-group mb-3">
-            <input hidden="true" disabled="true" name="token" id="token" class="form-control" value="<?= $consulta['token'] ?? '' ?>"></input>
+            <input name="token" id="token" class="form-control" value="<?= $consulta['token'] ?? '' ?>"></input>
         </div>
 
         <div class="form-group mb-3">
@@ -135,7 +135,7 @@
         </div>
 
         <div class="modal-footer">
-            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Salvar</button>
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i><?= isset($consulta['id']) ? ' Atualizar' : ' Salvar' ?></button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Fechar">Cancelar</button>
             <?php if (!empty($consulta['id'])): ?>
                 <button class="btn btn-danger btnExcluir" data-id=<?= $consulta['id'] ?>>
@@ -248,6 +248,7 @@
                     $('#tutor_nome').val(data.tutor_nome);
                     $('#tutor_telefone').val(data.tutor_telefone);
                     $('#tutor_cpf').val(data.tutor_cpf);
+
                     // Atualiza os cards
                     atualizarCards(data);
                 }

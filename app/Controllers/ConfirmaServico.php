@@ -32,6 +32,9 @@ class ConfirmaServico extends PublicBaseController
             return $this->render('confirma/erro_token');
         }
 
+        if ($agendamento['status'] != 'agendado')
+            return $this->render('confirma/sucesso', ['mensagem' => 'Status do Agendamento: ' . $agendamento['status']]);
+
         $pet = $this->petModel->find($agendamento['pet_id']);
         $cliente = $this->clientModel->find($pet['cliente_id']);
         $servico = $this->servicoModel->find($agendamento['servico_id']);

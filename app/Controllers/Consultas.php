@@ -79,8 +79,11 @@ class Consultas extends BaseController
     public function update($id)
     {
         $data = $this->request->getPost();
-        if(!isset($data['token']))
+        
+        if (empty($data['token'])) {
             $data['token'] = bin2hex(random_bytes(16));
+        }
+        
         $this->consultaModel->update($id, $data);
         return $this->response->setJSON(['success' => true, 'message' => 'Consulta atualizada com sucesso']);
     }
