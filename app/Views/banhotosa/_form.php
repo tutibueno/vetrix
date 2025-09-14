@@ -123,7 +123,7 @@
             </div>
 
             <div class="form-group">
-                <input hidden name="token" id="token" class="form-control" value="<?= $banho['token'] ?? '' ?>"></input>
+                <input type="hidden" name="token" id="token" class="form-control" value="<?= $banho['token'] ?? '' ?>"></input>
             </div>
 
         </div>

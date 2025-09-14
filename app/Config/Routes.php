@@ -168,6 +168,7 @@ $routes->group('servicos', ['filter' => 'userPermission:manage'], function ($rou
     $routes->get('delete/(:num)', 'Servicos::delete/$1');
 });
 
+//Pesos
 $routes->group('pesos', ['filter' => 'auth'], function ($routes) {
     $routes->get('create/(:num)', 'PesoController::create/$1');
     $routes->post('store', 'PesoController::store');
@@ -194,3 +195,15 @@ $routes->get('confirma/cancelar/(:segment)', 'Confirma::cancelar/$1');
 $routes->get('confirma/servico/(:segment)', 'ConfirmaServico::index/$1');
 $routes->get('confirma/servico/confirmar/(:segment)', 'ConfirmaServico::confirmar/$1');
 $routes->get('confirma/servico/cancelar/(:segment)', 'ConfirmaServico::cancelar/$1');
+
+//Cirurgias
+$routes->group('cirurgias', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'Cirurgias::index');                 // lista todas as cirurgias
+    $routes->get('create/(:num)', 'Cirurgias::create/$1'); // form para criar cirurgia (por pet_id)
+    $routes->post('store', 'Cirurgias::store');            // salva cirurgia
+    $routes->get('show/(:num)', 'Cirurgias::show/$1');     // detalhes da cirurgia
+    $routes->get('edit/(:num)', 'Cirurgias::edit/$1');     // form para editar
+    $routes->post('update/(:num)', 'Cirurgias::update/$1'); // atualiza cirurgia
+    $routes->get('delete/(:num)', 'Cirurgias::delete/$1'); // exclui cirurgia
+    $routes->get('list/(:num)', 'Cirurgias::list/$1');
+});

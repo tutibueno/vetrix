@@ -121,7 +121,7 @@
         </div>
 
         <div class="form-group mb-3">
-            <input name="token" id="token" class="form-control" value="<?= $consulta['token'] ?? '' ?>"></input>
+            <input type="hidden" name="token" id="token" class="form-control" value="<?= $consulta['token'] ?? '' ?>"></input>
         </div>
 
         <div class="form-group mb-3">
