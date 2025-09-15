@@ -320,7 +320,27 @@
             });
         });
 
+
+
     });
+
+    function novaConsulta() {
+        let dt = new Date();
+        let ano = dt.getFullYear();
+        let mes = String(dt.getMonth() + 1).padStart(2, '0');
+        let dia = String(dt.getDate()).padStart(2, '0');
+        let hora = String(dt.getHours()).padStart(2, '0');
+        let min = String(dt.getMinutes()).padStart(2, '0');
+
+        let formatted = `${ano}-${mes}-${dia}T${hora}:${min}`;
+        $('#modalGlobalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
+        $('#modalGlobal').modal('show');
+        // abrir modal e preencher input
+        $.get('<?= base_url("consultas/create") ?>', function(html) {
+            $('#modalGlobalContent').html(html);
+            $('#data_consulta').val(formatted);
+        });
+    }
 </script>
 
 <style>
@@ -355,8 +375,6 @@
         border-color: #3485FF !important;
         /* Desired border color */
     }
-
-    
 </style>
 
 <?= $this->endSection() ?>
