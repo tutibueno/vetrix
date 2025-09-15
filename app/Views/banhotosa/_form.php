@@ -31,11 +31,23 @@
                 <div class="col-md-6">
                     <!-- Card do Tutor -->
                     <div class="card mb-3" id="card_tutor" style="display:none;">
-                        <div class="card-header">Tutor</div>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Tutor</span>
+                        </div>
                         <div class="card-body">
                             <p><strong>Nome:</strong> <span id="tutor_nome_card"></span></p>
                             <p><strong>CPF:</strong> <span id="tutor_cpf_card"></span></p>
                             <p><strong>Telefone:</strong> <span id="tutor_telefone_card"></span></p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-end ">
+                            <!-- Botão WhatsApp -->
+                            <a id="btn_whatsapp" href="#" target="_blank" class="btn btn-success btn-sm me-1">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                            <!-- Botão Ligação -->
+                            <a id="btn_telefone" href="#" class="btn btn-primary btn-sm">
+                                <i class="fas fa-phone"></i> Ligar
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -51,7 +63,7 @@
                             <p><strong>Sexo:</strong> <span id="pet_sexo_card"></span></p>
                             <p><strong>Peso (Kg):</strong> <span id="pet_peso_card"></span></p>
                         </div>
-                        <div class="card-footer text-end">
+                        <div class="card-footer d-flex justify-content-end ">
                             <a href="#" id="linkFichaPet" class="btn btn-sm btn-primary">
                                 <i class="fas fa-file-alt"></i> Ver ficha do Pet
                             </a>
@@ -110,10 +122,14 @@
                 <textarea name="observacoes" class="form-control"><?= $banho['observacoes'] ?? '' ?></textarea>
             </div>
 
+            <div class="form-group">
+                <input type="hidden" name="token" id="token" class="form-control" value="<?= $banho['token'] ?? '' ?>"></input>
+            </div>
+
         </div>
 
         <div class="modal-footer">
-            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i><?= isset($banho) ? ' Atualizar' : ' Salvar' ?></button>
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i><?= isset($banho['id']) ? ' Atualizar' : ' Salvar' ?></button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
             <?php if (!empty($banho['id'])): ?>
                 <button class="btn btn-danger btnExcluir" data-id=<?= $banho['id'] ?>>
@@ -125,6 +141,171 @@
     </form>
 </div>
 <script>
+    // Ao abrir o formulário de edição
+    $(document).ready(function() {
+
+        let petId = $('#pet_id').val();
+        if (petId) {
+            $.getJSON('<?= site_url("pet/detalhes") ?>/' + petId, function(data) {
+                if (data && !data.error) {
+                    // Preenche campos editáveis
+                    $('#pet_nome').val(data.nome);
+                    $('#especie').val(data.especie);
+                    $('#raca').val(data.raca);
+                    $('#sexo').val(data.sexo);
+                    $('#peso').val(data.peso);
+                    $('#tutor_nome').val(data.tutor_nome);
+                    $('#tutor_telefone').val(data.tutor_telefone);
+                    $('#tutor_cpf').val(data.tutor_cpf);
+                    // Atualiza os cards
+                    atualizarCards(data);
+                }
+            });
+        }
+
+        // Quando o usuário seleciona um pet no autocomplete
+        $(document).on('click', '#pet_suggestions a', function(e) {
+            e.preventDefault();
+            let id = $(this).data('id');
+            $('#pet_id').val(id);
+
+            $.getJSON('<?= site_url("pet/detalhes") ?>/' + id, function(data) {
+                if (data && !data.error) {
+                    // Preenche campos editáveis
+                    $('#pet_nome').val(data.nome);
+                    $('#especie').val(data.especie);
+                    $('#raca').val(data.raca);
+                    $('#sexo').val(data.sexo);
+                    $('#peso').val(data.peso);
+                    $('#tutor_nome').val(data.tutor_nome);
+                    $('#tutor_telefone').val(data.tutor_telefone);
+                    $('#tutor_cpf').val(data.tutor_cpf);
+
+                    // Atualiza os cards
+                    atualizarCards(data);
+                }
+            });
+
+            $('#pet_suggestions').hide();
+
+
+        });
+
+        function atualizarCards(data) {
+            if (!data) return;
+
+            // Preenche o card do tutor
+            if (data.tutor_nome) {
+                $('#tutor_nome_card').text(data.tutor_nome);
+                $('#tutor_cpf_card').text(data.tutor_cpf);
+                $('#tutor_telefone_card').text(data.tutor_telefone);
+                if (data.tutor_telefone) {
+
+                    // Pega o nome do serviço selecionado
+                    let servico = $('select[name="servico_id"] option:selected').text().trim();
+
+                    // Pega a data/hora do agendamento e formata
+                    let dataAgendamento = $('#data_hora_inicio').val();
+                    let dataFormatada = '';
+                    let horaFormatada = '';
+                    let mensagem = '';
+                    let token = $('#token').val();
+
+                    if (dataAgendamento) {
+                        let d = new Date(dataAgendamento);
+
+                        dataFormatada = d.toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
+
+                        horaFormatada = d.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+
+                        // Data atual (sem horas)
+                        let hoje = new Date();
+                        let hojeFormatada = hoje.toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
+
+                        // Se for hoje, muda o texto
+                        if (dataFormatada === hojeFormatada) {
+                            mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para o serviço "${servico}" para hoje (${dataFormatada}) às ${horaFormatada}. `;
+                        } else {
+                            mensagem = `Prezado(a) ${data.tutor_nome}, gostaríamos de confirmar sua vinda à clínica para o serviço "${servico}" para o dia ${dataFormatada} às ${horaFormatada}. `;
+                        }
+
+                        mensagem += `Confirme aqui: <?= site_url('confirma/servico/') ?>${token}`;
+                    }
+                    // Remove caracteres não numéricos
+                    let numeroLimpo = data.tutor_telefone.replace(/\D/g, '');
+
+                    // Encode para URL
+                    let mensagemEncoded = encodeURIComponent(mensagem);
+
+                    // Monta link do WhatsApp (com DDI do Brasil 55)
+                    let linkWhatsApp = "https://wa.me/55" + numeroLimpo + "?text=" + mensagemEncoded;
+
+                    // Monta link de ligação
+                    let linkTelefone = "tel:" + "0" + numeroLimpo;
+
+                    // Atualiza botões
+                    document.getElementById('btn_whatsapp').href = linkWhatsApp;
+                    document.getElementById('btn_telefone').href = linkTelefone;
+                }
+                $('#card_tutor').show();
+            } else {
+                $('#card_tutor').hide();
+            }
+
+            // Preenche o card do pet
+            if (data.nome) {
+                $('#pet_nome_card').text(data.nome);
+                $('#pet_especie_card').text(data.especie);
+                $('#pet_raca_card').text(data.raca);
+                $('#pet_sexo_card').text(data.sexo);
+                $('#pet_peso_card').text(data.peso);
+                $('#linkFichaPet').attr('href', '<?= base_url("pet/ficha/") ?>' + data.id);
+                $('#card_pet').show();
+            } else {
+                $('#card_pet').hide();
+            }
+        }
+
+        // Selecionar Pet
+        $(document).on('click', '#pet_suggestions a', function(e) {
+            e.preventDefault();
+            let nome = $(this).find("strong").text();
+            let id = $(this).data('id');
+
+            $('#pet_nome').val(nome);
+            $('#pet_id').val(id);
+            $('#pet_suggestions').hide();
+
+            // Buscar detalhes do pet selecionado
+            $.getJSON('<?= site_url("pet/detalhes") ?>/' + id, function(data) {
+                if (data.error) {
+                    console.error(data.error);
+                    return;
+                }
+
+                // Exemplo: preencher campos da consulta automaticamente
+                $('#especie').val(data.especie);
+                $('#raca').val(data.raca);
+                $('#sexo').val(data.sexo);
+                $('#peso').val(data.peso);
+                $('#tutor_info').text(data.tutor_nome + ' - ' + (data.tutor_telefone ?? '') + ' - ' + data.tutor_cpf);
+            });
+        });
+    });
+
+
+
     // Autocomplete Pet (Consulta)
     $('#pet_nome').on('input', function() {
         let term = $(this).val();
@@ -157,132 +338,10 @@
         });
     });
 
-    // Selecionar Pet
-    $(document).on('click', '#pet_suggestions a', function(e) {
-        e.preventDefault();
-        let nome = $(this).find("strong").text();
-        let id = $(this).data('id');
-
-        $('#pet_nome').val(nome);
-        $('#pet_id').val(id);
-        $('#pet_suggestions').hide();
-
-        // Buscar detalhes do pet selecionado
-        $.getJSON('<?= site_url("pet/detalhes") ?>/' + id, function(data) {
-            if (data.error) {
-                console.error(data.error);
-                return;
-            }
-
-            // Exemplo: preencher campos da consulta automaticamente
-            $('#especie').val(data.especie);
-            $('#raca').val(data.raca);
-            $('#sexo').val(data.sexo);
-            $('#peso').val(data.peso);
-            $('#tutor_info').text(data.tutor_nome + ' - ' + (data.tutor_telefone ?? '') + ' - ' + data.tutor_cpf);
-        });
-    });
-
-    $(document).ready(function() {
-        let petId = $('#pet_id').val();
-
-        if (petId) {
-            $.getJSON('<?= site_url("pet/detalhes") ?>/' + petId, function(data) {
-                if (data && !data.error) {
-                    $('#pet_nome').val(data.nome);
-                    $('#especie').val(data.especie);
-                    $('#raca').val(data.raca);
-                    $('#sexo').val(data.sexo);
-                    $('#peso').val(data.peso);
-                    $('#tutor_nome').val(data.tutor_nome);
-                    $('#tutor_telefone').val(data.tutor_telefone);
-                    $('#tutor_cpf').val(data.tutor_cpf);
-                    $('#linkFichaPet').attr('href', '<?= base_url("pet/ficha/") ?>' + data.id);
-                }
-            });
-        }
-    });
-
     // Fechar lista ao clicar fora
     $(document).click(function(e) {
         if (!$(e.target).closest('#pet_nome, #pet_suggestions').length) {
             $('#pet_suggestions').hide();
-        }
-    });
-</script>
-
-<script>
-    function atualizarCards(data) {
-        if (!data) return;
-
-        // Preenche o card do tutor
-        if (data.tutor_nome) {
-            $('#tutor_nome_card').text(data.tutor_nome);
-            $('#tutor_cpf_card').text(data.tutor_cpf);
-            $('#tutor_telefone_card').text(data.tutor_telefone);
-            $('#card_tutor').show();
-        } else {
-            $('#card_tutor').hide();
-        }
-
-        // Preenche o card do pet
-        if (data.nome) {
-            $('#pet_nome_card').text(data.nome);
-            $('#pet_especie_card').text(data.especie);
-            $('#pet_raca_card').text(data.raca);
-            $('#pet_sexo_card').text(data.sexo);
-            $('#pet_peso_card').text(data.peso);
-            $('#card_pet').show();
-        } else {
-            $('#card_pet').hide();
-        }
-    }
-
-    // Quando o usuário seleciona um pet no autocomplete
-    $(document).on('click', '#pet_suggestions a', function(e) {
-        e.preventDefault();
-        let id = $(this).data('id');
-        $('#pet_id').val(id);
-
-        $.getJSON('<?= site_url("pet/detalhes") ?>/' + id, function(data) {
-            if (data && !data.error) {
-                // Preenche campos editáveis
-                $('#pet_nome').val(data.nome);
-                $('#especie').val(data.especie);
-                $('#raca').val(data.raca);
-                $('#sexo').val(data.sexo);
-                $('#peso').val(data.peso);
-                $('#tutor_nome').val(data.tutor_nome);
-                $('#tutor_telefone').val(data.tutor_telefone);
-                $('#tutor_cpf').val(data.tutor_cpf);
-
-                // Atualiza os cards
-                atualizarCards(data);
-            }
-        });
-
-        $('#pet_suggestions').hide();
-    });
-
-    // Ao abrir o formulário de edição
-    $(document).ready(function() {
-        let petId = $('#pet_id').val();
-        if (petId) {
-            $.getJSON('<?= site_url("pet/detalhes") ?>/' + petId, function(data) {
-                if (data && !data.error) {
-                    // Preenche campos editáveis
-                    $('#pet_nome').val(data.nome);
-                    $('#especie').val(data.especie);
-                    $('#raca').val(data.raca);
-                    $('#sexo').val(data.sexo);
-                    $('#peso').val(data.peso);
-                    $('#tutor_nome').val(data.tutor_nome);
-                    $('#tutor_telefone').val(data.tutor_telefone);
-                    $('#tutor_cpf').val(data.tutor_cpf);
-                    // Atualiza os cards
-                    atualizarCards(data);
-                }
-            });
         }
     });
 </script>

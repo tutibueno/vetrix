@@ -14,21 +14,21 @@
                     </p>
 
                     <br><strong>Anamnese:</strong></br>
-                    <p><?= nl2br(esc($h['anamnese'])) ?></p>
+                    <p><?= isset($h['anamnese']) ? nl2br($h['anamnese']) : ''?></p>
 
 
                     <br><strong>Sinais Clínicos:</strong></br>
-                    <p><?= nl2br(esc($h['sinais_clinicos'])) ?></p>
+                    <p><?= isset($h['sinais_clinicos']) ? nl2br($h['sinais_clinicos']) : '' ?></p>
 
 
 
                     <br><strong>Diagnóstico:</strong></br>
-                    <p><?= nl2br(esc($h['diagnostico'])) ?></p>
+                    <p><?= isset($h['diagnostico']) ? nl2br($h['diagnostico']) : ''?></p>
 
 
 
                     <br><strong>Observações:</strong></br>
-                    <p><?= nl2br(esc($h['observacoes'])) ?></p>
+                    <p><?= isset($h['observacoes']) ? nl2br($h['observacoes']) : ''?></p>
 
                 </div>
 

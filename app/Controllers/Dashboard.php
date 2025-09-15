@@ -20,6 +20,8 @@ class Dashboard extends BaseController
 
         $hoje = date('Y-m-d');
 
+        helper('cor_consulta_badge');
+
         // Contadores
         $data['consultasHoje']   = $consultaModel->where('DATE(data_consulta)', $hoje)->countAllResults();
         $data['consultasSemana'] = $consultaModel->where('YEARWEEK(data_consulta, 1)', date('oW'))->countAllResults();
@@ -40,6 +42,7 @@ class Dashboard extends BaseController
 
         foreach ($data['consultasHojeLista'] as &$consulta) {
             $consulta['data_consulta_label'] = date('H:i', strtotime($consulta['data_consulta'])) . " (hoje)";
+            $consulta['cor_badge'] = get_consulta_status_color_badge($consulta['status']);
         }
 
         // Próximas consultas (a partir de amanhã)
@@ -55,6 +58,7 @@ class Dashboard extends BaseController
 
         foreach ($data['proximasConsultas'] as &$consulta) {
             $consulta['data_consulta_label'] = date('d/m/Y H:i', strtotime($consulta['data_consulta']));
+            $consulta['cor_badge'] = get_consulta_status_color_badge($consulta['status']);
         }
 
         // Banhos & Tosa de hoje

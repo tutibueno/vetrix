@@ -1,48 +1,49 @@
 <?php
-// app/Views/Pagers/custom.php
-// Template de paginação customizado (Bootstrap-like)
 
-$pager->setSurroundCount(2);
+use CodeIgniter\Pager\PagerRenderer;
+
+/**
+ * @var PagerRenderer $pager
+ */
+$pager->setSurroundCount(5);
 ?>
 
-<?php if ($pager && count($pager->links()) > 0): ?>
-    <nav aria-label="Navegação de páginas">
-        <ul class="pagination justify-content-center mb-0">
-            <?php if (method_exists($pager, 'hasPreviousPage') ? $pager->hasPreviousPage() : $pager->hasPrevious()): ?>
-                <li class="page-item">
-                    <a class="page-link" href="<?= method_exists($pager, 'getFirstPageURI') ? $pager->getFirstPageURI() : $pager->getFirst() ?>" aria-label="Primeira">
-                        <i class="fas fa-angle-double-left"></i>
-                    </a>
-                </li>
+<nav aria-label="<?= lang('Pager.pageNavigation') ?>">
+    <ul class="pagination justify-content-center">
+        <?php if ($pager->hasPreviousPage()) : ?>
+            <li class="page-item">
+                <a class="page-link" href="<?= $pager->getPreviousPage() ?>" aria-label="Anterior">
+                    <span aria-hidden="true">Anterior</span>
+                </a>
+            </li>
+        <?php else: ?>
+            <li class="page-item">
+                <a class="page-link disabled">
+                    <span aria-hidden="true">Anterior</span>
+                </a>
+            </li>
+        <?php endif ?>
 
-                <li class="page-item">
-                    <a class="page-link" href="<?= method_exists($pager, 'getPreviousPageURI') ? $pager->getPreviousPageURI() : $pager->getPrevious() ?>" aria-label="Anterior">
-                        <i class="fas fa-angle-left"></i>
-                    </a>
-                </li>
-            <?php endif; ?>
+        <?php foreach ($pager->links() as $link) : ?>
+            <li class="page-item <?= $link['active'] ? 'active' : '' ?>">
+                <a class="page-link" href="<?= $link['uri'] ?>">
+                    <?= $link['title'] ?>
+                </a>
+            </li>
+        <?php endforeach ?>
 
-            <?php foreach ($pager->links() as $link): ?>
-                <li class="page-item <?= $link['active'] ? 'active' : '' ?>">
-                    <a class="page-link" href="<?= esc($link['uri']) ?>">
-                        <?= esc($link['title']) ?>
-                    </a>
-                </li>
-            <?php endforeach; ?>
-
-            <?php if (method_exists($pager, 'hasNextPage') ? $pager->hasNextPage() : $pager->hasNext()): ?>
-                <li class="page-item">
-                    <a class="page-link" href="<?= method_exists($pager, 'getNextPageURI') ? $pager->getNextPageURI() : $pager->getNext() ?>" aria-label="Próxima">
-                        <i class="fas fa-angle-right"></i>
-                    </a>
-                </li>
-
-                <li class="page-item">
-                    <a class="page-link" href="<?= method_exists($pager, 'getLastPageURI') ? $pager->getLastPageURI() : $pager->getLast() ?>" aria-label="Última">
-                        <i class="fas fa-angle-double-right"></i>
-                    </a>
-                </li>
-            <?php endif; ?>
-        </ul>
-    </nav>
-<?php endif; ?>
+        <?php if ($pager->hasNextPage()) : ?>
+            <li class="page-item">
+                <a class="page-link" href="<?= $pager->getNextPage() ?>" aria-label="Proxima">
+                    <span aria-hidden="true">Próxima</span>
+                </a>
+            </li>
+        <?php else: ?>
+            <li class="page-item">
+                <a class="page-link disabled">
+                    <span aria-hidden="true">Próxima</span>
+                </a>
+            </li>
+        <?php endif ?>
+    </ul>
+</nav>

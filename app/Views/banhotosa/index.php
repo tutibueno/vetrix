@@ -23,7 +23,7 @@
         <div class="tab-content mt-3" id="banhoTosaTabContent">
             <!-- FullCalendar Tab -->
             <div class="tab-pane fade show active" id="calendario" role="tabpanel">
-                <div id="fullCalendar"></div>
+                <div id="fullCalendarBanhoTosa"></div>
             </div>
 
             <!-- Lista Tab -->
@@ -35,151 +35,7 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="modalBanho" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" id="modalBanhoContent"></div>
-    </div>
-</div>
 
-<script>
-    var calendar;
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('fullCalendar');
-
-        calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            themeSystem: 'bootstrap5',
-            locale: 'pt-br',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            selectable: true, // habilita seleção de horários
-            dateClick: function(info) {
-                if (calendar.view.type === 'timeGridDay' || calendar.view.type === 'timeGridWeek') {
-                    // info.dateStr vem tipo "2025-09-05T14:30:00+00:00"
-                    let dt = new Date(info.date);
-                    let ano = dt.getFullYear();
-                    let mes = String(dt.getMonth() + 1).padStart(2, '0');
-                    let dia = String(dt.getDate()).padStart(2, '0');
-                    let hora = String(dt.getHours()).padStart(2, '0');
-                    let min = String(dt.getMinutes()).padStart(2, '0');
-
-                    let formatted = `${ano}-${mes}-${dia}T${hora}:${min}`;
-                    $('#modalBanhoContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-                    $('#modalBanho').modal('show');
-                    // abrir modal e preencher input
-                    $.get('<?= base_url("banhotosa/create") ?>', function(html) {
-                        $('#modalBanhoContent').html(html);
-                        $('#data_hora_inicio').val(formatted);
-                    });
-                } else {
-                    calendar.changeView('timeGridDay', info.dateStr);
-                }
-            },
-            events: function(fetchInfo, successCallback, failureCallback) {
-                $.getJSON("<?= site_url('banhotosa/listar-json') ?>", function(data) {
-                    let eventos = data.map(b => {
-                        let duracaoMinutos = Math.round((new Date(b.data_hora_fim) - new Date(b.data_hora_inicio)) / 60000);
-
-                        // Definir cores conforme o status
-                        let corFundo = '#3788d8'; // azul
-                        let corBorda = '#276ba0';
-                        if (b.status === 'agendado') {
-                            corFundo = '#ffc30b'; // amarelo
-                            corBorda = '#DEAA0D';
-                        } else if (b.status === 'cancelado') {
-                            corFundo = '#f44336'; // vermelho
-                            corBorda = '#d32f2f';
-                        } else if (b.status === 'concluido') {
-                            corFundo = '#4caf50'; // verde
-                            corBorda = '#388e3c';
-                        }
-
-                        return {
-                            id: b.id,
-                            title: `${b.pet_nome} - ${b.servico_nome}`,
-                            start: b.data_hora_inicio,
-                            end: b.data_hora_fim,
-                            backgroundColor: corFundo,
-                            borderColor: corBorda,
-                            textColor: 'white',
-                            extendedProps: {
-                                status: b.status,
-                                pet: b.pet_nome,
-                                servico: b.servico_nome,
-                                duracao: duracaoMinutos,
-                                observacoes: b.observacoes || ''
-                            },
-                            // Tooltip
-                            titleTooltip: `Pet: ${b.pet_nome}\nServiço: ${b.servico_nome}\nStatus: ${b.status}\nDuração: ${duracaoMinutos} min\nObservações: ${b.observacoes || '-'}`
-                        };
-                    });
-                    successCallback(eventos);
-                }).fail(function() {
-                    failureCallback();
-                });
-            },
-            eventDidMount: function(info) {
-
-                // força a cor de fundo também no "month"
-                if (info.event.backgroundColor) {
-                    info.el.style.backgroundColor = info.event.backgroundColor;
-                    info.el.style.borderColor = info.event.borderColor;
-                    info.el.style.color = info.event.textColor;
-                }
-
-                if (window.matchMedia("(pointer: coarse)").matches) {
-                    // Mobile ou tablet → não criar tooltip
-                    return;
-                }
-                // Tooltip usando Bootstrap 5
-                var tooltipText = info.event.extendedProps.observacoes ?
-                    `Pet: ${info.event.extendedProps.pet}\nServiço: ${info.event.extendedProps.servico}\nStatus: ${info.event.extendedProps.status}\nDuração: ${info.event.extendedProps.duracao} min\nObservações: ${info.event.extendedProps.observacoes}` :
-                    `Pet: ${info.event.extendedProps.pet}\nServiço: ${info.event.extendedProps.servico}\nStatus: ${info.event.extendedProps.status}\nDuração: ${info.event.extendedProps.duracao} min`;
-
-                new bootstrap.Tooltip(info.el, {
-                    title: tooltipText,
-                    placement: 'top',
-                    trigger: 'hover',
-                    container: 'body',
-                    html: false
-                });
-
-
-            },
-            eventTimeFormat: {
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            },
-            eventClick: function(info) {
-                const id = info.event.id;
-
-                $('#modalBanhoContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-                $('#modalBanho').modal('show');
-                $.get('<?= base_url("banhotosa/edit") ?>/' + id, function(html) {
-                    $('#modalBanhoContent').html(html);
-                });
-            }
-        });
-
-        // Render inicial
-        if (document.getElementById('calendario').classList.contains('show')) {
-            calendar.render();
-        }
-
-        //Resize quando trocar de tabs
-        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function() {
-            calendar.updateSize();
-        });
-
-
-    });
-</script>
 
 <script>
     $(document).ready(function() {
@@ -289,10 +145,10 @@
             // Formata YYYY-MM-DDTHH:MM para datetime-local
             const formattedDate = localDate.toISOString().slice(0, 16);
 
-            $('#modalBanhoContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-            $('#modalBanho').modal('show');
+            $('#modalGlobalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
+            $('#modalGlobal').modal('show');
             $.get('<?= base_url("banhotosa/create") ?>', function(html) {
-                $('#modalBanhoContent').html(html);
+                $('#modalGlobalContent').html(html);
                 $('#data_hora_inicio').val(formattedDate);
             }).fail(function() {
                 Swal.fire('Erro', 'Não foi possível abrir o formulário.', 'error');
@@ -306,8 +162,8 @@
             if (!id) return Swal.fire('Erro', 'ID do agendamento não encontrado.', 'error');
 
             $.get('<?= base_url("banhotosa/edit") ?>/' + id, function(html) {
-                $('#modalBanhoContent').html(html);
-                $('#modalBanho').modal('show');
+                $('#modalGlobalContent').html(html);
+                $('#modalGlobal').modal('show');
             }).fail(function() {
                 Swal.fire('Erro', 'Não foi possível carregar o formulário de edição.', 'error');
             });
@@ -339,7 +195,7 @@
                 dataType: 'json'
             }).done(function(res) {
                 if (res.success) {
-                    $('#modalBanho').modal('hide');
+                    $('#modalGlobal').modal('hide');
                     Swal.fire({
                         toast: true,
                         position: 'top-end',
@@ -350,8 +206,8 @@
                     });
                     carregarAgendamentos();
                     // Atualiza o calendário
-                    if (calendar) {
-                        calendar.refetchEvents();
+                    if (calendarBanhoTosa) {
+                        calendarBanhoTosa.refetchEvents();
                     }
                 } else {
                     let msg = res.message || 'Erro ao salvar.';
@@ -368,7 +224,7 @@
         });
 
         // Excluir (delegated). Usa POST para /banhotosa/delete/{id}
-        $(document).on('click', '.btnExcluir', function(e) {
+        $(document).on('click', '.btnExcluir', '#formBanhoTosa', function(e) {
             e.preventDefault();
             const id = $(this).data('id');
             if (!id) return Swal.fire('Erro', 'ID do agendamento não encontrado.', 'error');
@@ -398,11 +254,11 @@
                                 showConfirmButton: false,
                                 timer: 2000
                             });
-                            $('#modalBanho').modal('hide');
+                            $('#modalGlobal').modal('hide');
                             carregarAgendamentos();
                             // Atualiza o calendário
-                            if (calendar) {
-                                calendar.refetchEvents();
+                            if (calendarBanhoTosa) {
+                                calendarBanhoTosa.refetchEvents();
                             }
                         } else {
                             Swal.fire('Erro', res.message || 'Não foi possível excluir.', 'error');
@@ -413,6 +269,159 @@
                 }
             });
         });
+
+    });
+</script>
+
+<script>
+    var calendarBanhoTosa;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('fullCalendarBanhoTosa');
+
+        calendarBanhoTosa = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            themeSystem: 'bootstrap5',
+            locale: 'pt-br',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            buttonText: {
+                today: 'Hoje',
+                month: 'Mês',
+                week: 'Semana',
+                day: 'Dia',
+                list: 'Agenda'
+            },
+            selectable: true, // habilita seleção de horários
+            dateClick: function(info) {
+                if (calendarBanhoTosa.view.type === 'timeGridDay' || calendarBanhoTosa.view.type === 'timeGridWeek') {
+                    // info.dateStr vem tipo "2025-09-05T14:30:00+00:00"
+                    let dt = new Date(info.date);
+                    let ano = dt.getFullYear();
+                    let mes = String(dt.getMonth() + 1).padStart(2, '0');
+                    let dia = String(dt.getDate()).padStart(2, '0');
+                    let hora = String(dt.getHours()).padStart(2, '0');
+                    let min = String(dt.getMinutes()).padStart(2, '0');
+
+                    let formatted = `${ano}-${mes}-${dia}T${hora}:${min}`;
+                    $('#modalGlobalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
+                    $('#modalGlobal').modal('show');
+                    // abrir modal e preencher input
+                    $.get('<?= base_url("banhotosa/create") ?>', function(html) {
+                        $('#modalGlobalContent').html(html);
+                        $('#data_hora_inicio').val(formatted);
+                    });
+                } else {
+                    calendarBanhoTosa.changeView('timeGridDay', info.dateStr);
+                }
+            },
+            events: function(fetchInfo, successCallback, failureCallback) {
+                $.getJSON("<?= site_url('banhotosa/listar-json') ?>", function(data) {
+                    let eventos = data.map(b => {
+                        let duracaoMinutos = Math.round((new Date(b.data_hora_fim) - new Date(b.data_hora_inicio)) / 60000);
+
+                        // Definir cores conforme o status
+                        let corFundo = '#3788d8'; // azul
+                        let corBorda = '#276ba0';
+                        if (b.status === 'agendado') {
+                            corFundo = '#ffc30b'; // amarelo
+                            corBorda = '#DEAA0D';
+                        } else if (b.status === 'cancelado') {
+                            corFundo = '#f44336'; // vermelho
+                            corBorda = '#d32f2f';
+                        } else if (b.status === 'concluido') {
+                            corFundo = '#4caf50'; // verde
+                            corBorda = '#388e3c';
+                        }
+
+                        return {
+                            id: b.id,
+                            title: `${b.pet_nome} - ${b.servico_nome}`,
+                            start: b.data_hora_inicio,
+                            end: b.data_hora_fim,
+                            backgroundColor: corFundo,
+                            borderColor: corBorda,
+                            textColor: 'white',
+                            extendedProps: {
+                                status: b.status,
+                                pet: b.pet_nome,
+                                servico: b.servico_nome,
+                                duracao: duracaoMinutos,
+                                observacoes: b.observacoes || ''
+                            },
+                            // Tooltip
+                            titleTooltip: `Pet: ${b.pet_nome}\nServiço: ${b.servico_nome}\nStatus: ${b.status}\nDuração: ${duracaoMinutos} min\nObservações: ${b.observacoes || '-'}`
+                        };
+                    });
+                    successCallback(eventos);
+                }).fail(function() {
+                    failureCallback();
+                });
+            },
+            eventDidMount: function(info) {
+
+                // força a cor de fundo também no "month"
+                if (info.event.backgroundColor) {
+                    info.el.style.backgroundColor = info.event.backgroundColor;
+                    info.el.style.borderColor = info.event.borderColor;
+                    info.el.style.color = info.event.textColor;
+                }
+
+                if (window.matchMedia("(pointer: coarse)").matches) {
+                    // Mobile ou tablet → não criar tooltip
+                    return;
+                }
+                // Tooltip usando Bootstrap 5
+                var tooltipText = info.event.extendedProps.observacoes ?
+                    `Pet: ${info.event.extendedProps.pet}\nServiço: ${info.event.extendedProps.servico}\nStatus: ${info.event.extendedProps.status}\nDuração: ${info.event.extendedProps.duracao} min\nObservações: ${info.event.extendedProps.observacoes}` :
+                    `Pet: ${info.event.extendedProps.pet}\nServiço: ${info.event.extendedProps.servico}\nStatus: ${info.event.extendedProps.status}\nDuração: ${info.event.extendedProps.duracao} min`;
+
+                new bootstrap.Tooltip(info.el, {
+                    title: tooltipText,
+                    placement: 'top',
+                    trigger: 'hover',
+                    container: 'body',
+                    html: false
+                });
+
+
+            },
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            },
+            eventClick: function(info) {
+                const id = info.event.id;
+
+                $('#modalGlobalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
+                $('#modalGlobal').modal('show');
+                $.get('<?= base_url("banhotosa/edit") ?>/' + id, function(html) {
+                    $('#modalGlobalContent').html(html);
+                });
+            }
+        });
+
+        // Render inicial
+        calendarBanhoTosa.render();
+
+        if (document.getElementById('calendario').classList.contains('show')) {
+            calendarBanhoTosa.render();
+        }
+
+        //Resize quando trocar de tabs
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function() {
+            calendarBanhoTosa.updateSize();
+        });
+
+
+    });
+
+    $(document).ready(function() {
+
 
     });
 </script>

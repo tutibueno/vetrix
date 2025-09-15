@@ -31,13 +31,13 @@
             <!-- CALENDÁRIO -->
             <div class="tab-pane fade show active" id="calendario" role="tabpanel" aria-labelledby="calendario-tab">
                 <div class="card-body">
-                    <div id="calendar"></div>
+                    <div id="fullcalendarConsultas"></div>
                 </div>
             </div>
 
             <!-- LISTA -->
             <div class="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-tab">
-                
+
                 <div class="row">
                     <?php if (!empty($consultas)): ?>
                         <?php foreach ($consultas as $c): ?>
@@ -80,77 +80,17 @@
     </div>
 </div>
 
-<!-- Modal para criar consulta -->
-<div class="modal fade" id="modalFormulario" tabindex="-1" aria-labelledby="modalFormularioLabel" aria-hidden="true" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-body" id="modalContent">
-                <div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <script>
-    $(document).on('submit', '#modalFormulario', function(e) {
-        let petId = $('#pet_id').val();
-        if (!petId) {
-            e.preventDefault(); // impede submissão
-            Swal.fire({
-                icon: 'error',
-                title: 'Erro',
-                text: 'Por favor, selecione um Pet válido da lista.'
-            });
-            $('#pet_nome').focus();
-            return false;
-        }
-    });
+    //Full calendar consultas
 
-    function abrirModalConsulta(url, dataSelecionada = null) {
-        $('#modalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
-        $('#modalFormulario').modal('show');
+    var calendarConsulta;
 
-        $.get(url, function(data) {
-            $('#modalContent').html(data);
-
-            // Pré-preenche data/hora se fornecida
-            if (dataSelecionada) {
-                const datetimeInput = $('#modalFormulario').find('input[name="data_consulta"]');
-                if (datetimeInput.length) {
-                    datetimeInput.val(dataSelecionada);
-                }
-            }
-        }).fail(function() {
-            $('#modalContent').html('<div class="alert alert-danger">Erro ao carregar o formulário da consulta.</div>');
-        });
-    }
-
-    // Função para criar nova consulta
-    function novaConsulta(dataSelecionada = null) {
-        if (!dataSelecionada) {
-
-            let agora = new Date();
-            // Ajusta para horário local
-            const localDate = new Date(agora.getTime() - agora.getTimezoneOffset() * 60000);
-            // Formata YYYY-MM-DDTHH:MM para datetime-local
-            const formattedDate = localDate.toISOString().slice(0, 16);
-            dataSelecionada = formattedDate;
-        }
-
-        abrirModalConsulta("<?= base_url('consultas/create') ?>", dataSelecionada);
-    }
-
-    // Função para editar consulta
-    function editarConsulta(id) {
-        abrirModalConsulta("<?= base_url('consultas/edit') ?>/" + id);
-    }
-</script>
-
-<script>
     document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
+        var calendarEl = document.getElementById('fullcalendarConsultas');
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        calendarConsulta = new FullCalendar.Calendar(calendarEl, {
             themeSystem: 'bootstrap5',
             initialView: 'dayGridMonth',
             locale: 'pt-br',
@@ -160,45 +100,49 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            buttonText: {
+                today: 'Hoje',
+                month: 'Mês',
+                week: 'Semana',
+                day: 'Dia',
+                list: 'Agenda'
+            },
             navLinks: true, // clique em dias/semana
             editable: false,
             selectable: true,
-            events: [
-                <?php foreach ($consultas as $c): ?> {
-                        id: '<?= esc($c['id']) ?>',
-                        title: '<?= $c['flag_retorno'] === 'S' ? " (R)" : "" ?> <?= esc($c['pet_nome']) ?> - <?= esc($c['vet_nome']) ?>',
-                        start: '<?= $c['data_consulta'] ?>',
-                        end: '<?= $c['data_consulta_fim'] ?>',
-                        color: '<?= $c['cor_status'] ?>',
-                        borderColor: 'gray',
-                        textColor: 'white',
-                        extendedProps: {
-                            status: '<?= ucfirst($c['status']) ?>',
-                            pet: '<?= esc($c['pet_nome']) ?>',
-                            vet: '<?= esc($c['vet_nome']) ?>',
-                            retorno: '<?= esc($c['flag_retorno']) ?>'
-                        }
-                    },
-                <?php endforeach; ?>
-            ],
+            events: '<?= base_url("consultas/agendaJson") ?>',
             eventClick: function(info) {
                 //info.jsEvent.preventDefault(); // evita navegação
                 const id = info.event.id; // o id da consulta
-                editarConsulta(id);
+
+                $('#modalGlobalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
+                $('#modalGlobal').modal('show');
+                $.get('<?= base_url("consultas/edit") ?>/' + id, function(html) {
+                    $('#modalGlobalContent').html(html);
+                });
             },
             dateClick: function(info) {
-                if (calendar.view.type === 'timeGridDay' || calendar.view.type === 'timeGridWeek') {
-                    const clickedDate = info.date; // Objeto Date (UTC)
+                if (calendarConsulta.view.type === 'timeGridDay' || calendarConsulta.view.type === 'timeGridWeek') {
+                    // info.dateStr vem tipo "2025-09-05T14:30:00+00:00"
+                    let dt = new Date(info.date);
+                    let ano = dt.getFullYear();
+                    let mes = String(dt.getMonth() + 1).padStart(2, '0');
+                    let dia = String(dt.getDate()).padStart(2, '0');
+                    let hora = String(dt.getHours()).padStart(2, '0');
+                    let min = String(dt.getMinutes()).padStart(2, '0');
 
-                    // Ajusta para horário local
-                    const localDate = new Date(clickedDate.getTime() - clickedDate.getTimezoneOffset() * 60000);
+                    let formatted = `${ano}-${mes}-${dia}T${hora}:${min}`;
+                    $('#modalGlobalContent').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin"></i> Carregando...</div>');
+                    $('#modalGlobal').modal('show');
+                    // abrir modal e preencher input
+                    $.get('<?= base_url("consultas/create") ?>', function(html) {
+                        $('#modalGlobalContent').html(html);
+                        $('#data_consulta').val(formatted);
+                    });
 
-                    // Formata YYYY-MM-DDTHH:MM para datetime-local
-                    const formattedDate = localDate.toISOString().slice(0, 16);
 
-                    novaConsulta(formattedDate);
                 } else {
-                    calendar.changeView('timeGridDay', info.dateStr);
+                    calendarConsulta.changeView('timeGridDay', info.dateStr);
                 }
             },
             eventTimeFormat: {
@@ -236,11 +180,11 @@
                         <strong>Veterinário:</strong> ${info.event.extendedProps.vet}<br>
                         <strong>Status:</strong> ${info.event.extendedProps.status}<br>
                         <strong>Data:</strong> ${info.event.start.toLocaleString('pt-BR', {
-                            day: '2-digit', month: '2-digit', year: 'numeric',
-                            hour: '2-digit', minute: '2-digit'
-                        })} - ${info.event.end.toLocaleString('pt-BR', {
-                            hour: '2-digit', minute: '2-digit'
-                        })}
+                day: '2-digit', month: '2-digit', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            })} - ${info.event.end.toLocaleString('pt-BR', {
+                hour: '2-digit', minute: '2-digit'
+            })}
                     </div>
                 `;
 
@@ -258,15 +202,123 @@
         });
 
         // Render inicial
+        calendarConsulta.render();
+
+        // Render inicial
         if (document.getElementById('calendario').classList.contains('show')) {
-            calendar.render();
+            calendarConsulta.render();
         }
 
         //Resize quando trocar de tabs
         $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function() {
-            calendar.updateSize();
+            calendarConsulta.updateSize();
         });
 
+
+    });
+
+    $(document).ready(function() {
+
+        // Submit do form dentro do modal (delegated)
+        $(document).on('submit', '#formConsulta', function(e) {
+            e.preventDefault();
+            let petId = $('#pet_id').val();
+            if (!petId) {
+                e.preventDefault(); // impede submissão
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    text: 'Por favor, selecione um Pet válido da lista.'
+                });
+                $('#pet_nome').focus();
+                return false;
+            }
+            let form = $(this);
+            let url = form.attr('action');
+            let method = form.attr('method') || 'POST';
+            let data = form.serialize();
+
+            $.ajax({
+                url: url,
+                type: method,
+                data: data,
+                dataType: 'json'
+            }).done(function(res) {
+                if (res.success) {
+                    $('#modalGlobal').modal('hide');
+                    Swal.fire({
+                        toast: true,
+                        position: 'top-end',
+                        icon: 'success',
+                        title: res.message,
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                    //carregarListaConsultas();
+                    // Atualiza o calendário
+                    if (calendarConsulta) {
+                        calendarConsulta.refetchEvents();
+                    }
+                } else {
+                    let msg = res.message || 'Erro ao salvar.';
+                    if (res.errors) msg += '<br>' + Object.values(res.errors).join('<br>');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        html: msg
+                    });
+                }
+            }).fail(function(xhr) {
+                Swal.fire('Erro', xhr.responseText || 'Erro inesperado no servidor.', 'error');
+            });
+        });
+
+        // Excluir (delegated). Usa POST para /banhotosa/delete/{id}
+        $(document).on('click', '.btnExcluir', '#formConsulta', function(e) {
+            e.preventDefault();
+            const id = $(this).data('id');
+            if (!id) return Swal.fire('Erro', 'ID da consulta não encontrado.', 'error');
+
+            Swal.fire({
+                title: 'Excluir consulta?',
+                text: "Essa ação não poderá ser desfeita.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '<?= site_url('consultas/delete') ?>/' + id,
+                        type: 'GET',
+                        dataType: 'json'
+                    }).done(function(res) {
+                        if (res.success) {
+                            Swal.fire({
+                                toast: true,
+                                position: 'top-end',
+                                icon: 'success',
+                                title: res.message || 'Excluído',
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            $('#modalGlobal').modal('hide');
+                            //carregarAgendamentos();
+                            // Atualiza o calendário
+                            if (calendarConsulta) {
+                                calendarConsulta.refetchEvents();
+                            }
+                        } else {
+                            Swal.fire('Erro', res.message || 'Não foi possível excluir.', 'error');
+                        }
+                    }).fail(function(xhr) {
+                        Swal.fire('Erro', xhr.responseJSON?.message || 'Erro inesperado no servidor.', 'error');
+                    });
+                }
+            });
+        });
 
     });
 </script>
@@ -294,6 +346,17 @@
     .fc-list-event-dot {
         display: none !important;
     }
+
+    .fc .fc-button-primary {
+        background-color: #3485FF !important;
+        /* Desired background color */
+        color: #FFFFFF !important;
+        /* Desired text color */
+        border-color: #3485FF !important;
+        /* Desired border color */
+    }
+
+    
 </style>
 
 <?= $this->endSection() ?>

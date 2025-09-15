@@ -55,10 +55,12 @@ class Medicamentos extends Controller
             while (($row = fgetcsv($handle, 1000, ';')) !== false) {
                 $data = array_combine($header, $row);
                 $medModel->insert([
-                    'nome_comercial' => $data['nome_comercial'] ?? '',
-                    'principio_ativo' => $data['principio_ativo'] ?? '',
-                    'forma'           => $data['forma'] ?? '',
-                    'categoria'       => $data['categoria'] ?? null,
+                    'nome_comercial'     => $data['nome_comercial'] ?? '',
+                    'principio_ativo'    => $data['principio_ativo'] ?? '',
+                    'forma'              => $data['forma'] ?? '',
+                    'categoria'          => $data['categoria'] ?? null,
+                    'classe_terapeutica' => $data['classe_terapeutica'] ?? null,
+                    'especie_destino'    => $data['especie_destino'] ?? null,
                 ]);
             }
 
@@ -122,7 +124,7 @@ class Medicamentos extends Controller
         }, $header);
 
         // Campos esperados (aceita variações)
-        $expected = ['nome_comercial', 'principio_ativo', 'forma', 'categoria'];
+        $expected = ['nome_comercial', 'principio_ativo', 'forma', 'categoria', 'classe_terapeutica','especie_destino'];
 
         // mapa de índices
         $map = [];
@@ -135,6 +137,11 @@ class Medicamentos extends Controller
         $now = date('Y-m-d H:i:s');
 
         while (($data = fgetcsv($handle, 0, $delimiter)) !== false) {
+            // converte cada campo para UTF-8 (corrige acentuação)
+            $data = array_map(function ($campo) {
+                return mb_convert_encoding($campo, 'UTF-8', 'ISO-8859-1');
+            }, $data);
+
             // pula linhas vazias
             $allEmpty = true;
             foreach ($data as $c) {
@@ -147,12 +154,14 @@ class Medicamentos extends Controller
 
             // construir registro com fallback quando coluna não existir
             $registro = [
-                'nome_comercial'  => isset($map['nome_comercial']) ? ($data[$map['nome_comercial']] ?? '') : ($data[0] ?? ''),
-                'principio_ativo' => $map['principio_ativo'] ? ($data[$map['principio_ativo']] ?? '') : ($data[1] ?? ''),
-                'forma'           => isset($map['forma']) ? ($data[$map['forma']] ?? '') : ($data[2] ?? ''),
-                'categoria'       => isset($map['categoria']) ? ($data[$map['categoria']] ?? null) : ($data[3] ?? null),
-                'created_at'      => $now,
-                'updated_at'      => $now,
+                'nome_comercial'     => isset($map['nome_comercial']) ? ($data[$map['nome_comercial']] ?? '') : ($data[0] ?? ''),
+                'principio_ativo'    => isset($map['principio_ativo']) ? ($data[$map['principio_ativo']] ?? '') : ($data[1] ?? ''),
+                'forma'              => isset($map['forma']) ? ($data[$map['forma']] ?? '') : ($data[2] ?? ''),
+                'categoria'          => isset($map['categoria']) ? ($data[$map['categoria']] ?? null) : ($data[3] ?? null),
+                'classe_terapeutica' => isset($map['classe_terapeutica']) ? ($data[$map['classe_terapeutica']] ?? null) : ($data[4] ?? null),
+                'especie_destino'    => isset($map['especie_destino']) ? ($data[$map['especie_destino']] ?? null) : ($data[5] ?? null),
+                'created_at'         => $now,
+                'updated_at'         => $now,
             ];
 
             // trim de strings
@@ -219,6 +228,8 @@ class Medicamentos extends Controller
                 $med['principio_ativo'],
                 $med['forma'],
                 $med['categoria'],
+                $med['classe_terapeutica'],
+                $med['especie_destino'],
             ], ';');
         }
 

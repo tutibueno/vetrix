@@ -14,7 +14,8 @@ class MedicamentosModel extends Model
         'especie_destino',
         'forma',
         'categoria',
-        'laboratorio'
+        'laboratorio',
+        'classe_terapeutica'
     ];
 
     protected $useAutoIncrement = true;

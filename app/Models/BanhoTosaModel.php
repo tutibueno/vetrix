@@ -15,7 +15,8 @@ class BanhoTosaModel extends Model
         'data_hora_inicio',
         'data_hora_fim',
         'observacoes',
-        'status'
+        'status',
+        'token'
     ];
 
     protected $useSoftDeletes = true;

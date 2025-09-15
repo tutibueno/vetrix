@@ -19,7 +19,7 @@ $escala = [
     <div class="mb-3">
         <label for="data_registro" class="form-label">Data do registro</label>
         <input type="date" name="data_registro" id="data_registro" class="form-control"
-            value="<?= esc($peso['data_registro'] ?? '') ?>" required>
+            value="<?= esc($peso['data_registro'] ?? date('Y-m-d')) ?>" required>
     </div>
 
     <div class="mb-3">
@@ -30,7 +30,7 @@ $escala = [
 
     <div class="mb-3">
         <label for="escala_condicao_corporal" class="form-label">Escore de Condição Corporal (opcional)</label>
-        <select name="escala_condicao_corporal" id="escala_condicao_corporal" class="form-select">
+        <select name="escala_condicao_corporal" id="escala_condicao_corporal" class="form-control select2" style="width: 100%;">
             <?php foreach ($escala as $key => $label): ?>
                 <option value="<?= $key ?>" <?= isset($peso['escala_condicao_corporal']) && $peso['escala_condicao_corporal'] == $key ? 'selected' : '' ?>><?= $label ?></option>
             <?php endforeach; ?>
@@ -44,6 +44,7 @@ $escala = [
     </div>
 
     <button type="submit" class="btn btn-primary">Salvar</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
 </div>
 
 <script>
@@ -80,5 +81,4 @@ $escala = [
     $('input[name="peso_kg"]').mask('000.000', {
         reverse: true
     });
-    
 </script>

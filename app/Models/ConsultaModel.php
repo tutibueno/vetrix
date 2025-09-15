@@ -15,7 +15,8 @@ class ConsultaModel extends Model
         'flag_retorno',
         'motivo',
         'observacoes',
-        'status'
+        'status',
+        'token'
     ];
     protected $useTimestamps = true;
 

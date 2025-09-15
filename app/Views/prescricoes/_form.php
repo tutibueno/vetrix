@@ -62,7 +62,7 @@
                         <label>Nome do Medicamento</label>
                         <input type="text" name="medicamentos[<?= $index ?>][nome_medicamento]"
                             class="form-control medicamento-nome"
-                            value="<?= esc($med['nome_medicamento']) ?>" autocomplete="new-password" required>
+                            value="<?= esc($med['nome_medicamento']) ?>" autocomplete="off" required>
                         <div class="autocomplete-results bg-white border rounded shadow-sm mt-1 position-absolute w-100"
                             style="z-index: 1000; display: none;"></div>
                     </div>
@@ -133,7 +133,8 @@
                             $results.append(`
                             <div class="p-2 result-item" style="cursor:pointer;">
                                 <strong>${item.nome_comercial}</strong><br>
-                                <small>${item.principio_ativo} - ${item.forma}</small>
+                                <small>Princípio Ativo: ${item.principio_ativo} - forma: ${item.forma}</small><br>
+                                <small>Classe: ${item.classe_terapeutica}</small>
                             </div>
                         `);
                         });
@@ -173,7 +174,7 @@
             <div class="form-group position-relative">
                 <label>Nome do Medicamento</label>
                 <input type="text" name="medicamentos[${medIndex}][nome_medicamento]" 
-                       class="form-control medicamento-nome" autocomplete="new-password" required>
+                       class="form-control medicamento-nome" autocomplete="off" required>
                 <div class="autocomplete-results bg-white border rounded shadow-sm mt-1 position-absolute w-100" 
                      style="z-index: 1000; display:none;"></div>
             </div>

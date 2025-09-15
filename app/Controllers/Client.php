@@ -80,14 +80,18 @@ class Client extends BaseController
     public function update($id)
     {
         $data = $this->request->getPost();
-        $data['id'] = $id;
+
+        // remove o id se for criação
+        if (empty($data['id'])) {
+            unset($data['id']);
+        }
 
         // Se o campo cpf_cnpj vier vazio, transforma em NULL
         if (empty(trim($data['cpf_cnpj'] ?? ''))) {
             $data['cpf_cnpj'] = null;
         }
 
-        if (!$this->clientModel->save($data)) {
+        if (!$this->clientModel->update($id, $data)) {
             return redirect()->back()
                 ->withInput()
                 ->with('errors', $this->clientModel->errors());

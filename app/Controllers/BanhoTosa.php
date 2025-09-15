@@ -90,7 +90,8 @@ class BanhoTosa extends BaseController
             'servico_id'      => $post['servico_id'],
             'data_hora_inicio' => $post['data_hora_inicio'],
             'status'          => $post['status'],
-            'observacoes'     => $post['observacoes']
+            'observacoes'     => $post['observacoes'],
+            'token'           => $post['token'] 
         ];
 
         // Calcula o fim com base na duração informada
@@ -103,6 +104,9 @@ class BanhoTosa extends BaseController
             $data['data_hora_fim'] = $data['data_hora_inicio'];
         }
 
+        if(empty($data['token']))
+            $data['token'] = bin2hex(random_bytes(16));
+
         // Inserir ou atualizar
         if ($id) {
             $this->banhoModel->update($id, $data);
@@ -114,7 +118,7 @@ class BanhoTosa extends BaseController
             $this->banhoModel->insert($data);
             return $this->response->setJSON([
                 'success' => true,
-                'message' => 'Agendamento criado com sucesso'
+                'message' => 'Agendamento salvo com sucesso'
             ]);
         }
     }
