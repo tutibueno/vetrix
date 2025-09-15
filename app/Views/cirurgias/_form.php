@@ -63,6 +63,7 @@
         <button type="submit" class="btn btn-primary">
             <i class="fas fa-save"></i> Salvar
         </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
     </div>
 </div>
 

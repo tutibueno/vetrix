@@ -54,7 +54,7 @@
                             Cirurgias
                         </button>
                     </li>
-                    
+
                 </ul>
             </div>
             <button class="scroll-btn scroll-right d-none">&gt;</button>
@@ -153,17 +153,20 @@
 
             <!-- Aba Medicamentos -->
             <div class="tab-pane fade" id="medicamentos" role="tabpanel">
-                <button class="btn btn-primary mb-3" id="btnAdicionarMedicamento" data-pet-id="<?= esc($pet['id']) ?>">
-                    <i class="fas fa-plus"></i> Medicamento
-                </button>
-                <?= view('pets/_medicamentos', ['medicamentos' => $medicamentos]) ?>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5><i class="fas fa-pills"> </i> Medicamentos Aplicados</h5>
+                    <button class="btn btn-primary mb-3" id="btnAdicionarMedicamento" data-pet-id="<?= esc($pet['id']) ?>">
+                        <i class="fas fa-plus"></i> Medicamento
+                    </button>
+                    <?= view('pets/_medicamentos', ['medicamentos' => $medicamentos]) ?>
+                </div>
             </div>
 
             <!-- Aba Cirurgias -->
             <div class="tab-pane fade" id="cirurgias" role="tabpanel">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5><i class="fas fa-procedures"> </i> Cirurgias Realizadas</h5>
-                    <button class="btn btn-primary btn-sm" id="btnAdicionarCirurgia" data-pet-id="<?= esc($pet['id']) ?>">
+                    <button class="btn btn-primary" id="btnAdicionarCirurgia" data-pet-id="<?= esc($pet['id']) ?>">
                         <i class="fas fa-plus"></i> Nova Cirurgia
                     </button>
                 </div>
