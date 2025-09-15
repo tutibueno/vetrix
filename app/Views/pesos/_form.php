@@ -30,7 +30,7 @@ $escala = [
 
     <div class="mb-3">
         <label for="escala_condicao_corporal" class="form-label">Escore de Condição Corporal (opcional)</label>
-        <select name="escala_condicao_corporal" id="escala_condicao_corporal" class="form-select">
+        <select name="escala_condicao_corporal" id="escala_condicao_corporal" class="form-control select2" style="width: 100%;">
             <?php foreach ($escala as $key => $label): ?>
                 <option value="<?= $key ?>" <?= isset($peso['escala_condicao_corporal']) && $peso['escala_condicao_corporal'] == $key ? 'selected' : '' ?>><?= $label ?></option>
             <?php endforeach; ?>
@@ -80,5 +80,4 @@ $escala = [
     $('input[name="peso_kg"]').mask('000.000', {
         reverse: true
     });
-    
 </script>

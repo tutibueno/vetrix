@@ -1,7 +1,7 @@
 <div class="modal-body">
     <input type="hidden" id="pet_id" name="pet_id" value="<?= esc($pet['id'] ?? $cirurgia['pet_id'] ?? '') ?>">
 
-    <div class="mb-3">
+    <div class="form-group">
         <label for="data_cirurgia" class="form-label">Data da Cirurgia</label>
         <input type="date" class="form-control"
             name="data_cirurgia"
@@ -10,14 +10,12 @@
             required>
     </div>
 
-    <div class="form-group mb-3">
-        <label for="veterinario_id" class="form-label">Veterinário Responsável</label>
-        <select name="veterinario_id" id="veterinario_id" class="form-select" required>
+    <div class="mb-3">
+        <label for="veterinario_id" class="form-label">Veterinário</label>
+        <select name="veterinario_id" id="veterinario_id" class="form-control select2" style="width: 100%;" required>
             <?php foreach ($veterinarios as $vet): ?>
-                <option value="<?= esc($vet['id']) ?>"
-                    <?= (isset($cirurgia['veterinario_id']) && $cirurgia['veterinario_id'] == $vet['id'])
-                        || (!isset($cirurgia) && $default_vet_id == $vet['id'])
-                        ? 'selected' : '' ?>>
+                <option value="<?= $vet['id'] ?>"
+                    <?= isset($cirurgia) && $cirurgia['veterinario_id'] == $vet['id'] ? 'selected' : '' ?>>
                     <?= esc($vet['nome']) ?>
                 </option>
             <?php endforeach; ?>
@@ -41,7 +39,7 @@
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Materiais e Implantes</label>
-                        <input type="text" name="detalhes[materiais][]" class="form-control" value="<?= esc($d['materiais']) ?>">
+                        <textarea name="detalhes[materiais][]" class="form-control" value="<?= esc($d['materiais']) ?>"></textarea>
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Complicações</label>
@@ -80,7 +78,7 @@
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Materiais e Implantes</label>
-                        <input type="text" name="detalhes[materiais][]" class="form-control">
+                        <textarea type="text" name="detalhes[materiais][]" class="form-control"></textarea>
                     </div>
                     <div class="mb-2">
                         <label class="form-label">Complicações</label>

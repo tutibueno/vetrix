@@ -54,11 +54,7 @@
                             Cirurgias
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="agendamentos-tab" data-bs-toggle="tab" data-bs-target="#agendamentos" type="button" role="tab">
-                            Agendamentos
-                        </button>
-                    </li>
+                    
                 </ul>
             </div>
             <button class="scroll-btn scroll-right d-none">&gt;</button>
@@ -172,14 +168,6 @@
                     </button>
                 </div>
                 <?= view('pets/_cirurgias') ?>
-            </div>
-
-            <!-- Aba Agendamentos -->
-            <div class="tab-pane fade" id="agendamentos" role="tabpanel">
-                <button class="btn btn-primary mb-3" id="btnAdicionarAgendamento" data-pet="<?= $pet['id'] ?>">
-                    <i class="fas fa-plus"></i> Agendamento
-                </button>
-                <?= view('pets/_agendamentos', ['agendamentos' => $agendamentos]) ?>
             </div>
 
         </div>
